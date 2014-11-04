@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.wequote366944" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>weQuote</name>
-  <description>
-        weQuote. Together.
-  </description>
-  <author email="hkt@wequote.it" href="http://www.wequote.it/">
-      HKT
-    </author>
-  <content src="index.html"/>
-  <access origin="*"/>
-  <preference name="Orientation" value="portrait" />
-  <preference name="webviewbounce" value="false"/>
-  <preference name="UIWebViewBounce" value="false"/>
-  <preference name="DisallowOverscroll" value="true"/>
-  <preference name="BackupWebStorage" value="none"/>
-  <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
-  </feature>
+	<widget id="com.ionicframework.wequote366944" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+	<name>weQuote</name>
+	<description>
+	    weQuote. Together.
+	</description>
+	<author email="hkt@wequote.it" href="http://www.wequote.it/">
+	  HKT
+	</author>
+	<content src="index.html"/>
+	<access origin="*"/>
+	<preference name="Orientation" value="portrait" />
+	<preference name="webviewbounce" value="false"/>
+	<preference name="UIWebViewBounce" value="false"/>
+	<preference name="DisallowOverscroll" value="true"/>
+	<preference name="BackupWebStorage" value="none"/>
+	<feature name="StatusBar">
+	<param name="ios-package" value="CDVStatusBar" onload="true"/>
+	</feature>
+	<platform name="android">
+  		<icon src="res/android/ldpi.png" density="ldpi" />
+		<icon src="res/android/mdpi.png" density="mdpi" />
+		<icon src="res/android/hdpi.png" density="hdpi" />
+		<icon src="res/android/xhdpi.png" density="xhdpi" />
+	</platform>
 </widget>
