@@ -7,11 +7,7 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     
-    -->
-
     <link href="css/ionic.app.css" rel="stylesheet">
 
     <script src="lib/openFb/openfb.js"></script>
@@ -28,21 +24,9 @@
     <script src="js/controllers.js"></script>
   </head>
   <body controller="Root">
-
-    <ion-pane>
-      <ion-header-bar class="bar-royal">
-        <h1 class="title">Ionic Blank Starter</h1>
-      </ion-header-bar>
-      <ion-content id="mainContent">
-        <label class="item">
-          <button class="button button-block button-positive" ng-click="fbLogin()">
-              Login with Facebook
-          </button>
-      </label>
-      </ion-content>
-      <ion-footer-bar class="bar-royal">
-        <h1 class="title">Ionic Blank Starter</h1>
-      </ion-footer-bar>
+    <ion-pane class="royal-bg">
+      <div ui-view>
+      </div>
     </ion-pane>
   </body>
 </html>
