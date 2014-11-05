@@ -14,3 +14,14 @@ body{
 .title{
 	font-family: 'Pacifico';
 }
+
+.facebook-bg{
+	background-color: #2C4388 !important;
+	color:white !important;
+}
+
+.google-bg{
+	background-color: #D43326 !important;
+	color:white !important;
+
+}
