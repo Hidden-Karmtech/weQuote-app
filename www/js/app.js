@@ -28,11 +28,14 @@ angular.module('weQuote', ['ionic','weQuote.controllers'])
       url: "/login",
       controller: 'Login',
       templateUrl: "templates/login.html"
+    })
+    .state('home', {
+      url: "/home",
+      controller: 'Home',
+      templateUrl: "templates/home.html"
     });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
-
-  openFB.init({appId: '654874671294085'});
 
 });

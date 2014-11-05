@@ -1,11 +1,28 @@
-<ion-content class="padding">
-	<h1 class="light title text-center">#weQuote</h1>
-
-	<button class="button icon-left ion-social-facebook button-block facebook-bg">
-  		Login con Facebook
-	</button>
-
-	<button class="button icon-left ion-social-google button-block google-bg">
-  		Login con Google
-	</button>
+<ion-content class="text-center" id="loginSection">
+	<img width="40%" src="img/logo.png"/>
+	{{test}}
+	<h1 class="light title">#weQuote</h1>
+	<h4 class="light title">Quote Together</h4>
+	
 </ion-content>
+<div class="padding" style="width:100%;position:absolute;bottom:15px;">
+	<button 
+		ng-click="login()"
+		ng-disabled="busy"
+		class="button button-block facebook-bg">
+			<i 
+			style="font-size: 24px;float:left;" 
+			ng-class="{'ion-social-facebook':!busy,'ion-loading-a':busy}"></i>
+			Login con Facebook
+	</button>
+
+	<button 
+		ng-click="login()"
+		ng-disabled="busy"
+		class="button button-block google-bg">
+			<i 
+			style="font-size: 24px;float:left;" 
+			ng-class="{'ion-social-google':!busy,'ion-loading-a':busy}"></i>
+			Login con Google
+	</button>
+</div>

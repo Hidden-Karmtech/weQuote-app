@@ -2,7 +2,7 @@
   "name": "weQuote",
   "private": "true",
   "dependencies": {
-  	"openFb": "https://github.com/ccoenraets/OpenFB.git#latest"
+    "sweetalert": "~0.3.1"
   },
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0-beta.13"

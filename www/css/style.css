@@ -15,6 +15,10 @@ body{
 	font-family: 'Pacifico';
 }
 
+#loginSection{
+	padding-top: 20%;
+}
+
 .facebook-bg{
 	background-color: #2C4388 !important;
 	color:white !important;
@@ -23,5 +27,4 @@ body{
 .google-bg{
 	background-color: #D43326 !important;
 	color:white !important;
-
 }

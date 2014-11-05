@@ -13,8 +13,13 @@ angular.module('weQuote.controllers', [])
 	        {scope: 'email,publish_actions'});
 	}
 }])
-.controller('Login', ['$scope',function($scope) {
-	
+.controller('Login', ['$scope','$state',function($scope,$state) {
+	$scope.busy = false;
+
+	$scope.login = function(){
+		$scope.busy = true;
+		setTimeout(function(){$state.go('home');}, 500);
+	}
 }])
 .controller('Home', ['$scope',function($scope) {
 	
