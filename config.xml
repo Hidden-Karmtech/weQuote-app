@@ -7,6 +7,7 @@
 	<author email="hkt@wequote.it" href="http://www.wequote.it/">
 	  HKT
 	</author>
+	<icon src="res/icon.png" />
 	<content src="index.html"/>
 	<access origin="*"/>
 	<preference name="Orientation" value="portrait" />
@@ -17,10 +18,4 @@
 	<feature name="StatusBar">
 	<param name="ios-package" value="CDVStatusBar" onload="true"/>
 	</feature>
-	<platform name="android">
-  		<icon src="res/android/ldpi.png" density="ldpi" />
-		<icon src="res/android/mdpi.png" density="mdpi" />
-		<icon src="res/android/hdpi.png" density="hdpi" />
-		<icon src="res/android/xhdpi.png" density="xhdpi" />
-	</platform>
 </widget>

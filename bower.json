@@ -1,6 +1,9 @@
 {
   "name": "weQuote",
   "private": "true",
+  "dependencies": {
+  	"openFb": "https://github.com/ccoenraets/OpenFB.git#latest"
+  },
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0-beta.13"
   }

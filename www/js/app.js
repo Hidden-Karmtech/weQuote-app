@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('weQuote', ['ionic','weQuote.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -17,3 +17,63 @@ angular.module('starter', ['ionic'])
     }
   });
 })
+
+
+.config(function($stateProvider, $urlRouterProvider) {
+  /*
+  $stateProvider
+
+    // setup an abstract state for the tabs directive
+    .state('tab', {
+      url: "/tab",
+      abstract: true,
+      templateUrl: "templates/tabs.html"
+    })
+
+    // Each tab has its own nav history stack:
+
+    .state('tab.dash', {
+      url: '/dash',
+      views: {
+        'tab-dash': {
+          templateUrl: 'templates/tab-dash.html',
+          controller: 'DashCtrl'
+        }
+      }
+    })
+
+    .state('tab.friends', {
+      url: '/friends',
+      views: {
+        'tab-friends': {
+          templateUrl: 'templates/tab-friends.html',
+          controller: 'FriendsCtrl'
+        }
+      }
+    })
+    .state('tab.friend-detail', {
+      url: '/friend/:friendId',
+      views: {
+        'tab-friends': {
+          templateUrl: 'templates/friend-detail.html',
+          controller: 'FriendDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.account', {
+      url: '/account',
+      views: {
+        'tab-account': {
+          templateUrl: 'templates/tab-account.html',
+          controller: 'AccountCtrl'
+        }
+      }
+    });
+
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('/tab/dash');*/
+
+  openFB.init({appId: '654874671294085'});
+
+});
