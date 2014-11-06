@@ -38,4 +38,24 @@ angular.module('weQuote', ['ionic','weQuote.controllers'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
-});
+}).run(['$ionicPlatform',function($ionicPlatform) {
+      FastClick.attach(document.body);
+
+      $ionicPlatform.registerBackButtonAction(function () {
+        
+        //Try to figure if ask this.
+        if(true){
+          swal({
+            title: "Sei sicuro di voler abbandonare #weQuote?",
+            showCancelButton: true,
+            confirmButtonColor: "#5264AE",
+            cancelButtonText:"No",
+            confirmButtonText: "Sì",
+            closeOnConfirm: false }, 
+              function(){
+                ionic.Platform.exitApp();
+              });
+        }
+      }, 100);
+     
+  }]);
