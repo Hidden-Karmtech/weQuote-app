@@ -28,3 +28,64 @@ body{
 	background-color: #D43326 !important;
 	color:white !important;
 }
+
+.swipe-cards {
+  position: fixed;
+}
+
+.swipe-card {
+  display: none;
+  position: fixed;
+  -webkit-transform: scale(1,1);
+  top:15vh;
+  left: 5vw;
+  width: 90vw;
+  height: 90vw;
+  box-sizing: border-box;
+   border-radius: 4px;
+  overflow: hidden;
+  -webkit-animation-fill-mode: forwards;
+}
+
+.text-card {
+  color: #fff;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  line-height: 300px;
+  word-wrap: break-word;
+  border: 6px solid #A9B5E3;
+  text-align: center;
+}
+
+.text-card span {
+  display: inline-block;
+  line-height: 40px;
+  width: 200px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+#shareButton{
+	position: fixed;
+ 	bottom: 10px;
+}
+
+@-webkit-keyframes bounceIn {
+  0% {
+    -webkit-transform: scale(0,0);
+  }
+  70% {
+    -webkit-transform: scale(1.2,1.2);
+  }
+  100% {
+    -webkit-transform: scale(1,1);
+  }
+}
+
+.swipe-card.pop-in-start {
+  -webkit-transform: scale(0,0);
+}
+.swipe-card.pop-in {
+  -webkit-animation: bounceIn 0.4s ease-out;
+}

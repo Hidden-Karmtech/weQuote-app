@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('weQuote', ['ionic','weQuote.controllers','ngCordova'])
+angular.module('weQuote', ['ionic','weQuote.controllers','ngCordova','ionic.contrib.ui.cards'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -15,10 +15,25 @@ angular.module('weQuote', ['ionic','weQuote.controllers','ngCordova'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    $ionicPlatform.registerBackButtonAction(function () {
+        
+        //Try to figure if ask this.
+        if(true){
+          swal({
+            title: "Sei sicuro di voler abbandonare #weQuote?",
+            showCancelButton: true,
+            confirmButtonColor: "#5264AE",
+            cancelButtonText:"No",
+            confirmButtonText: "Sì",
+            closeOnConfirm: true }, 
+              function(){
+                ionic.Platform.exitApp();
+              });
+        }
+      }, 100);
   });
 })
-
-
 .config(function($stateProvider, $urlRouterProvider) {
   
   $stateProvider
@@ -38,22 +53,4 @@ angular.module('weQuote', ['ionic','weQuote.controllers','ngCordova'])
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/login');
 
-}).run(['$ionicPlatform',function($ionicPlatform) {
-      $ionicPlatform.registerBackButtonAction(function () {
-        
-        //Try to figure if ask this.
-        if(true){
-          swal({
-            title: "Sei sicuro di voler abbandonare #weQuote?",
-            showCancelButton: true,
-            confirmButtonColor: "#5264AE",
-            cancelButtonText:"No",
-            confirmButtonText: "Sì",
-            closeOnConfirm: true }, 
-              function(){
-                ionic.Platform.exitApp();
-              });
-        }
-      }, 100);
-     
-  }]);
+});
