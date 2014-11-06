@@ -39,8 +39,6 @@ angular.module('weQuote', ['ionic','weQuote.controllers'])
   $urlRouterProvider.otherwise('/login');
 
 }).run(['$ionicPlatform',function($ionicPlatform) {
-      FastClick.attach(document.body);
-
       $ionicPlatform.registerBackButtonAction(function () {
         
         //Try to figure if ask this.

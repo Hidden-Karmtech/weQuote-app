@@ -3,8 +3,7 @@
   "private": "true",
   "dependencies": {
     "sweetalert": "~0.3.1",
-    "angular-translate": "~2.4.2",
-    "fastclick": "~1.0.3"
+    "angular-translate": "~2.4.2"
   },
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0-beta.13"
