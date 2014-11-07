@@ -10,12 +10,11 @@ angular.module('weQuote.controllers', [])
 		setTimeout(function(){$state.go('home');}, 500);
 	}
 }])
-.controller('Home', ['$scope',function($scope) {
-	$scope.quotes = [
-		{text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac ipsum mollis, finibus nulla sit amet, vehicula mi. Curabitur aliquet accumsan porta. Nam at quam libero. Etiam lobortis massa vel ex accumsan fringilla. Curabitur accumsan et libero non tincidunt. Sed eu elit dictum nullam sodales.'},
-		{text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac ipsum mollis, finibus nulla sit amet, vehicula mi. Curabitur aliquet accumsan porta. Nam at quam libero. Etiam lobortis massa vel ex accumsan fringilla. Curabitur accumsan et libero non tincidunt. Sed eu elit dictum nullam sodales.'},
-		{text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac ipsum mollis, finibus nulla sit amet, vehicula mi. Curabitur aliquet accumsan porta. Nam at quam libero. Etiam lobortis massa vel ex accumsan fringilla. Curabitur accumsan et libero non tincidunt. Sed eu elit dictum nullam sodales.'},
-		{text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac ipsum mollis, finibus nulla sit amet, vehicula mi. Curabitur aliquet accumsan porta. Nam at quam libero. Etiam lobortis massa vel ex accumsan fringilla. Curabitur accumsan et libero non tincidunt. Sed eu elit dictum nullam sodales.'},
-		{text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ac ipsum mollis, finibus nulla sit amet, vehicula mi. Curabitur aliquet accumsan porta. Nam at quam libero. Etiam lobortis massa vel ex accumsan fringilla. Curabitur accumsan et libero non tincidunt. Sed eu elit dictum nullam sodales.'}
-	];
+.controller('Home', ['$scope','QuoteRepository',function($scope,QuoteRepository) {
+
+	$scope.quotes = [];
+
+	QuoteRepository.list().then(function(quotes){
+		$scope.quotes = quotes;
+	});
 }]);
