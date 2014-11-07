@@ -1,7 +1,7 @@
 weQuote-app
 ===========
 
-#weQuote project ionic app
+weQuote project ionic app
 
 Installation
 ------------
