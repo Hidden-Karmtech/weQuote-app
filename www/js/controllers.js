@@ -13,8 +13,14 @@ angular.module('weQuote.controllers', [])
 .controller('Home', ['$scope','QuoteRepository',function($scope,QuoteRepository) {
 
 	$scope.quotes = [];
+	$scope.visibleQuotes = [];
 
 	QuoteRepository.list().then(function(quotes){
-		$scope.quotes = quotes;
+		$scope.quotes = _.shuffle(quotes);
+		$scope.visibleQuotes = [$scope.quotes.pop()];
 	});
+
+	$scope.cardDestroyed = function(index){
+		$scope.visibleQuotes = [$scope.quotes.pop()];
+	}
 }]);

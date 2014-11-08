@@ -5,7 +5,8 @@
     "sweetalert": "~0.3.1",
     "angular-translate": "~2.4.2",
     "ngCordova": "~0.1.7-alpha",
-    "ionic-contrib-swipe-cards": "https://github.com/driftyco/ionic-contrib-swipe-cards.git"
+    "ionic-contrib-swipe-cards": "https://github.com/driftyco/ionic-contrib-swipe-cards.git",
+    "underscore": "~1.7.0"
   },
   "overrides": {
     "ionic-contrib-swipe-cards": {

@@ -11,8 +11,9 @@
  <swipe-cards>
   <swipe-card 
   	class="text-card" 
-  	ng-style="{'background-image':'url(img/backgrounds/Amore/00' + ($index % 5) + '.jpg)'}"
-  	ng-repeat="q in quotes">
+  	ng-style="{'background-image':'url(img/backgrounds/Amore/00' + (q.text.length % 4) + '.jpg)'}"
+  	ng-repeat="q in visibleQuotes" 
+    on-destroy="cardDestroyed($index)">
     <span>{{q.text}}</span>
   </swipe-card>
 </swipe-cards>
