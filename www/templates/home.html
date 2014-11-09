@@ -14,7 +14,8 @@
   	ng-style="{'background-image':'url(img/backgrounds/Amore/00' + (q.text.length % 4) + '.jpg)'}"
   	ng-repeat="q in visibleQuotes" 
     on-destroy="cardDestroyed($index)">
-    <span>{{q.text}}</span>
+    <span class="slick">{{q.text}}</span>
+    <span class="author slick">{{q.author}}</span>
   </swipe-card>
 </swipe-cards>
 	<div class="bar bar-footer bar-light">

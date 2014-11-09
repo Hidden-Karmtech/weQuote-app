@@ -37,29 +37,37 @@ body{
   left: 5vw;
   width: 90vw;
   height: 90vw;
-  box-sizing: border-box;
+  line-height: 40vw;
+ box-sizing: border-box;
    border-radius: 4px;
   overflow: hidden;
   -webkit-animation-fill-mode: forwards;
 }
 
 .text-card {
+  display: table;
   color: #fff;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center center;
-  line-height: 300px;
   word-wrap: break-word;
+  line-height: 100%
   border: 6px solid #A9B5E3;
   text-align: center;
 }
 
 .text-card span {
-  display: inline-block;
-  line-height: 40px;
-  width: 200px;
-  font-size: 10px;
+  display: table-cell;
   vertical-align: middle;
+  line-height: normal;      
+  width: 80%;
+  font-size: 20px;
+}
+
+.text-card .author{
+  font-style: italic;
+  position: absolute;
+  bottom: 50px;
 }
 
 #shareButton{
