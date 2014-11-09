@@ -1,10 +1,6 @@
 @font-face {
-  font-family: 'Pacifico';
-  src: url('pacifico.eot');
-  src: url('pacifico.eot?#iefix') format('embedded-opentype'),
-       url('pacifico.woff') format('woff'),
-       url('pacifico.ttf') format('truetype'),
-       url('pacifico.svg#Pacifico') format('svg');
+  font-family: 'Lobster';
+  src: url('Lobster.otf');
 }
 
 body{
@@ -12,7 +8,7 @@ body{
 }
 
 .slick{
-	font-family: 'Pacifico';
+	font-family: 'Lobster';
 }
 
 #loginSection{
