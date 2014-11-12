@@ -10,17 +10,36 @@ angular.module('weQuote.controllers', [])
 		setTimeout(function(){$state.go('home');}, 500);
 	}
 }])
-.controller('Home', ['$scope','QuoteRepository',function($scope,QuoteRepository) {
+.controller('Home', ['$scope','$log','QuoteRepository',function($scope,$log,QuoteRepository) {
 
-	$scope.quotes = [];
+	var MIN_SIZE = 5;
+	var quotes = [];
 	$scope.visibleQuotes = [];
+	var downloading = false;
 
-	QuoteRepository.list().then(function(quotes){
-		$scope.quotes = _.shuffle(quotes);
-		$scope.visibleQuotes = [$scope.quotes.pop()];
-	});
+	var downloadQuotes = function(onComplete){
+		downloading = true;
+		QuoteRepository.list().then(function(newQuotes){
+			$log.debug(newQuotes.length + " downloaded");
+			
+			downloading = false;
+			quotes = _.union(quotes,_.shuffle(newQuotes));
+			
+			if(onComplete){
+				onComplete(quotes);
+			}
+		});
+	}
 
 	$scope.cardDestroyed = function(index){
-		$scope.visibleQuotes = [$scope.quotes.pop()];
+		$scope.visibleQuotes = [quotes.pop()];
+		$log.debug(quotes.length + " left");
+		if(quotes.length <= MIN_SIZE && !downloading){
+			downloadQuotes();
+		}
 	}
+
+	downloadQuotes(function(quotes){
+		$scope.visibleQuotes = [quotes.pop()];
+	});
 }]);
