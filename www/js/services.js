@@ -1,10 +1,21 @@
 angular.module('weQuote.services', [])
-.service('QuoteRepository', ['$http',function($http) {
+.constant('SERVER_BASE_URL','https://api-wequote.rhcloud.com/')
+.service('QuoteRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
 	var that = this;
 
 	return {
 		list:function(query){
-			return $http.get('http://api-wequote.rhcloud.com/list?search=' + query).then(function(response){
+
+			var params = {};
+			if(query){
+				params.search = query;
+			}
+
+			return $http({
+				method:'GET',
+				url:SERVER_BASE_URL + 'list',
+				params:params
+			}).then(function(response){
 				return response.data;
 			});
 		}
