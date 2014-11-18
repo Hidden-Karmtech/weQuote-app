@@ -56,6 +56,7 @@ body{
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center center;
+  background-size: 100% auto;
   word-wrap: break-word;
   line-height: 100%
   border: 6px solid #A9B5E3;
