@@ -13,6 +13,7 @@ angular.module('weQuote.controllers', [])
 .controller('Home', ['$scope','$log','QuoteRepository',function($scope,$log,QuoteRepository) {
 
 	var MIN_SIZE = 5;
+	var IMAGES = 20;
 	var quotes = [];
 	$scope.visibleQuotes = [];
 	var downloading = false;
@@ -46,5 +47,11 @@ angular.module('weQuote.controllers', [])
 
 	downloadQuotes(function(quotes){
 		$scope.visibleQuotes = [quotes.pop()];
+	});
+
+	$scope.$watch('visibleQuotes',function(newValue){
+		if(newValue.length){
+			$scope.imageUrl = _.str.pad(Date.now() % IMAGES,3,'0');
+		}
 	});
 }]);
