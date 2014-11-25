@@ -10,7 +10,7 @@ angular.module('weQuote.controllers', [])
 		setTimeout(function(){$state.go('home');}, 500);
 	}
 }])
-.controller('Home', ['$scope','$log','QuoteRepository',function($scope,$log,QuoteRepository) {
+.controller('Home', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 
 	var MIN_SIZE = 5;
 	var IMAGES = 20;
@@ -31,6 +31,10 @@ angular.module('weQuote.controllers', [])
 			}
 		});
 	}
+
+	$scope.toggleLeft = function() {
+    	$ionicSideMenuDelegate.toggleLeft();
+  	};
 
 	$scope.cardDestroyed = function(index){
 		$scope.visibleQuotes = [quotes.pop()];
@@ -57,6 +61,10 @@ angular.module('weQuote.controllers', [])
 		$scope.$broadcast('generate-canvas',url,quote,function(imgData){
 			window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
 		});
+	}
+
+	$scope.exit = function(){
+		alert("Porco iddio");	
 	}
 
 	downloadQuotes(function(quotes){

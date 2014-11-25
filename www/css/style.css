@@ -15,6 +15,10 @@ body{
   color: #5264AE !important;
 }
 
+.important-light{
+  color: #FFFFFF !important;
+}
+
 #loginSection{
 	padding-top: 20%;
 }
