@@ -1,26 +1,58 @@
-<ion-header-bar class="bar-light">
-	<h1 class="title important-royal slick">#weQuote</h1>
-</ion-header-bar>
-<ion-content>
-<div class="list padding">
-  <label class="item item-input">
-  	<i class="icon ion-search placeholder-icon"></i>
-    <input type="text" placeholder="Ricerca...">
-  </label>
-</div>
- <swipe-cards>
-  <swipe-card 
-  	class="text-card" 
-  	ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
-  	ng-repeat="q in visibleQuotes" 
-    on-destroy="cardDestroyed($index)">
-    <span class="slick">{{q.text}}</span>
-    <span class="author slick">{{q.author}}</span>
-  </swipe-card>
-</swipe-cards>
-</ion-content>
-<ion-footer-bar class="bar-light">
-  <h1 
-    class="title important-royal slick" 
-    ng-click="share()">Condividi</h1>
-</ion-footer-bar>
+<ion-side-menus>
+
+  <!-- Center content -->
+  <ion-side-menu-content class="royal-bg">
+    <ion-header-bar class="bar-light">
+    <button class="button icon ion-navicon" ng-click="toggleLeft()"></button>
+      <h1 class="title important-royal slick">#weQuote</h1>
+    </ion-header-bar>
+    <ion-content>
+    <div class="list padding">
+      <label class="item item-input">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="Ricerca...">
+      </label>
+    </div>
+     <swipe-cards>
+      <swipe-card 
+        class="text-card" 
+        ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
+        ng-repeat="q in visibleQuotes" 
+        on-destroy="cardDestroyed($index)">
+        <span class="slick">{{q.text}}</span>
+        <span class="author slick">{{q.author}}</span>
+      </swipe-card>
+    </swipe-cards>
+    </ion-content>
+    <ion-footer-bar class="bar-light">
+      <h1 
+        class="title important-royal slick" 
+        ng-click="share()">Condividi</h1>
+    </ion-footer-bar>
+
+  </ion-side-menu-content>
+
+  <!-- Left menu -->
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-royal">
+            <h1 class="title important-light slick">Menù</h1>           
+    </ion-header-bar>
+    <ion-content>
+      <!--<div class="list">
+                <div class="item important-royal slick">Autori</div>
+                <div class="item important-royal slick">Tags</div>
+                <div class="item important-royal slick">About</div>
+                <div class="item important-royal slick">Esci</div>
+      </div>-->
+      <ion-list>
+        <ion-item class="item important-royal slick">Autori</ion-item>
+        <ion-item class="item important-royal slick">Tags</ion-item>
+        <ion-item class="item important-royal slick">About</ion-item>
+        <ion-item class="item important-royal slick">
+          <span ng-click="alert('merda');">Ciao Merda</span>
+        </ion-item>
+      </ion-list>
+    <ion-content>   
+  </ion-side-menu>
+  
+</ion-side-menus>
