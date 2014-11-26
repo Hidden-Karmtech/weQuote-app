@@ -48,6 +48,21 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
       url: "/home",
       controller: 'Home',
       templateUrl: "templates/home.html"
+    })
+    .state('authors', {
+      url: "/authors",
+      controller: 'Authors',
+      templateUrl: "templates/authors.html"
+    })
+    .state('tags', {
+      url: "/tags",
+      controller: 'Tags',
+      templateUrl: "templates/tags.html"
+    })
+    .state('about', {
+      url: "/about",
+      controller: 'about',
+      templateUrl: "templates/about.html"
     });
 
   // if none of the above states are matched, use this as the fallback

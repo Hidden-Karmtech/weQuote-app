@@ -58,7 +58,7 @@ angular.module('weQuote.controllers', [])
 	}
 
 	$scope.exit = function(){
-		alert("Esci");	
+		alert("ESCI");
 	}
 
 	downloadQuotes(function(quotes){
