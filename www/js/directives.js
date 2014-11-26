@@ -4,22 +4,38 @@ angular.module('weQuote.directives', [])
 		var that = this;
 
 		var IMG_SIZE = 500;
+		var START_FONT_SIZE = 52;
+		var TEXT_HEIGHT_THRESHOLD = 300;
 
 		this.getQuoteText = function(quote){
-			var quoteText = new Kinetic.Text(
+			var generateText = function(text,fontSize){
+				return new Kinetic.Text(
 				{
-					text: quote.text,
-					fontSize: 52,
+					text: text,
+					fontSize: fontSize,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
 					width: IMG_SIZE,
 					padding: 0,
 					align: 'center'
 				});
+			};
+
+			var quoteText;
+			var fontSize = START_FONT_SIZE;
+			var textHeight;
+
+			do{	
+				$log.debug("Generating text with font " + fontSize);
+				
+				fontSize = fontSize ? ((fontSize*90)/100) : START_FONT_SIZE;
+				quoteText = generateText(quote.text,fontSize);
+				textHeight = quoteText.getAttr('height');
+
+				$log.debug("text height " + textHeight);
+			}while(textHeight > TEXT_HEIGHT_THRESHOLD)
 
 			//Y center
-			var textHeight = quoteText.getAttr('height');
-			$log.debug(textHeight);
 			quoteText.setAttr('y',(IMG_SIZE - textHeight)/2);
 
 			return quoteText;
