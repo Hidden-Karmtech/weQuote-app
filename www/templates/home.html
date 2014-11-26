@@ -1,57 +1,62 @@
-<ion-side-menus>
-
-  <!-- Center content -->
-  <ion-side-menu-content class="royal-bg">
-    <ion-header-bar class="bar-light">
-      <button class="button icon ion-navicon" ng-click="toggleLeft()"></button>
-      <h1 class="title important-royal slick">#weQuote</h1>
-    </ion-header-bar>
-    <ion-content>
-    <div class="list padding">
-      <label class="item item-input">
-        <i class="icon ion-search placeholder-icon"></i>
-        <input type="text" placeholder="Ricerca...">
-      </label>
-    </div>
-     <swipe-cards>
-      <swipe-card 
-        class="text-card" 
-        ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
-        ng-repeat="q in visibleQuotes" 
-        on-destroy="cardDestroyed($index)">
-        <span class="slick">{{q.text}}</span>
-        <span class="author slick">{{q.author}}</span>
-      </swipe-card>
-    </swipe-cards>
-    </ion-content>
-    <ion-footer-bar class="bar-light">
-      <a 
-        class="button button-icon icon ion-loading-a important-royal"
-        ng-show="sharing"
-      ></a>
-      <h1 
-        class="title important-royal slick text-disabled" 
-        ng-click="share(visibleQuotes[0])">
-          {{sharing ? 'Attendi' : 'Condividi'}}
-      </h1>
-    </ion-footer-bar>
-
-
-  </ion-side-menu-content>
-
-  <ion-side-menu side="left">
-    <ion-header-bar class="bar-royal">
-      <h1 class="title important-light slick">Menù</h1>           
-    </ion-header-bar>
-    <ion-content>
-      <div class="list">
-          <a class="item important-royal slick" ui-sref="login" menu-close>Autori</a>
-          <a class="item important-royal slick" href="#/home">Tags</a>
-          <a class="item important-royal slick" href="#/home">About</a>
-          <a menu-close class="item important-royal slick" href="#/home">Esci</a>
+  <ion-side-menus>
+    <ion-side-menu-content class="royal-bg">
+      <ion-header-bar class="bar-light">
+       <button 
+          menu-toggle="left"
+          class="button button-icon icon ion-navicon"></button>
+        <h1 class="title important-royal slick">#weQuote</h1>
+      </ion-header-bar>
+      <ion-content>
+      <div class="list padding">
+        <label class="item item-input">
+          <i class="icon ion-search placeholder-icon"></i>
+          <input type="text" placeholder="Ricerca...">
+        </label>
       </div>
-    <ion-content>   
-  </ion-side-menu>
-  
-</ion-side-menus>
-<quote-canvas/>
+       <swipe-cards>
+        <swipe-card 
+          class="text-card" 
+          ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
+          ng-repeat="q in visibleQuotes" 
+          on-destroy="cardDestroyed($index)">
+          <span class="slick">{{q.text}}</span>
+          <span class="author slick">{{q.author}}</span>
+        </swipe-card>
+      </swipe-cards>
+      </ion-content>
+      <ion-footer-bar class="bar-light">
+        <a 
+          class="button button-icon icon ion-loading-a important-royal"
+          ng-show="sharing"
+        ></a>
+        <h1 
+          class="title important-royal slick text-disabled" 
+          ng-click="share(visibleQuotes[0])">
+            {{sharing ? 'Attendi' : 'Condividi'}}
+        </h1>
+      </ion-footer-bar>
+    </ion-side-menu-content>
+
+    <ion-side-menu side="left">
+      <ion-header-bar class="bar-royal">
+        <h1 class="title important-light slick">Menù</h1>           
+      </ion-header-bar>
+      <ion-content class="has-header">
+        <ion-list>
+          <ion-item nav-clear menu-close ng-click="login()">
+            Login
+          </ion-item>
+          <ion-item nav-clear menu-close href="#/app/search">
+            Search
+          </ion-item>
+          <ion-item nav-clear menu-close href="#/app/browse">
+            Browse
+          </ion-item>
+          <ion-item nav-clear menu-close href="#/app/playlists">
+            Playlists
+          </ion-item>
+        </ion-list>
+      </ion-content>  
+    </ion-side-menu>
+  </ion-side-menus>
+  <quote-canvas/>
