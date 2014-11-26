@@ -6,6 +6,7 @@ angular.module('weQuote.directives', [])
 		var IMG_SIZE = 500;
 		var START_FONT_SIZE = 52;
 		var TEXT_HEIGHT_THRESHOLD = 300;
+		var TEXT_SCALE_FACTOR = 0.9;
 
 		this.getQuoteText = function(quote){
 			var generateText = function(text,fontSize){
@@ -28,7 +29,7 @@ angular.module('weQuote.directives', [])
 			do{	
 				$log.debug("Generating text with font " + fontSize);
 				
-				fontSize = fontSize ? ((fontSize*90)/100) : START_FONT_SIZE;
+				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : START_FONT_SIZE;
 				quoteText = generateText(quote.text,fontSize);
 				textHeight = quoteText.getAttr('height');
 
