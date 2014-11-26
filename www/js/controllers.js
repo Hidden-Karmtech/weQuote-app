@@ -15,8 +15,11 @@ angular.module('weQuote.controllers', [])
 	var MIN_SIZE = 5;
 	var IMAGES = 20;
 	var quotes = [];
-	$scope.visibleQuotes = [];
 	var downloading = false;
+
+
+	$scope.visibleQuotes = [];
+	$scope.sharing = false;
 
 	var downloadQuotes = function(onComplete){
 		downloading = true;
@@ -45,26 +48,17 @@ angular.module('weQuote.controllers', [])
 	}
 
 	$scope.share = function(quote){
-	//	window.plugins.socialsharing.share('', '', 'www/img/backgrounds/Amore/00'+($scope.visibleQuotes[0].text.length % 4)+ '.jpg')
-		/*
-		var c = document.getElementById("canvas");
-		var ctx = c.getContext("2d");
-		
-		var image = new Image();
-		image.src = 'img/backgrounds/Amore/' + $scope.imageUrl + '.png'
-		image.onload = function() {
-			console.log("Here");
-    		ctx.drawImage(image, 0, 0);
-    		window.plugins.socialsharing.share(null, 'weQuote', c.toDataURL(), null);
-		};*/
+		$scope.sharing = true;
 		var url = 'img/backgrounds/Amore/' + $scope.imageUrl + '.png';
 		$scope.$broadcast('generate-canvas',url,quote,function(imgData){
 			window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
+			$scope.sharing = false;
+			$scope.$apply();
 		});
 	}
 
 	$scope.exit = function(){
-		alert("Porco iddio");	
+		alert("Esci");	
 	}
 
 	downloadQuotes(function(quotes){
