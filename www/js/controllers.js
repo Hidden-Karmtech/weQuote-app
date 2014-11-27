@@ -17,7 +17,6 @@ angular.module('weQuote.controllers', [])
 	var quotes = [];
 	var downloading = false;
 
-
 	$scope.visibleQuotes = [];
 	$scope.sharing = false;
 
@@ -58,7 +57,7 @@ angular.module('weQuote.controllers', [])
 	}
 
 	$scope.exit = function(){
-		alert("ESCI");
+		ionic.Platform.exitApp();
 	}
 
 	downloadQuotes(function(quotes){
