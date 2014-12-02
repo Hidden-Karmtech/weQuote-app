@@ -20,4 +20,34 @@ angular.module('weQuote.services', [])
 			});
 		}
 	};
+}])
+.service('AuthorRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
+	var that = this;
+
+	return {
+		list:function(){
+
+			return $http({
+				method:'GET',
+				url:SERVER_BASE_URL + 'authors'
+			}).then(function(response){
+				return response.data;
+			});
+		}
+	};
+}])
+.service('TagRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
+	var that = this;
+
+	return {
+		list:function(){
+
+			return $http({
+				method:'GET',
+				url:SERVER_BASE_URL + 'tags'
+			}).then(function(response){
+				return response.data;
+			});
+		}
+	};
 }]);

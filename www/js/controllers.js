@@ -1,25 +1,48 @@
 angular.module('weQuote.controllers', [])
-.controller('Root', ['$scope',function($scope) {
+.controller('Root', ['$scope','$state',function($scope,$state) {
 	$scope.exit = function(){
 		ionic.Platform.exitApp();
-	}	
+	}		
+
+	$scope.$on('$stateChangeSuccess',function(event,toState){
+		$scope.title = toState.title || '#weQuote';
+	});
+
+	$scope.title = $state.title || '#weQuote';
 }])
 .controller('About', ['$scope','$state',function($scope,$state) {
 	$scope.openLink = function() {
     	window.open('http://www.wequote.it', '_system', 'location=yes');
   	};	
+  	
   	$scope.$on('back-button-action', function(event, args) {                
        $state.go('quotes');
 	});
 }])
-.controller('Tags', ['$scope','$state',function($scope,$state) {
+.controller('Tags', ['$scope','TagRepository','$state',function($scope,TagRepository,$state) {
+	$scope.tags=[];
+	TagRepository.list().then(function(tags){
+			$scope.tags = _.map(tags,function(tag){
+				tag.name = _.str.capitalize(_.str.trim(tag.name));
+				return tag;
+			});
+	});	
+
 	$scope.$on('back-button-action', function(event, args) {                
         $state.go('quotes');
 	});	
 }])
-.controller('Authors', ['$scope','$state',function($scope,$state) {
+.controller('Authors', ['$scope','AuthorRepository','$state',function($scope,AuthorRepository,$state) {
 	$scope.$on('back-button-action', function(event, args) {                
-       $state.go('quotes'); 
+       $state.go('quotes');
+    });
+
+  	$scope.authors=[];
+	AuthorRepository.list().then(function(authors){
+			$scope.authors = _.map(authors,function(author){
+				author.name = _.str.capitalize(_.str.trim(author.name));
+				return author;
+			});
 	});	
 }])
 .controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
