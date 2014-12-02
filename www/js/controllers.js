@@ -1,6 +1,11 @@
 angular.module('weQuote.controllers', [])
 .controller('Root', ['$scope',function($scope) {
-	
+		
+}])
+.controller('About', ['$scope',function($scope) {
+	$scope.openLink = function() {
+    	window.open('http://www.wequote.it', '_system', 'location=yes');
+  	};	
 }])
 .controller('Home', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 

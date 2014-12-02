@@ -54,7 +54,7 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
     })
     .state('about', {
       url: "/about",
-      controller: 'about',
+      controller: 'About',
       templateUrl: "templates/about.html"
     });
 
