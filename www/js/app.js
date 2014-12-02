@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQuote.directives','ngCordova','ionic.contrib.ui.cards'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,21 +17,8 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
     }
 
     $ionicPlatform.registerBackButtonAction(function () {
-        
-        //Try to figure if ask this.
-        if(true){
-          swal({
-            title: "Sei sicuro di voler abbandonare #weQuote?",
-            showCancelButton: true,
-            confirmButtonColor: "#5264AE",
-            cancelButtonText:"No",
-            confirmButtonText: "Sì",
-            closeOnConfirm: true }, 
-              function(){
-                ionic.Platform.exitApp();
-              });
-        }
-      }, 100);
+        $rootScope.$broadcast('back-button-action');      
+    }, 100);
   });
 })
 .config(function($stateProvider, $urlRouterProvider) {

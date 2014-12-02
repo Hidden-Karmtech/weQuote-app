@@ -2,18 +2,25 @@ angular.module('weQuote.controllers', [])
 .controller('Root', ['$scope',function($scope) {
 	$scope.exit = function(){
 		ionic.Platform.exitApp();
-	}
+	}	
 }])
-.controller('About', ['$scope',function($scope) {
+.controller('About', ['$scope','$state',function($scope,$state) {
 	$scope.openLink = function() {
     	window.open('http://www.wequote.it', '_system', 'location=yes');
   	};	
+  	$scope.$on('back-button-action', function(event, args) {                
+       $state.go('quotes');
+	});
 }])
-.controller('Tags', ['$scope',function($scope) {
-		
+.controller('Tags', ['$scope','$state',function($scope,$state) {
+	$scope.$on('back-button-action', function(event, args) {                
+        $state.go('quotes');
+	});	
 }])
-.controller('Authors', ['$scope',function($scope) {
-		
+.controller('Authors', ['$scope','$state',function($scope,$state) {
+	$scope.$on('back-button-action', function(event, args) {                
+       $state.go('quotes'); 
+	});	
 }])
 .controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 
@@ -69,5 +76,20 @@ angular.module('weQuote.controllers', [])
 		if(newValue.length){
 			$scope.imageUrl = _.str.pad(Date.now() % IMAGES,3,'0');
 		}
+	});
+
+	$scope.$on('back-button-action', function(event, args) {
+        if(true){
+          swal({
+            title: "Sei sicuro di voler abbandonare #weQuote?",
+            showCancelButton: true,
+            confirmButtonColor: "#5264AE",
+            cancelButtonText:"No",
+            confirmButtonText: "Sì",
+            closeOnConfirm: true }, 
+              function(){
+                ionic.Platform.exitApp();
+              });
+        }
 	});
 }]);
