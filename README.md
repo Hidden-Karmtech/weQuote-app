@@ -9,7 +9,6 @@ Installation
 bower install
 
 ionic platform add android/ios
-ionic run android/ios
 
 cordova plugin add com.ionic.keyboard
 cordova plugin add org.apache.cordova.console
