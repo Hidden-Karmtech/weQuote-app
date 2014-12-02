@@ -6,8 +6,8 @@
     </label>
 </div>
 <ul class="list slick">
-    <li class="item important-royal" ng-repeat="tag in tags | filter:query">
-      {{tag.name}} ({{tag.count}})
+    <li class="item important-royal" bindonce ng-repeat="tag in tags | filter:query">
+      <span bo-text="tag.name + '(' + tag.count +')'"/>
     </li>
 </ul>
 </ion-content>
