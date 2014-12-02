@@ -7,6 +7,12 @@ angular.module('weQuote.controllers', [])
     	window.open('http://www.wequote.it', '_system', 'location=yes');
   	};	
 }])
+.controller('Tags', ['$scope',function($scope) {
+		
+}])
+.controller('Authors', ['$scope',function($scope) {
+		
+}])
 .controller('Home', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 
 	var MIN_SIZE = 5;
