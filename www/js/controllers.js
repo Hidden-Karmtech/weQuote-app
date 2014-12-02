@@ -1,6 +1,8 @@
 angular.module('weQuote.controllers', [])
 .controller('Root', ['$scope',function($scope) {
-		
+	$scope.exit = function(){
+		ionic.Platform.exitApp();
+	}
 }])
 .controller('About', ['$scope',function($scope) {
 	$scope.openLink = function() {
@@ -25,7 +27,7 @@ angular.module('weQuote.controllers', [])
 			});
 	});	
 }])
-.controller('Home', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
+.controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 
 	var MIN_SIZE = 5;
 	var IMAGES = 20;
@@ -69,10 +71,6 @@ angular.module('weQuote.controllers', [])
 			$scope.sharing = false;
 			$scope.$apply();
 		});
-	}
-
-	$scope.exit = function(){
-		ionic.Platform.exitApp();
 	}
 
 	downloadQuotes(function(quotes){

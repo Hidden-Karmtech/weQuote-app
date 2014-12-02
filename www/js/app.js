@@ -37,10 +37,10 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
 .config(function($stateProvider, $urlRouterProvider) {
   
   $stateProvider
-    .state('home', {
-      url: "/home",
-      controller: 'Home',
-      templateUrl: "templates/home.html"
+    .state('quotes', {
+      url: "/quotes",
+      controller: 'Quotes',
+      templateUrl: "templates/quotes.html"
     })
     .state('authors', {
       url: "/authors",
@@ -58,6 +58,6 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
       templateUrl: "templates/about.html"
     });
 
-  $urlRouterProvider.otherwise('/home');
+  $urlRouterProvider.otherwise('/quotes');
 
 });
