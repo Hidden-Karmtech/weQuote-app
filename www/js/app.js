@@ -37,13 +37,6 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
 .config(function($stateProvider, $urlRouterProvider) {
   
   $stateProvider
-
-    // setup an abstract state for the tabs directive
-    .state('login', {
-      url: "/login",
-      controller: 'Login',
-      templateUrl: "templates/login.html"
-    })
     .state('home', {
       url: "/home",
       controller: 'Home',
@@ -65,7 +58,6 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
       templateUrl: "templates/about.html"
     });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/home');
 
 });

@@ -38,6 +38,43 @@
     <script src="js/directives.js"></script>
   </head>
   <body controller="Root">
-      <ion-nav-view></ion-nav-view>
+      <ion-side-menus>
+            <ion-side-menu-content class="royal-bg" drag-content="false">
+                <ion-header-bar class="bar-light">
+                   <button 
+                      menu-toggle="left"
+                      class="button button-icon icon ion-navicon important-royal"></button>
+                    <h1 class="title important-royal slick">#weQuote</h1>
+                </ion-header-bar>
+                <ion-nav-view></ion-nav-view>
+            
+            </ion-side-menu-content>
+
+            <ion-side-menu side="left" class="calm-bg">
+              <ion-header-bar class="bar-dark">
+                <h1 class="title important-light slick">Menù</h1>           
+              </ion-header-bar>
+              <ion-content class="has-header">
+                <ion-list>
+                  <ion-item nav-clear menu-close class="item-calm title slick " href="#/authors">
+                  <i class="icon ion-person-stalker padding"></i>
+                    Autori
+                  </ion-item>
+                  <ion-item nav-clear menu-close class="item-calm title slick" href="#/tags">
+                  <i class="icon ion-pound padding"></i>
+                    Tags
+                  </ion-item>
+                  <ion-item nav-clear menu-close class="item-calm title slick" href="#/about">
+                  <i class="icon ion-help-circled padding"></i>
+                    About
+                  </ion-item>
+                  <ion-item nav-clear menu-close class="item-calm title slick" ng-click="exit();">
+                  <i class="icon ion-log-out padding"></i>
+                    Esci
+                  </ion-item>
+                </ion-list>
+              </ion-content>  
+            </ion-side-menu>
+  </ion-side-menus>
   </body>
 </html>
