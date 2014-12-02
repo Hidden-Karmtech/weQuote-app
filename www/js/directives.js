@@ -42,6 +42,23 @@ angular.module('weQuote.directives', [])
 			return quoteText;
 		};
 
+		this.getWatermark = function(){
+			var watermark = new Kinetic.Text(
+				{
+					text:'www.wequote.it',
+					fontSize: 16,
+					x:5,
+					y:5,
+					fontFamily: 'Lobster',
+					fill: '#FFFFFF',
+					width: IMG_SIZE,
+					padding: 0,
+					align: 'left'
+				});
+
+			return watermark;
+		};
+
 		this.getAuthorText = function(quote){
 			var autorText = new Kinetic.Text(
 				{
@@ -106,6 +123,7 @@ angular.module('weQuote.directives', [])
 						layer.add(that.getImageBackgroud(imageObj));
 						layer.add(that.getAuthorText(quote));
 						layer.add(that.getQuoteText(quote));
+						layer.add(that.getWatermark());
 
 						$scope.kinetic.stage.add(layer);
 						$scope.kinetic.stage.toDataURL({
