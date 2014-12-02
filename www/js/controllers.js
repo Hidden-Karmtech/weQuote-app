@@ -1,8 +1,14 @@
 angular.module('weQuote.controllers', [])
-.controller('Root', ['$scope',function($scope) {
+.controller('Root', ['$scope','$state',function($scope,$state) {
 	$scope.exit = function(){
 		ionic.Platform.exitApp();
 	}
+
+	$scope.$on('$stateChangeSuccess',function(event,toState){
+		$scope.title = toState.title || '#weQuote';
+	});
+
+	$scope.title = $state.title || '#weQuote';
 }])
 .controller('About', ['$scope',function($scope) {
 	$scope.openLink = function() {

@@ -45,16 +45,19 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
     .state('authors', {
       url: "/authors",
       controller: 'Authors',
+      title:'Autori',
       templateUrl: "templates/authors.html"
     })
     .state('tags', {
       url: "/tags",
       controller: 'Tags',
+      title:'Tags',
       templateUrl: "templates/tags.html"
     })
     .state('about', {
       url: "/about",
       controller: 'About',
+      title:'About',
       templateUrl: "templates/about.html"
     });
 
