@@ -2,24 +2,12 @@
 <div class="list padding">
     <label class="item item-input">
     <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" placeholder="Ricerca...">
+    <input type="text" placeholder="Ricerca..." ng-model="query">
     </label>
 </div>
 <ul class="list slick">
-    <li class="item important-royal">
-      AUTORE 1
-    </li>
-    <li class="item important-royal">
-      AUTORE 2
-    </li>
-    <li class="item important-royal">
-      AUTORE 3
-    </li>
-    <li class="item important-royal">
-      AUTORE 4
-    </li>
-    <li class="item important-royal">
-      AUTORE 5
+    <li class="item important-royal" ng-repeat="author in authors | filter:query">
+      {{author.name}} ({{author.count}})
     </li>
 </ul>
 </ion-content>

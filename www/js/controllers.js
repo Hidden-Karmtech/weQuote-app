@@ -7,11 +7,23 @@ angular.module('weQuote.controllers', [])
     	window.open('http://www.wequote.it', '_system', 'location=yes');
   	};	
 }])
-.controller('Tags', ['$scope',function($scope) {
-		
+.controller('Tags', ['$scope','TagRepository',function($scope,TagRepository) {
+	$scope.tags=[];
+	TagRepository.list().then(function(tags){
+			$scope.tags = _.map(tags,function(tag){
+				tag.name = _.str.capitalize(_.str.trim(tag.name));
+				return tag;
+			});
+	});	
 }])
-.controller('Authors', ['$scope',function($scope) {
-		
+.controller('Authors', ['$scope','AuthorRepository',function($scope,AuthorRepository) {
+	$scope.authors=[];
+	AuthorRepository.list().then(function(authors){
+			$scope.authors = _.map(authors,function(author){
+				author.name = _.str.capitalize(_.str.trim(author.name));
+				return author;
+			});
+	});	
 }])
 .controller('Home', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
 
