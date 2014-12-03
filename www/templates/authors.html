@@ -1,10 +1,10 @@
-<ion-content class="royal-bg has-header">
-<div class="list padding">
-    <label class="item item-input">
-    <i class="icon ion-search placeholder-icon"></i>
-    <input type="text" placeholder="Ricerca..." ng-model="query">
-    </label>
-</div>
+<ion-header-bar class="royal-bg has-header bar-subheader padding" style="height:auto">
+      <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Ricerca..." ng-model="query">
+      </label>
+</ion-header-bar>
+<ion-content class="royal-bg padding">
 <ul class="list slick">
     <li class="item important-royal" bindonce ng-repeat="author in authors | filter:query">
       <span bo-text="author.name + '(' + author.count +')'"/>
