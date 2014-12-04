@@ -6,7 +6,7 @@
       </label>
 </div>
 <ul class="list slick">
-    <li class="item important-royal" bindonce ng-repeat="tag in tags | filter:query">
+    <li class="item important-royal" bindonce ng-repeat="tag in state.tags | filter:query">
       <span bo-text="tag.name + '(' + tag.count +')'"/>
     </li>
 </ul>

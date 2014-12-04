@@ -1,5 +1,8 @@
 angular.module('weQuote.services', [])
 .constant('SERVER_BASE_URL','https://api-wequote.rhcloud.com/')
+.value('QuotesState',{})
+.value('TagsState',{})
+.value('AuthorsState',{})
 .service('QuoteRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
 	var that = this;
 

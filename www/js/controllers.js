@@ -19,52 +19,67 @@ angular.module('weQuote.controllers', [])
        $state.go('quotes');
 	});
 }])
-.controller('Tags', ['$scope','TagRepository','$state',function($scope,TagRepository,$state) {
-	$scope.tags=[];
+.controller('Tags', ['$scope','TagRepository','$state','TagsState',function($scope,TagRepository,$state,TagsState) {
+	$scope.state = TagsState;
+
+	if(_.isEmpty($scope.state)){
+		$scope.state.tags=[];	
+	}
+	
 	TagRepository.list().then(function(tags){
-			$scope.tags = _.map(tags,function(tag){
-				tag.name = _.str.capitalize(_.str.trim(tag.name));
-				return tag;
-			});
+		$scope.state.tags = _.map(tags,function(tag){
+			tag.name = _.str.capitalize(_.str.trim(tag.name));
+			return tag;
+		});
 	});	
 
 	$scope.$on('back-button-action', function(event, args) {                
         $state.go('quotes');
 	});	
 }])
-.controller('Authors', ['$scope','AuthorRepository','$state',function($scope,AuthorRepository,$state) {
+.controller('Authors', ['$scope','AuthorRepository','$state','AuthorsState',function($scope,AuthorRepository,$state,AuthorsState) {
+	
+	$scope.state = AuthorsState;
+
+	if(_.isEmpty($scope.state)){
+		$scope.state.authors=[];	
+	}
+	
+	AuthorRepository.list().then(function(authors){
+		$scope.state.authors = _.map(authors,function(author){
+			author.name = _.str.capitalize(_.str.trim(author.name));
+			return author;
+		});
+	});
+
 	$scope.$on('back-button-action', function(event, args) {                
        $state.go('quotes');
     });
-
-  	$scope.authors=[];
-	AuthorRepository.list().then(function(authors){
-			$scope.authors = _.map(authors,function(author){
-				author.name = _.str.capitalize(_.str.trim(author.name));
-				return author;
-			});
-	});	
 }])
-.controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
+.controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate','QuotesState',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate,QuotesState) {
 
 	var MIN_SIZE = 5;
 	var IMAGES = 20;
-	var quotes = [];
 	var downloading = false;
 
-	$scope.visibleQuotes = [];
+	$scope.state = QuotesState;
 	$scope.sharing = false;
 
+	if(_.isEmpty($scope.state)){
+		$scope.state.visibleQuotes = [];
+		$scope.state.quotes = [];
+	}
+	
 	var downloadQuotes = function(onComplete){
 		downloading = true;
 		QuoteRepository.list().then(function(newQuotes){
 			$log.debug(newQuotes.length + " downloaded");
 			
 			downloading = false;
-			quotes = _.union(quotes,_.shuffle(newQuotes));
+			$scope.state.quotes = _.union($scope.state.quotes,_.shuffle(newQuotes));
 			
 			if(onComplete){
-				onComplete(quotes);
+				onComplete($scope.state.quotes);
 			}
 		});
 	}
@@ -74,8 +89,8 @@ angular.module('weQuote.controllers', [])
   	};
 
 	$scope.cardDestroyed = function(index){
-		$scope.visibleQuotes = [quotes.pop()];
-		$log.debug(quotes.length + " left");
+		$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
+		$log.debug($scope.state.quotes.length + " left");
 		if(quotes.length <= MIN_SIZE && !downloading){
 			downloadQuotes();
 		}
@@ -91,11 +106,16 @@ angular.module('weQuote.controllers', [])
 		});
 	}
 
-	downloadQuotes(function(quotes){
-		$scope.visibleQuotes = [quotes.pop()];
-	});
+	//On first run download the quotes
+	if(!$scope.state.quotes.length){
+		downloadQuotes(function(quotes){
+			$scope.state.visibleQuotes = [quotes.pop()];
+		});
+	}
 
-	$scope.$watch('visibleQuotes',function(newValue){
+	
+
+	$scope.$watch('state.visibleQuotes',function(newValue){
 		if(newValue.length){
 			$scope.imageUrl = _.str.pad(Date.now() % IMAGES,3,'0');
 		}

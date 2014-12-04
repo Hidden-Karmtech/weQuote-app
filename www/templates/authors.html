@@ -6,7 +6,7 @@
 </ion-header-bar>
 <ion-content class="royal-bg padding" has-header="true" has-subheader="true">
 <ul class="list slick">
-    <li class="item important-royal" bindonce ng-repeat="author in authors | filter:query">
+    <li class="item important-royal" bindonce ng-repeat="author in state.authors | filter:query">
       <span bo-text="author.name + '(' + author.count +')'"/>
     </li>
 </ul>
