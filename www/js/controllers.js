@@ -39,14 +39,10 @@ angular.module('weQuote.controllers', [])
 
 	if(_.isEmpty($scope.state)){
 		$scope.state.authors=[];	
-	}
-	
-	AuthorRepository.list().then(function(authors){
-		$scope.state.authors = _.map(authors,function(author){
-			author.name = _.str.capitalize(_.str.trim(author.name));
-			return author;
+		AuthorRepository.list().then(function(authors){
+			$scope.state.authors = authors;
 		});
-	});
+	}
 
 	$scope.$on('back-button-action', function(event, args) {                
        $state.go('quotes');

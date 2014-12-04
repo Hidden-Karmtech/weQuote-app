@@ -34,7 +34,10 @@ angular.module('weQuote.services', [])
 				method:'GET',
 				url:SERVER_BASE_URL + 'authors'
 			}).then(function(response){
-				return response.data;
+				return _.map(response.data,function(author){
+					author.name = _.str.capitalize(_.str.trim(author.name));
+					return author;
+				});
 			});
 		}
 	};

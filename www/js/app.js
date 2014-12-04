@@ -5,11 +5,15 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQuote.directives','ngCordova','ionic.contrib.ui.cards','pasvaz.bindonce'])
 
-.run(function($ionicPlatform,$rootScope,TagRepository,TagsState,$log) {
+.run(function($ionicPlatform,$rootScope,TagRepository,TagsState,AuthorRepository,AuthorsState,$log) {
 
   TagRepository.list().then(function(tags){
     TagsState.tags = tags;
   }); 
+
+  AuthorRepository.list().then(function(authors){
+    AuthorsState.authors = authors;
+  });
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
