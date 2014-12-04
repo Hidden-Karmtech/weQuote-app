@@ -19,31 +19,42 @@ angular.module('weQuote.controllers', [])
        $state.go('quotes');
 	});
 }])
-.controller('Tags', ['$scope','TagRepository','$state',function($scope,TagRepository,$state) {
-	$scope.tags=[];
+.controller('Tags', ['$scope','TagRepository','$state','TagsState',function($scope,TagRepository,$state,TagsState) {
+	$scope.state = TagsState;
+
+	if(_.isEmpty($scope.state)){
+		$scope.state.tags=[];	
+	}
+	
 	TagRepository.list().then(function(tags){
-			$scope.tags = _.map(tags,function(tag){
-				tag.name = _.str.capitalize(_.str.trim(tag.name));
-				return tag;
-			});
+		$scope.state.tags = _.map(tags,function(tag){
+			tag.name = _.str.capitalize(_.str.trim(tag.name));
+			return tag;
+		});
 	});	
 
 	$scope.$on('back-button-action', function(event, args) {                
         $state.go('quotes');
 	});	
 }])
-.controller('Authors', ['$scope','AuthorRepository','$state',function($scope,AuthorRepository,$state) {
+.controller('Authors', ['$scope','AuthorRepository','$state','AuthorsState',function($scope,AuthorRepository,$state,AuthorsState) {
+	
+	$scope.state = AuthorsState;
+
+	if(_.isEmpty($scope.state)){
+		$scope.state.authors=[];	
+	}
+	
+	AuthorRepository.list().then(function(authors){
+		$scope.state.authors = _.map(authors,function(author){
+			author.name = _.str.capitalize(_.str.trim(author.name));
+			return author;
+		});
+	});
+
 	$scope.$on('back-button-action', function(event, args) {                
        $state.go('quotes');
     });
-
-  	$scope.authors=[];
-	AuthorRepository.list().then(function(authors){
-			$scope.authors = _.map(authors,function(author){
-				author.name = _.str.capitalize(_.str.trim(author.name));
-				return author;
-			});
-	});	
 }])
 .controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate','QuotesState',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate,QuotesState) {
 
@@ -78,8 +89,8 @@ angular.module('weQuote.controllers', [])
   	};
 
 	$scope.cardDestroyed = function(index){
-		$scope.state.visibleQuotes = [quotes.pop()];
-		$log.debug(quotes.length + " left");
+		$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
+		$log.debug($scope.state.quotes.length + " left");
 		if(quotes.length <= MIN_SIZE && !downloading){
 			downloadQuotes();
 		}
