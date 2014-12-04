@@ -23,15 +23,11 @@ angular.module('weQuote.controllers', [])
 	$scope.state = TagsState;
 
 	if(_.isEmpty($scope.state)){
-		$scope.state.tags=[];	
+		$scope.state.tags=[];
+		TagRepository.list().then(function(tags){
+			$scope.state.tags = tags;
+		});	
 	}
-	
-	TagRepository.list().then(function(tags){
-		$scope.state.tags = _.map(tags,function(tag){
-			tag.name = _.str.capitalize(_.str.trim(tag.name));
-			return tag;
-		});
-	});	
 
 	$scope.$on('back-button-action', function(event, args) {                
         $state.go('quotes');

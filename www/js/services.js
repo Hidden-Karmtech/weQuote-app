@@ -49,7 +49,10 @@ angular.module('weQuote.services', [])
 				method:'GET',
 				url:SERVER_BASE_URL + 'tags'
 			}).then(function(response){
-				return response.data;
+				return _.map(response.data,function(tag){
+      				tag.name = _.str.capitalize(_.str.trim(tag.name));
+      				return tag;
+    			});
 			});
 		}
 	};
