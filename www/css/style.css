@@ -54,6 +54,10 @@ body{
     align-items: center;
 }
 
+.item-input-wrapper {
+  background: #fff !important;
+}
+
 .facebook-bg{
 	background-color: #2C4388 !important;
 	color:white !important;
