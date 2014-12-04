@@ -56,6 +56,7 @@ angular.module('weQuote.controllers', [])
 
 	$scope.state = QuotesState;
 	$scope.sharing = false;
+	$scope.showTutorial = !localStorage.getItem('tutorial');
 
 	if(_.isEmpty($scope.state)){
 		$scope.state.visibleQuotes = [];
@@ -83,10 +84,17 @@ angular.module('weQuote.controllers', [])
 	$scope.cardDestroyed = function(index){
 		$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
 		$log.debug($scope.state.quotes.length + " left");
-		if(quotes.length <= MIN_SIZE && !downloading){
+		if($scope.state.quotes.length <= MIN_SIZE && !downloading){
 			downloadQuotes();
 		}
-	}
+	};
+
+	$scope.destroyTutorial = function(){
+		localStorage.setItem('tutorial','done');
+		downloadQuotes(function(quotes){
+			$scope.state.visibleQuotes = [quotes.pop()];
+		});
+	};
 
 	$scope.share = function(quote){
 		$scope.sharing = true;
@@ -101,7 +109,9 @@ angular.module('weQuote.controllers', [])
 	//On first run download the quotes
 	if(!$scope.state.quotes.length){
 		downloadQuotes(function(quotes){
-			$scope.state.visibleQuotes = [quotes.pop()];
+			if(!$scope.showTutorial){
+				$scope.state.visibleQuotes = [quotes.pop()];
+			}
 		});
 	}
 

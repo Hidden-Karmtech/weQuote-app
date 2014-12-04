@@ -14,6 +14,18 @@
         <span class="slick">{{q.text}}</span>
         <span class="author slick">{{q.author}}</span>
       </swipe-card>
+      <swipe-card 
+        class="text-card calm-bg"
+        on-destroy="destroyTutorial();"> 
+        <div class="text-center">
+          <span class="slick">
+            Scorri verso il basso per leggere le citazioni.  
+          </span>
+          <div>
+            <i style="margin-top:20%;font-size:128pt" class="ion-arrow-down-c"></i>
+          </div>
+        </div>
+      </swipe-card>
     </swipe-cards>
 </ion-content>
 <ion-footer-bar class="bar-light">

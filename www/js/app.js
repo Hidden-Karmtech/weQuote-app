@@ -15,6 +15,9 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
     AuthorsState.authors = authors;
   });
 
+  //Use in debug
+  localStorage.clear();
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
