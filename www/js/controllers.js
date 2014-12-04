@@ -45,26 +45,30 @@ angular.module('weQuote.controllers', [])
 			});
 	});	
 }])
-.controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate) {
+.controller('Quotes', ['$scope','$log','QuoteRepository','$ionicSideMenuDelegate','QuotesState',function($scope,$log,QuoteRepository,$ionicSideMenuDelegate,QuotesState) {
 
 	var MIN_SIZE = 5;
 	var IMAGES = 20;
-	var quotes = [];
 	var downloading = false;
 
-	$scope.visibleQuotes = [];
+	$scope.state = QuotesState;
 	$scope.sharing = false;
 
+	if(_.isEmpty($scope.state)){
+		$scope.state.visibleQuotes = [];
+		$scope.state.quotes = [];
+	}
+	
 	var downloadQuotes = function(onComplete){
 		downloading = true;
 		QuoteRepository.list().then(function(newQuotes){
 			$log.debug(newQuotes.length + " downloaded");
 			
 			downloading = false;
-			quotes = _.union(quotes,_.shuffle(newQuotes));
+			$scope.state.quotes = _.union($scope.state.quotes,_.shuffle(newQuotes));
 			
 			if(onComplete){
-				onComplete(quotes);
+				onComplete($scope.state.quotes);
 			}
 		});
 	}
@@ -74,7 +78,7 @@ angular.module('weQuote.controllers', [])
   	};
 
 	$scope.cardDestroyed = function(index){
-		$scope.visibleQuotes = [quotes.pop()];
+		$scope.state.visibleQuotes = [quotes.pop()];
 		$log.debug(quotes.length + " left");
 		if(quotes.length <= MIN_SIZE && !downloading){
 			downloadQuotes();
@@ -91,11 +95,16 @@ angular.module('weQuote.controllers', [])
 		});
 	}
 
-	downloadQuotes(function(quotes){
-		$scope.visibleQuotes = [quotes.pop()];
-	});
+	//On first run download the quotes
+	if(!$scope.state.quotes.length){
+		downloadQuotes(function(quotes){
+			$scope.state.visibleQuotes = [quotes.pop()];
+		});
+	}
 
-	$scope.$watch('visibleQuotes',function(newValue){
+	
+
+	$scope.$watch('state.visibleQuotes',function(newValue){
 		if(newValue.length){
 			$scope.imageUrl = _.str.pad(Date.now() % IMAGES,3,'0');
 		}

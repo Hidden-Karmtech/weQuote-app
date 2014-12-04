@@ -9,7 +9,7 @@
       <swipe-card 
         class="text-card" 
         ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
-        ng-repeat="q in visibleQuotes" 
+        ng-repeat="q in state.visibleQuotes" 
         on-destroy="cardDestroyed($index)">
         <span class="slick">{{q.text}}</span>
         <span class="author slick">{{q.author}}</span>
@@ -24,7 +24,7 @@
   ></a>
   <h1 
     class="title important-royal slick text-disabled" 
-    ng-click="share(visibleQuotes[0])">
+    ng-click="share(state.visibleQuotes[0])">
       {{sharing ? 'Attendi' : 'Condividi'}}
   </h1>
 </ion-footer-bar>
