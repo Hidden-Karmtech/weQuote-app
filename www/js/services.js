@@ -24,32 +24,38 @@ angular.module('weQuote.services', [])
 		}
 	};
 }])
-.service('AuthorRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
+.service('AuthorRepository',['$http','SERVER_BASE_URL','$log',function($http,SERVER_BASE_URL,$log) {
 	var that = this;
 
 	return {
 		list:function(){
-
+			$log.debug('downloading authors');
 			return $http({
 				method:'GET',
 				url:SERVER_BASE_URL + 'authors'
 			}).then(function(response){
-				return response.data;
+				return _.map(response.data,function(author){
+					author.name = _.str.capitalize(_.str.trim(author.name));
+					return author;
+				});
 			});
 		}
 	};
 }])
-.service('TagRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
+.service('TagRepository',['$http','SERVER_BASE_URL','$log',function($http,SERVER_BASE_URL,$log) {
 	var that = this;
 
 	return {
 		list:function(){
-
+			$log.debug('downloading tags');
 			return $http({
 				method:'GET',
 				url:SERVER_BASE_URL + 'tags'
 			}).then(function(response){
-				return response.data;
+				return _.map(response.data,function(tag){
+      				tag.name = _.str.capitalize(_.str.trim(tag.name));
+      				return tag;
+    			});
 			});
 		}
 	};
