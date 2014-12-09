@@ -18,5 +18,6 @@ cordova plugin add org.apache.cordova.file-transfer
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.inappbrowser
 cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
+cordova plugin add https://github.com/floatinghotpot/cordova-plugin-admob.git
 
 ionic run android/ios
