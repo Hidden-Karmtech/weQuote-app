@@ -6,7 +6,7 @@
 </ion-header-bar>
 <ion-content class="royal-bg padding-left padding-right" has-header="true" has-subheader="true" style="padding-top:5px">
 <ul class="list slick">
-    <li class="item important-royal" bindonce ng-repeat="tag in state.tags | filter:query">
+    <li class="item important-royal" ng-click="toQuotes(tag)" bindonce ng-repeat="tag in state.tags | filter:query">
       <span bo-text="tag.name + '(' + tag.count +')'"/>
     </li>
 </ul>

@@ -19,7 +19,7 @@ angular.module('weQuote.controllers', [])
        $state.go('quotes');
 	});
 }])
-.controller('Tags', ['$scope','TagRepository','$state','TagsState',function($scope,TagRepository,$state,TagsState) {
+.controller('Tags', ['$scope','TagRepository','$state','TagsState','QuotesState',function($scope,TagRepository,$state,TagsState,QuotesState) {
 	$scope.state = TagsState;
 
 	if(_.isEmpty($scope.state)){
@@ -29,11 +29,16 @@ angular.module('weQuote.controllers', [])
 		});	
 	}
 
+	$scope.toQuotes = function(tag){
+		QuotesState.startTag = tag;
+		$state.go('quotes');
+	}
+
 	$scope.$on('back-button-action', function(event, args) {                
         $state.go('quotes');
 	});	
 }])
-.controller('Authors', ['$scope','AuthorRepository','$state','AuthorsState',function($scope,AuthorRepository,$state,AuthorsState) {
+.controller('Authors', ['$scope','AuthorRepository','$state','AuthorsState','QuotesState',function($scope,AuthorRepository,$state,AuthorsState,QuotesState) {
 	
 	$scope.state = AuthorsState;
 
@@ -42,6 +47,11 @@ angular.module('weQuote.controllers', [])
 		AuthorRepository.list().then(function(authors){
 			$scope.state.authors = authors;
 		});
+	}
+
+	$scope.toQuotes = function(author){
+		QuotesState.startAuthor = author;
+		$state.go('quotes');
 	}
 
 	$scope.$on('back-button-action', function(event, args) {                
@@ -61,6 +71,14 @@ angular.module('weQuote.controllers', [])
 	if(_.isEmpty($scope.state)){
 		$scope.state.visibleQuotes = [];
 		$scope.state.quotes = [];
+	}else{
+		if($scope.state.startTag){
+			console.log($scope.state.startTag);
+			$scope.state.startTag = null;
+		}else if($scope.state.startAuthor){
+			console.log($scope.state.startAuthor);
+			$scope.state.startAuthor = null;
+		}
 	}
 	
 	var downloadQuotes = function(onComplete){

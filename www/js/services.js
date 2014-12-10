@@ -5,11 +5,14 @@ angular.module('weQuote.services', [])
 .value('AuthorsState',{})
 .service('QuoteRepository',['$http','SERVER_BASE_URL',function($http,SERVER_BASE_URL) {
 	var that = this;
-
+	var MAX_LEN = 200;
 	return {
 		list:function(query){
 
-			var params = {};
+			var params = {
+				maxlen:MAX_LEN
+			};
+			
 			if(query){
 				params.search = query;
 			}
