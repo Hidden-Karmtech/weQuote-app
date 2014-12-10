@@ -22,7 +22,7 @@ angular.module('weQuote', ['ionic','weQuote.controllers','weQuote.services','weQ
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.plugins && window.plugins.AdMob) {
-                var admob_key = device.platform == "Android" ? "ca-app-pub-2603547889798705/4397541472" : "IOS_PUBLISHER_KEY";
+                var admob_key = ionic.Platform.isAndroid() ? "ca-app-pub-2603547889798705/4397541472" : "IOS_PUBLISHER_KEY";
                 var admob = window.plugins.AdMob;
                 admob.createBannerView( 
                     {
