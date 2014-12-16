@@ -35,6 +35,7 @@ angular.module('weQuote.controllers', [])
 				value:tag.name
 			};
 
+			QuotesState.quotes = [];
 			QuotesState.visibleQuotes = [];
 
 			$state.go('quotes');
@@ -61,6 +62,7 @@ angular.module('weQuote.controllers', [])
 				value:author.name
 			};
 
+			QuotesState.quotes = [];
 			QuotesState.visibleQuotes = [];
 
 			$state.go('quotes');
