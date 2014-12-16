@@ -28,7 +28,9 @@ angular.module('weQuote.controllers', [])
 				$scope.state.tags = tags;
 			});
 		}
-
+		$scope.clearText = function(){
+			$scope.query="";	
+		}
 		$scope.toQuotes = function(tag) {
 			QuotesState.query = {
 				type: 'tag',
@@ -66,6 +68,10 @@ angular.module('weQuote.controllers', [])
 			QuotesState.visibleQuotes = [];
 
 			$state.go('quotes');
+		}
+
+		$scope.clearText = function(){
+			$scope.query="";	
 		}
 
 		$scope.$on('back-button-action', function(event, args) {
@@ -109,7 +115,9 @@ angular.module('weQuote.controllers', [])
 					}
 				});
 			}
-
+			$scope.clearText = function(){
+				$scope.state.query.value="";	
+			}
 			$scope.toggleLeft = function() {
 				$ionicSideMenuDelegate.toggleLeft();
 			};

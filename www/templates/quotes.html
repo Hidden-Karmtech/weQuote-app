@@ -32,8 +32,10 @@
             type="search" placeholder="Ricerca..." 
             ng-model="state.query.value"
             ng-blur="onChangeSearch();"> 
-                    <i class="icon ion-close-circled"></i>
       </label>
+      <button class="button button-small royal-bg light clear-search-button" ng-click="clearText()">
+      <i class="ion-close-circled"></i>
+      </button>
 </ion-header-bar>
 <ion-content class="royal-bg text-center center">
   <div>

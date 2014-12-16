@@ -89,6 +89,10 @@ body{
   -webkit-animation-fill-mode: forwards;
 }
 
+.clear-search-button{
+  border-style: none !important;
+}
+
 .text-card {
   display: table;
   color: #fff;
