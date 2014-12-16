@@ -1,12 +1,13 @@
 angular.module('weQuote', [
-'ionic', 
-'weQuote.controllers', 
-'weQuote.services', 
-'weQuote.directives', 
-'ngCordova', 
-'ionic.contrib.ui.cards', 
-'pasvaz.bindonce'])
-.run(function($ionicPlatform, $rootScope, TagRepository, TagsState, AuthorRepository, AuthorsState, $log,$cordovaDevice,UUID) {
+    'ionic',
+    'weQuote.controllers',
+    'weQuote.services',
+    'weQuote.directives',
+    'ngCordova',
+    'ionic.contrib.ui.cards',
+    'pasvaz.bindonce'
+  ])
+  .run(function($ionicPlatform, $rootScope, TagRepository, TagsState, AuthorRepository, AuthorsState, $log, $cordovaDevice, UUID, $window) {
 
     TagRepository.list().then(function(tags) {
       TagsState.tags = tags;
@@ -15,6 +16,16 @@ angular.module('weQuote', [
     AuthorRepository.list().then(function(authors) {
       AuthorsState.authors = authors;
     });
+
+    var head = angular.element(document.querySelector('head'));
+
+    //Adding fake class at runtime
+    var size = Math.floor($window.innerWidth * 95 / 100);
+    var left = Math.floor(($window.innerWidth - size) / 2);
+    var top = Math.floor(($window.innerHeight - size) / 2);
+
+    head.append(angular.element("<style type='text/css'> .quote-card{width:" + size + "px; height:" + size + "px; left:" + left + "px; top:" + top + "px;} </style>"));
+
 
     //Use in debug
     localStorage.clear();
@@ -59,6 +70,7 @@ angular.module('weQuote', [
       $ionicPlatform.registerBackButtonAction(function() {
         $rootScope.$broadcast('back-button-action');
       }, 100);
+
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {

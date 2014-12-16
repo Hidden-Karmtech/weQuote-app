@@ -1,25 +1,18 @@
-<ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
-  <label class="item-input-wrapper"> 
-        <i class="icon ion-search placeholder-icon"></i> 
-          <input 
-            class="item-input-small" 
-            type="search" placeholder="Ricerca..." 
-            ng-model="state.query.value"
-            ng-blur="onChangeSearch();"> 
-      </label>
-</ion-header-bar>
-<ion-content class="royal-bg"> 
-     <swipe-cards>
+
+<swipe-cards>
       <swipe-card 
-        class="text-card" 
-        ng-style="{'background-image':'url(img/backgrounds/Amore/' + imageUrl + '.png)'}"
+        quote-card
+        class="text-card quote-card" 
+        ng-style="{
+                    'background-image': 'url(img/backgrounds/Amore/' + imageUrl + '.png)'
+                  };"
         ng-repeat="q in state.visibleQuotes" 
         on-destroy="cardDestroyed($index)">
         <span class="slick">{{q.text}}</span>
         <span class="author slick">{{q.author}}</span>
       </swipe-card>
       <swipe-card 
-        class="text-card calm-bg"
+        class="text-card calm-bg quote-card"
         on-destroy="destroyTutorial();"> 
         <div class="text-center">
           <span class="slick">
@@ -31,6 +24,22 @@
         </div>
       </swipe-card>
     </swipe-cards>
+<ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
+  <label class="item-input-wrapper"> 
+        <i class="icon ion-search placeholder-icon"></i> 
+          <input 
+            class="item-input-small" 
+            type="search" placeholder="Ricerca..." 
+            ng-model="state.query.value"
+            ng-blur="onChangeSearch();"> 
+      </label>
+</ion-header-bar>
+<ion-content class="royal-bg text-center center">
+  <div>
+    <span 
+      style="font-size:80pt;"
+      class="ion-loading-a light"></span>
+  </div>
 </ion-content>
 <ion-footer-bar class="bar-light">
   <a 

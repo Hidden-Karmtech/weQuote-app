@@ -31,8 +31,8 @@ angular.module('weQuote.controllers', [])
 
 		$scope.toQuotes = function(tag) {
 			QuotesState.query = {
-				type:'tag',
-				value:tag.name
+				type: 'tag',
+				value: tag.name
 			};
 
 			QuotesState.quotes = [];
@@ -58,8 +58,8 @@ angular.module('weQuote.controllers', [])
 
 		$scope.toQuotes = function(author) {
 			QuotesState.query = {
-				type:'author',
-				value:author.name
+				type: 'author',
+				value: author.name
 			};
 
 			QuotesState.quotes = [];
@@ -72,108 +72,114 @@ angular.module('weQuote.controllers', [])
 			$state.go('quotes');
 		});
 	}])
-	.controller('Quotes', ['$scope', '$log', 'QuoteRepository', '$ionicSideMenuDelegate', 'QuotesState', function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState) {
+	.controller('Quotes', ['$scope',
+		'$log',
+		'QuoteRepository',
+		'$ionicSideMenuDelegate',
+		'QuotesState',
+		'$window',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $window) {
 
-		var MIN_SIZE = 5;
-		var IMAGES = 20;
-		var downloading = false;
+			var MIN_SIZE = 5;
+			var IMAGES = 20;
+			var downloading = false;
 
-		$scope.search = "";
-		$scope.state = QuotesState;
-		$scope.sharing = false;
-		$scope.showTutorial = !localStorage.getItem('tutorial');
+			$scope.state = QuotesState;
+			$scope.sharing = false;
+			$scope.showTutorial = !localStorage.getItem('tutorial');
 
-		if (_.isEmpty($scope.state)) {
-			$scope.state.visibleQuotes = [];
-			$scope.state.quotes = [];
-			$scope.state.query = {
-				type:'search'
+			if (_.isEmpty($scope.state)) {
+				$scope.state.visibleQuotes = [];
+				$scope.state.quotes = [];
+				$scope.state.query = {
+					type: 'search'
+				};
+			}
+
+			var downloadQuotes = function(onComplete) {
+				downloading = true;
+				QuoteRepository.list($scope.state.query).then(function(newQuotes) {
+					$log.debug(newQuotes.length + " downloaded");
+
+					downloading = false;
+					$scope.state.quotes = _.union($scope.state.quotes, _.shuffle(newQuotes));
+
+					if (onComplete) {
+						onComplete($scope.state.quotes);
+					}
+				});
+			}
+
+			$scope.toggleLeft = function() {
+				$ionicSideMenuDelegate.toggleLeft();
 			};
-		}
 
-		var downloadQuotes = function(onComplete) {
-			downloading = true;
-			QuoteRepository.list($scope.state.query).then(function(newQuotes) {
-				$log.debug(newQuotes.length + " downloaded");
-
-				downloading = false;
-				$scope.state.quotes = _.union($scope.state.quotes, _.shuffle(newQuotes));
-
-				if (onComplete) {
-					onComplete($scope.state.quotes);
+			$scope.cardDestroyed = function(index) {
+				$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
+				$log.debug($scope.state.quotes.length + " left");
+				if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
+					downloadQuotes();
 				}
-			});
-		}
+			};
 
-		$scope.toggleLeft = function() {
-			$ionicSideMenuDelegate.toggleLeft();
-		};
-
-		$scope.cardDestroyed = function(index) {
-			$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
-			$log.debug($scope.state.quotes.length + " left");
-			if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
-				downloadQuotes();
-			}
-		};
-
-		$scope.destroyTutorial = function() {
-			$scope.showTutorial = false;
-			localStorage.setItem('tutorial', 'done');
-			downloadQuotes(function(quotes) {
-				$scope.state.visibleQuotes = [quotes.pop()];
-			});
-		};
-
-		$scope.share = function(quote) {
-			$scope.sharing = true;
-			var url = 'img/backgrounds/Amore/' + $scope.imageUrl + '.png';
-			$scope.$broadcast('generate-canvas', url, quote, function(imgData) {
-				window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
-				$scope.sharing = false;
-				$scope.$apply();
-			});
-		}
-
-		var reloadQuotes = function(){
-			$scope.state.quotes = [];
-			$scope.visibleQuotes = [];
-			downloadQuotes(function(quotes) {
-				if (!$scope.showTutorial) {
+			$scope.destroyTutorial = function() {
+				$scope.showTutorial = false;
+				localStorage.setItem('tutorial', 'done');
+				downloadQuotes(function(quotes) {
 					$scope.state.visibleQuotes = [quotes.pop()];
+				});
+			};
+
+			$scope.share = function(quote) {
+				$scope.sharing = true;
+				var url = 'img/backgrounds/Amore/' + $scope.imageUrl + '.png';
+				$scope.$broadcast('generate-canvas', url, quote, function(imgData) {
+					window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
+					$scope.sharing = false;
+					$scope.$apply();
+				});
+			}
+
+			var reloadQuotes = function() {
+				$scope.state.quotes = [];
+				$scope.visibleQuotes = [];
+				downloadQuotes(function(quotes) {
+					if (!$scope.showTutorial) {
+						$scope.state.visibleQuotes = [quotes.pop()];
+					}
+				});
+			}
+
+			//On first run download the quotes
+			if (!$scope.state.quotes.length) {
+				reloadQuotes();
+			}
+
+			$scope.onChangeSearch = function() {
+				$scope.state.query.type = "search";
+				reloadQuotes();
+			}
+
+			$scope.$watch('state.visibleQuotes', function(newValue) {
+				if (newValue.length) {
+					$scope.imageUrl = _.str.pad(Date.now() % IMAGES, 3, '0');
+				}
+			});
+
+			$scope.$on('back-button-action', function(event, args) {
+				if (true) {
+					swal({
+							title: "Sei sicuro di voler abbandonare #weQuote?",
+							showCancelButton: true,
+							confirmButtonColor: "#5264AE",
+							cancelButtonText: "No",
+							confirmButtonText: "Sì",
+							closeOnConfirm: true
+						},
+						function() {
+							ionic.Platform.exitApp();
+						});
 				}
 			});
 		}
-
-		//On first run download the quotes
-		if (!$scope.state.quotes.length) {
-			reloadQuotes();
-		}
-
-		$scope.onChangeSearch = function() {
-			$scope.state.query.type = "search";
-			reloadQuotes();
-		}
-
-		$scope.$watch('state.visibleQuotes', function(newValue) {
-			if (newValue.length) {
-				$scope.imageUrl = _.str.pad(Date.now() % IMAGES, 3, '0');
-			}
-		});
-
-		$scope.$on('back-button-action', function(event, args) {
-			if (true) {
-				swal({
-						title: "Sei sicuro di voler abbandonare #weQuote?",
-						showCancelButton: true,
-						confirmButtonColor: "#5264AE",
-						cancelButtonText: "No",
-						confirmButtonText: "Sì",
-						closeOnConfirm: true
-					},
-					function() {
-						ionic.Platform.exitApp();
-					});
-			}
-		});
-	}]);
+	]);
