@@ -3,46 +3,44 @@ angular.module('weQuote.directives', [])
 
 		var that = this;
 
-		var IMG_SIZE = Screen.getSize();
-		var START_FONT_SIZE = 36;
-		var TEXT_HEIGHT_THRESHOLD = Screen.getSize() * (3/5);
 		var TEXT_SCALE_FACTOR = 0.9;
 
-		this.getQuoteText = function(quote){
-			var generateText = function(text,fontSize){
+		this.getQuoteText = function(quote,size,startFontSize){
+			var generateText = function(text,fontSize,size){
 				return new Kinetic.Text(
 				{
 					text: text,
 					fontSize: fontSize,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
-					width: IMG_SIZE,
+					width: size,
 					padding: 0,
 					align: 'center'
 				});
 			};
 
+			var HeightThreshold = size * (3/5);
 			var quoteText;
-			var fontSize = START_FONT_SIZE;
+			var fontSize;
 			var textHeight;
 
 			do{	
 				$log.debug("Generating text with font " + fontSize);
 				
-				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : START_FONT_SIZE;
-				quoteText = generateText(quote.text,fontSize);
+				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
+				quoteText = generateText(quote.text,fontSize,size);
 				textHeight = quoteText.getAttr('height');
 
 				$log.debug("text height " + textHeight);
-			}while(textHeight > TEXT_HEIGHT_THRESHOLD)
+			}while(textHeight > HeightThreshold)
 
 			//Y center
-			quoteText.setAttr('y',(IMG_SIZE - textHeight)/2);
+			quoteText.setAttr('y',(size - textHeight)/2);
 
 			return quoteText;
 		};
 
-		this.getWatermark = function(){
+		this.getWatermark = function(size){
 			var watermark = new Kinetic.Text(
 				{
 					text:'www.wequote.it',
@@ -51,7 +49,7 @@ angular.module('weQuote.directives', [])
 					y:5,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
-					width: IMG_SIZE,
+					width: size,
 					padding: 0,
 					align: 'left'
 				});
@@ -59,33 +57,33 @@ angular.module('weQuote.directives', [])
 			return watermark;
 		};
 
-		this.getAuthorText = function(quote){
+		this.getAuthorText = function(quote,size){
 			var autorText = new Kinetic.Text(
 				{
 					text: quote.author,
 					fontSize: 24,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
-					width: IMG_SIZE,
+					width: size,
 					padding: 0,
 					align: 'center'
 				});
 
 			//Stick to bottom
 			var textHeight = autorText.getAttr('height');
-			autorText.setAttr('y',IMG_SIZE - textHeight -25);
+			autorText.setAttr('y',size - textHeight -25);
 
 			return autorText;
 		};
 
-		this.getImageBackgroud = function(imgElement){
+		this.getImageBackgroud = function(imgElement,size){
 			return new Kinetic.Rect(
 				{
 					x: 0,
 					y: 0,
 					fillPatternImage: imgElement,
-					width: IMG_SIZE,
-					height: IMG_SIZE,
+					width: size,
+					height: size,
 					cornerRadius: 12,
 					stroke: '#98A4D7',
         			strokeWidth: 6
@@ -106,7 +104,7 @@ angular.module('weQuote.directives', [])
 
 				$scope.$watch('quote',function(quote){
 					if(quote && quote.url){
-						generateCanvas(visibleKinetic.stage,quote);	
+						generateCanvas(visibleKinetic.stage,quote,Screen.getSize(),36);	
 					}
 				},true);
 
@@ -127,11 +125,15 @@ angular.module('weQuote.directives', [])
 				};
 
 				$scope.$on('generate-canvas', function(event, quote, callback) {
-					generateCanvas(invisibleKinetic.stage,quote,callback);
+					generateCanvas(
+							invisibleKinetic.stage,
+							quote,
+							1000,
+							104,
+							callback);
 				});
 
-
-				var generateCanvas = function(stage, quote, callback) {
+				var generateCanvas = function(stage, quote, size,startFontSize,callback) {
 
 					stage.clear();
 
@@ -140,10 +142,10 @@ angular.module('weQuote.directives', [])
 					imageObj.onload = function() {
 						var layer = new Kinetic.Layer();
 
-						layer.add(that.getImageBackgroud(imageObj));
-						layer.add(that.getAuthorText(quote));
-						layer.add(that.getQuoteText(quote));
-						layer.add(that.getWatermark());
+						layer.add(that.getImageBackgroud(imageObj,size));
+						layer.add(that.getAuthorText(quote,size));
+						layer.add(that.getQuoteText(quote,size,startFontSize));
+						layer.add(that.getWatermark(size));
 
 						stage.add(layer);
 
