@@ -1,9 +1,3 @@
-<div class="text-card quote-card centered-card" ng-animate="'animate'" ng-style="{
-      'background-image': 'url(' + imageUrl + ')'
-    };" ng-repeat="q in state.visibleQuotes">
-    <span class="slick">{{q.text}}</span>
-    <span class="author slick">{{q.author}}</span>
-</div>
 <ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
     <label class="item-input-wrapper">
         <i class="icon ion-search placeholder-icon"></i>
@@ -14,21 +8,23 @@
     </button>
 </ion-header-bar>
 <ion-content class="royal-bg text-center center">
-    <div>
-        <span style="font-size:80pt;" class="ion-loading-a light"></span>
-    </div>
+    <quote-card 
+      ng-if="state.currentQuote" 
+      quote="state.currentQuote"/>
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
         <a class="button button-icon" ng-click="next();">
             <i class="icon ion-skip-forward royal"></i>
         </a>
-        <a class="button button-icon" ng-click="share(state.visibleQuotes[0]);">
-            <i class="icon royal" ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
+        <a class="button button-icon" ng-click="share(state.currentQuote);">
+            <i 
+              class="icon royal" 
+              ng-disabled="sharing" 
+              ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
         </a>
         <a class="button button-icon" ng-click="startCamera();">
             <i class="icon ion-camera royal"></i>
         </a>
     </div>
 </ion-footer-bar>
-<quote-canvas/>

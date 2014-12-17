@@ -4,6 +4,24 @@ angular.module('weQuote.services', [])
 	.value('TagsState', {})
 	.value('AuthorsState', {})
 	.value('UUID', {})
+	.service('Screen', ['$window',function($window){
+		//Adding fake class at runtime
+    	var size = Math.floor($window.innerWidth * 95 / 100);
+		var left = Math.floor(($window.innerWidth - size) / 2);
+    	var top = Math.floor(($window.innerHeight - size) / 2);
+
+    	return {
+    		getSize:function(){
+    			return size;
+    		},
+    		getLeft:function(){
+    			return left;
+    		},
+    		getTop:function(){
+    			return top;
+    		}
+    	};
+	}])
 	.service('QuoteRepository', [
 		'$http',
 		'SERVER_BASE_URL',

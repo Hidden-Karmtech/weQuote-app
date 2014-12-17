@@ -1,11 +1,11 @@
 angular.module('weQuote.directives', [])
-	.directive('quoteCanvas', ['$log',function($log) {
+	.directive('quoteCard', ['$log','Screen',function($log,Screen) {
 
 		var that = this;
 
-		var IMG_SIZE = 500;
-		var START_FONT_SIZE = 52;
-		var TEXT_HEIGHT_THRESHOLD = 300;
+		var IMG_SIZE = Screen.getSize();
+		var START_FONT_SIZE = 36;
+		var TEXT_HEIGHT_THRESHOLD = Screen.getSize() * (3/5);
 		var TEXT_SCALE_FACTOR = 0.9;
 
 		this.getQuoteText = function(quote){
@@ -79,41 +79,61 @@ angular.module('weQuote.directives', [])
 		};
 
 		this.getImageBackgroud = function(imgElement){
-			return new Kinetic.Image(
+			return new Kinetic.Rect(
 				{
 					x: 0,
 					y: 0,
-					image: imgElement,
+					fillPatternImage: imgElement,
 					width: IMG_SIZE,
-					height: IMG_SIZE
+					height: IMG_SIZE,
+					cornerRadius: 12,
+					stroke: '#98A4D7',
+        			strokeWidth: 6
 				});
 		}
 
+		var visibleId = Math.random().toString(36).substring(8);
+		var hiddenId = Math.random().toString(36).substring(8);
+
 		return {
 			restrict: 'E',
-			template: '<div style="display:none;"></div>',
+			template: '<div><div style="z-index:10000" id=' + visibleId + '></div><div style="display:none" id=' + hiddenId + '></div></div>',
 			replace: true,
+			scope:{
+				quote:'='
+			},
 			link: function($scope, element, attrs) {
-				var id = attrs["id"];
 
-				if (!id) {
-					id = Math.random().toString(36).substring(8);
-					element.attr('id', id);
-				}
+				$scope.$watch('quote',function(quote){
+					if(quote && quote.url){
+						generateCanvas(visibleKinetic.stage,quote);	
+					}
+				},true);
 
-				var kinetic = {
+				var visibleKinetic = {
 					stage: new Kinetic.Stage({
-						container: id,
-						width: 500,
-						height: 500
+						container: visibleId,
+						width: Screen.getSize(),
+						height: Screen.getSize()
 					})
 				};
 
-				$scope.kinetic = kinetic;
+				var invisibleKinetic = {
+					stage: new Kinetic.Stage({
+						container: hiddenId,
+						width: 1000,
+						height: 1000
+					})
+				};
 
-				$scope.$on('generate-canvas', function(event, url, quote, callback) {
+				$scope.$on('generate-canvas', function(event, quote, callback) {
+					generateCanvas(invisibleKinetic.stage,quote,callback);
+				});
 
-					$scope.kinetic.stage.clear();
+
+				var generateCanvas = function(stage, quote, callback) {
+
+					stage.clear();
 
 					var imageObj = new Image();
 
@@ -125,16 +145,18 @@ angular.module('weQuote.directives', [])
 						layer.add(that.getQuoteText(quote));
 						layer.add(that.getWatermark());
 
-						$scope.kinetic.stage.add(layer);
-						$scope.kinetic.stage.toDataURL({
-							callback: callback
-						});
+						stage.add(layer);
 
+						if(callback){
+							stage.toDataURL({
+								callback: callback
+							});
+						}
 					};
 					
-					imageObj.src = url;
+					imageObj.src = quote.url;
 
-				});
+				};
 			}
 		};
 	}])
