@@ -28,8 +28,8 @@ angular.module('weQuote.controllers', [])
 				$scope.state.tags = tags;
 			});
 		}
-		$scope.clearText = function(){
-			$scope.query="";	
+		$scope.clearText = function() {
+			$scope.query = "";
 		}
 		$scope.toQuotes = function(tag) {
 			QuotesState.query = {
@@ -70,8 +70,8 @@ angular.module('weQuote.controllers', [])
 			$state.go('quotes');
 		}
 
-		$scope.clearText = function(){
-			$scope.query="";	
+		$scope.clearText = function() {
+			$scope.query = "";
 		}
 
 		$scope.$on('back-button-action', function(event, args) {
@@ -83,8 +83,8 @@ angular.module('weQuote.controllers', [])
 		'QuoteRepository',
 		'$ionicSideMenuDelegate',
 		'QuotesState',
-		'$window',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $window) {
+		'$cordovaCamera',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera) {
 
 			var MIN_SIZE = 5;
 			var IMAGES = 20;
@@ -92,7 +92,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.state = QuotesState;
 			$scope.sharing = false;
-			
+
 			if (_.isEmpty($scope.state)) {
 				$scope.state.visibleQuotes = [];
 				$scope.state.quotes = [];
@@ -114,8 +114,8 @@ angular.module('weQuote.controllers', [])
 					}
 				});
 			}
-			$scope.clearText = function(){
-				$scope.state.query.value="";	
+			$scope.clearText = function() {
+				$scope.state.query.value = "";
 			}
 			$scope.toggleLeft = function() {
 				$ionicSideMenuDelegate.toggleLeft();
@@ -131,8 +131,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.share = function(quote) {
 				$scope.sharing = true;
-				var url = 'img/backgrounds/Amore/' + $scope.imageUrl + '.png';
-				$scope.$broadcast('generate-canvas', url, quote, function(imgData) {
+				$scope.$broadcast('generate-canvas', $scope.imageUrl, quote, function(imgData) {
 					window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
 					$scope.sharing = false;
 					$scope.$apply();
@@ -157,8 +156,8 @@ angular.module('weQuote.controllers', [])
 				reloadQuotes();
 			}
 
-			$scope.changeBackground = function(){
-				$scope.imageUrl = _.str.pad(Date.now() % IMAGES, 3, '0');
+			$scope.changeBackground = function() {
+				$scope.imageUrl = 'img/backgrounds/Amore/' + _.str.pad(Date.now() % IMAGES, 3, '0') + '.png';
 			}
 
 			$scope.$watch('state.visibleQuotes', function(newValue) {
@@ -166,6 +165,27 @@ angular.module('weQuote.controllers', [])
 					$scope.changeBackground();
 				}
 			});
+
+			$scope.startCamera = function() {
+				var options = {
+					quality:100,
+					destinationType: Camera.DestinationType.DATA_URL,
+					sourceType: Camera.PictureSourceType.CAMERA,
+					allowEdit: true,
+					encodingType: Camera.EncodingType.PNG,
+					targetWidth: 1000,
+					targetHeight: 1000,
+					popoverOptions: CameraPopoverOptions,
+					saveToPhotoAlbum: false
+				};
+
+				$cordovaCamera.getPicture(options).then(function(imageData) {
+					$scope.imageUrl = "data:image/png;base64," + imageData;
+					console.log($scope.imageUrl);
+				}, function(err) {
+					// An error occurred. Show a message to the user
+				});
+			};
 
 			$scope.$on('back-button-action', function(event, args) {
 				if (true) {

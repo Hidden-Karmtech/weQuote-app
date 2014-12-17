@@ -1,5 +1,5 @@
 <div class="text-card quote-card centered-card" ng-animate="'animate'" ng-style="{
-      'background-image': 'url(img/backgrounds/Amore/' + imageUrl + '.png)'
+      'background-image': 'url(' + imageUrl + ')'
     };" ng-repeat="q in state.visibleQuotes">
     <span class="slick">{{q.text}}</span>
     <span class="author slick">{{q.author}}</span>
@@ -26,7 +26,7 @@
         <a class="button button-icon" ng-click="share(state.visibleQuotes[0]);">
             <i class="icon royal" ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
         </a>
-        <a class="button button-icon" ng-click="changeBackground();">
+        <a class="button button-icon" ng-click="startCamera();">
             <i class="icon ion-camera royal"></i>
         </a>
     </div>
