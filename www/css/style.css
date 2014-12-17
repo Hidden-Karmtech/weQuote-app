@@ -87,6 +87,10 @@ body{
   border-style: none !important;
 }
 
+.border-sub-header{
+  border-style: none !important;
+}
+
 .text-card {
   display: table;
   color: #fff;
