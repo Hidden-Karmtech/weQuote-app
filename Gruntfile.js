@@ -26,7 +26,48 @@ module.exports = function (grunt) {
           { src:"www/res/screens/android/xhdpi-land/screen.png", dest:"platforms/android/res/drawable-land-xhdpi/screen.png" }
         ]
       }
+    },
+    shell: {    
+      installPluginFile: {
+          command: 'cordova plugin add org.apache.cordova.file'
+      },
+      installPluginKeyboard: {
+          command: 'cordova plugin add com.ionic.keyboard'
+      },
+      installPluginConsole: {
+          command: 'cordova plugin add org.apache.cordova.console'
+      },
+      installPluginDevice: {
+          command: 'cordova plugin add org.apache.cordova.device'
+      },
+      installPluginFileTransfer: {
+          command: 'cordova plugin add org.apache.cordova.file-transfer'
+      },
+      installPluginInappbrowser: {
+          command: 'cordova plugin add org.apache.cordova.inappbrowser'
+      },
+      installPluginPhoneGap: {
+          command: 'cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git'
+      },
+      installPluginAdmob: {
+          command: 'cordova plugin add https://github.com/floatinghotpot/cordova-plugin-admob.git'
+      },
+      installPluginSplashscreen: {
+          command: 'cordova plugin add org.apache.cordova.splashscreen'
+      }
     }
   });
+  
+  grunt.registerTask('setup'
+    , ['shell:installPluginFile', 
+        'shell:installPluginKeyboard',
+        'shell:installPluginConsole',
+        'shell:installPluginDevice',
+        'shell:installPluginFileTransfer',
+        'shell:installPluginInappbrowser',
+        'shell:installPluginPhoneGap',
+        'shell:installPluginAdmob',
+        'shell:installPluginSplashscreen',
+        'copy']);
 
 };
