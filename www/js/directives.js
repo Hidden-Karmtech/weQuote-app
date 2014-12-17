@@ -1,112 +1,142 @@
 angular.module('weQuote.directives', [])
-	.directive('quoteCard', ['$log','Screen',function($log,Screen) {
+	.directive('quoteCard', ['$log', 'Screen', function($log, Screen) {
 
 		var that = this;
 
 		var TEXT_SCALE_FACTOR = 0.9;
+		var TEXT_X_OFFSET = 3;
+		var WATERMARK_OFFSET = 3;
+		var AUTHOR_OFFSET = 7;
+		var WATERMARK_FONT_SIZE = 4.5;
+		var AUTHOR_FONT_SIZE = 7;
+		var BORDER_WIDTH = 3.5;
+		var HEIGHT_THRESHOLD = 60;
 
-		this.getQuoteText = function(quote,size,startFontSize){
-			var generateText = function(text,fontSize,size){
-				return new Kinetic.Text(
-				{
+		this.getQuoteText = function(quote, size, startFontSize) {
+
+			var xOffset = size * (TEXT_X_OFFSET / 100);
+
+			var generateText = function(text, fontSize, size) {
+				return new Kinetic.Text({
 					text: text,
 					fontSize: fontSize,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
-					width: size,
+					x:xOffset,
+					width: size-(xOffset * 2),
 					padding: 0,
 					align: 'center'
 				});
 			};
 
-			var HeightThreshold = size * (3/5);
+			var HeightThreshold = size * (HEIGHT_THRESHOLD / 100);
 			var quoteText;
 			var fontSize;
 			var textHeight;
 
-			do{	
+			do {
 				$log.debug("Generating text with font " + fontSize);
-				
+
 				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
-				quoteText = generateText(quote.text,fontSize,size);
+				quoteText = generateText(quote.text, fontSize, size);
 				textHeight = quoteText.getAttr('height');
 
 				$log.debug("text height " + textHeight);
-			}while(textHeight > HeightThreshold)
+			} while (textHeight > HeightThreshold)
 
 			//Y center
-			quoteText.setAttr('y',(size - textHeight)/2);
+			quoteText.setAttr('y', (size - textHeight) / 2);
 
 			return quoteText;
 		};
 
-		this.getWatermark = function(size){
-			var watermark = new Kinetic.Text(
-				{
-					text:'www.wequote.it',
-					fontSize: 16,
-					x:5,
-					y:5,
-					fontFamily: 'Lobster',
-					fill: '#FFFFFF',
-					width: size,
-					padding: 0,
-					align: 'left'
-				});
+		this.getWatermark = function(size) {
+
+			var offset = size * (WATERMARK_OFFSET / 100);
+			var fontSize = size * (WATERMARK_FONT_SIZE / 100);
+
+			var watermark = new Kinetic.Text({
+				text: 'www.wequote.it',
+				fontSize: fontSize,
+				x: offset,
+				y: offset,
+				fontFamily: 'Lobster',
+				fill: '#FFFFFF',
+				width: size,
+				padding: 0,
+				align: 'left'
+			});
 
 			return watermark;
 		};
 
-		this.getAuthorText = function(quote,size){
-			var autorText = new Kinetic.Text(
-				{
-					text: quote.author,
-					fontSize: 24,
-					fontFamily: 'Lobster',
-					fill: '#FFFFFF',
-					width: size,
-					padding: 0,
-					align: 'center'
-				});
+		this.getAuthorText = function(quote, size) {
+
+			var fontSize = size * (AUTHOR_FONT_SIZE / 100);
+
+			var autorText = new Kinetic.Text({
+				text: quote.author,
+				fontSize: fontSize,
+				fontFamily: 'Lobster',
+				fill: '#FFFFFF',
+				width: size,
+				padding: 0,
+				align: 'center'
+			});
 
 			//Stick to bottom
+
+			var yOffset = size * (AUTHOR_OFFSET / 100);
+
 			var textHeight = autorText.getAttr('height');
-			autorText.setAttr('y',size - textHeight -25);
+			autorText.setAttr('y', size - textHeight - yOffset);
 
 			return autorText;
 		};
 
-		this.getImageBackgroud = function(imgElement,size){
-			return new Kinetic.Rect(
-				{
-					x: 0,
-					y: 0,
-					fillPatternImage: imgElement,
-					width: size,
-					height: size,
-					cornerRadius: 12,
-					stroke: '#98A4D7',
-        			strokeWidth: 6
-				});
+		this.getRectBorder = function(size) {
+
+			var strokeWidth = size * (BORDER_WIDTH / 100);
+
+			return new Kinetic.Image({
+				x: 0,
+				y: 0,
+				width: size,
+				height: size,
+				fillAlpha:0,
+				stroke: '#98A4D7',
+				strokeWidth: strokeWidth
+			});
+		}
+
+		this.getImageBackgroud = function(imgElement, size) {
+			return new Kinetic.Image({
+				x: 0,
+				y: 0,
+				image: imgElement,
+				width: size,
+				height: size
+			});
 		}
 
 		var visibleId = Math.random().toString(36).substring(8);
 		var hiddenId = Math.random().toString(36).substring(8);
+		var canvasId = Math.random().toString(36).substring(8);
 
 		return {
 			restrict: 'E',
-			template: '<div><div style="z-index:10000" id=' + visibleId + '></div><div style="display:none" id=' + hiddenId + '></div></div>',
+			template: '<div><div style="z-index:10000" id=' + visibleId + '></div><div style="display:none" id=' + hiddenId + '></div><canvas style="display:none"id=' + canvasId + '></div>',
 			replace: true,
-			scope:{
-				quote:'='
+			scope: {
+				quote: '='
 			},
 			link: function($scope, element, attrs) {
 
-				$scope.$watch('quote',function(quote){
-					if(quote && quote.url){
-						generateCanvas(visibleKinetic.stage,quote,Screen.getSize(),36);	
+				$scope.$watch('quote', function(quote) {
+					if (quote && quote.url) {
+						generateCanvas(visibleKinetic.stage, quote, Screen.getSize(), 36);
 					}
-				},true);
+				}, true);
 
 				var visibleKinetic = {
 					stage: new Kinetic.Stage({
@@ -126,36 +156,98 @@ angular.module('weQuote.directives', [])
 
 				$scope.$on('generate-canvas', function(event, quote, callback) {
 					generateCanvas(
-							invisibleKinetic.stage,
-							quote,
-							1000,
-							104,
-							callback);
+						invisibleKinetic.stage,
+						quote,
+						1000,
+						104,
+						callback);
 				});
 
-				var generateCanvas = function(stage, quote, size,startFontSize,callback) {
+				var generateCanvas = function(stage, quote, size, startFontSize, callback) {
 
 					stage.clear();
 
 					var imageObj = new Image();
 
 					imageObj.onload = function() {
+
+						if (imageObj.naturalHeight !== imageObj.naturalWidth) {
+							cropImage();
+						} else {
+							executeGenerateCanvas();
+						}
+
+					};
+
+					var cropImage = function() {
+						var photoSize;
+						var portrait;
+						if (imageObj.naturalWidth < imageObj.naturalHeight) {
+							portrait = true;
+							photoSize = imageObj.naturalWidth;
+						} else {
+							portrait = false;
+							photoSize = imageObj.naturalHeight;
+						}
+
+						//Crop Image
+						var canvas = document.getElementById(canvasId);
+						canvas.width = photoSize;
+						canvas.height = photoSize;
+
+						var context = canvas.getContext('2d');
+
+						if (portrait) {
+							var yOffest = (imageObj.naturalHeight - photoSize) / 2;
+							context.drawImage(
+								imageObj,
+								0,
+								yOffest,
+								photoSize,
+								photoSize,
+								0,
+								0,
+								photoSize,
+								photoSize
+							);
+						} else {
+							var xOffest = (imageObj.naturalWidth - photoSize) / 2;
+							context.drawImage(
+								imageObj,
+								xOffest,
+								0,
+								photoSize,
+								photoSize,
+								0,
+								0,
+								photoSize,
+								photoSize
+							);
+						}
+
+						//Reload url
+						imageObj.src = canvas.toDataURL();
+					};
+
+					var executeGenerateCanvas = function() {
+
 						var layer = new Kinetic.Layer();
 
-						layer.add(that.getImageBackgroud(imageObj,size));
-						layer.add(that.getAuthorText(quote,size));
-						layer.add(that.getQuoteText(quote,size,startFontSize));
+						layer.add(that.getImageBackgroud(imageObj, size));
+						layer.add(that.getRectBorder(size));
+						layer.add(that.getAuthorText(quote, size));
+						layer.add(that.getQuoteText(quote, size, startFontSize));
 						layer.add(that.getWatermark(size));
 
 						stage.add(layer);
 
-						if(callback){
+						if (callback) {
 							stage.toDataURL({
 								callback: callback
 							});
 						}
 					};
-					
+
 					imageObj.src = quote.url;
 
 				};
