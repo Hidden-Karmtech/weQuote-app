@@ -4,9 +4,13 @@ angular.module('weQuote.controllers', [])
 			ionic.Platform.exitApp();
 		}
 
+		$scope.goTo = function(url) {
+			$state.go(url);
+		}
+
 		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
-		});
+		});		
 
 		$scope.title = $state.title || '#weQuote';
 	}])
@@ -16,7 +20,7 @@ angular.module('weQuote.controllers', [])
 		};
 
 		$scope.$on('back-button-action', function(event, args) {
-			$state.go('quotes');
+			$scope.goTo('quotes');			
 		});
 	}])
 	.controller('Tags', ['$scope', 'TagRepository', '$state', 'TagsState', 'QuotesState', function($scope, TagRepository, $state, TagsState, QuotesState) {
@@ -40,11 +44,11 @@ angular.module('weQuote.controllers', [])
 			QuotesState.quotes = [];
 			QuotesState.currentQuote = null;
 
-			$state.go('quotes');
+			$scope.goTo('quotes');	
 		}
 
 		$scope.$on('back-button-action', function(event, args) {
-			$state.go('quotes');
+			$scope.goTo('quotes');	
 		});
 	}])
 	.controller('Authors', ['$scope', 'AuthorRepository', '$state', 'AuthorsState', 'QuotesState', function($scope, AuthorRepository, $state, AuthorsState, QuotesState) {
@@ -67,7 +71,7 @@ angular.module('weQuote.controllers', [])
 			QuotesState.quotes = [];
 			QuotesState.currentQuote = null;
 
-			$state.go('quotes');
+			$scope.goTo('quotes');
 		}
 
 		$scope.clearText = function() {
@@ -75,7 +79,7 @@ angular.module('weQuote.controllers', [])
 		}
 
 		$scope.$on('back-button-action', function(event, args) {
-			$state.go('quotes');
+			$scope.goTo('quotes');
 		});
 	}])
 	.controller('Quotes', ['$scope',
