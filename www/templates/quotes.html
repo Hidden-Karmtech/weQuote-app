@@ -7,8 +7,16 @@
             ng-model="state.query.value"
             ng-blur="onChangeSearch();"> 
       </label>
+      <button class="button button-small royal-bg light clear-search-button" ng-click="clearText()">
+      <i class="ion-close-circled"></i>
+      </button>
 </ion-header-bar>
-<ion-content class="royal-bg">
+<ion-content class="royal-bg text-center center">
+ <div>
+    <span 
+      style="font-size:80pt;"
+      class="ion-loading-a light"></span>
+  </div>
 <swipe-cards>
       <swipe-card 
         quote-card
@@ -34,7 +42,6 @@
         </div>
       </swipe-card>
     </swipe-cards>
-</ion-content>
 <ion-footer-bar class="bar-light">
   <a 
     ng-cloak
