@@ -5,8 +5,8 @@ angular.module('weQuote.services', [])
 	.value('AuthorsState', {})
 	.value('UUID', {})
 	.service('Screen', ['$window',function($window){
-		//Adding fake class at runtime
-    	var size = Math.floor($window.innerWidth * 95 / 100);
+		var size = Math.floor($window.innerWidth * 95 / 100);
+		
 		var left = Math.floor(($window.innerWidth - size) / 2);
     	var top = Math.floor(($window.innerHeight - size) / 2);
 
@@ -28,7 +28,7 @@ angular.module('weQuote.services', [])
 		'UUID',
 		function($http, SERVER_BASE_URL,UUID) {
 			var that = this;
-			var MAX_LEN = 200;
+			var MAX_LEN = 300;
 			return {
 				list: function(queryParam) {
 
@@ -38,7 +38,7 @@ angular.module('weQuote.services', [])
 					};
 
 					if (queryParam && queryParam.value) {
-						params[queryParam.type] = queryParam.value;
+						params[queryParam.type] = queryParam.value.toLowerCase();
 					}
 
 					return $http({
