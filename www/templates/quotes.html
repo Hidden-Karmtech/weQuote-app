@@ -1,57 +1,39 @@
+<div class="text-card quote-card centered-card" ng-style="{
+              'background-image': 'url(img/backgrounds/Amore/' + imageUrl + '.png)'
+            };" ng-repeat="q in state.visibleQuotes" on-destroy="cardDestroyed($index)">
+    <span class="slick">{{q.text}}</span>
+    <span class="author slick">{{q.author}}</span>
+</div>
 <ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
-  <label class="item-input-wrapper"> 
-        <i class="icon ion-search placeholder-icon"></i> 
-          <input 
-            class="item-input-small" 
-            type="search" placeholder="Ricerca..." 
-            ng-model="state.query.value"
-            ng-blur="onChangeSearch();"> 
-      </label>
-      <button class="button button-small royal-bg light clear-search-button" ng-click="clearText()">
-      <i class="ion-close-circled"></i>
-      </button>
+    <label class="item-input-wrapper">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input class="item-input-small" type="search" placeholder="Ricerca..." ng-model="state.query.value" ng-blur="onChangeSearch();">
+    </label>
+    <button class="button button-icon button-small royal-bg light clear-search-button" ng-click="clearText()">
+        <i class="ion-close-circled"></i>
+    </button>
 </ion-header-bar>
 <ion-content class="royal-bg text-center center">
- <div>
-    <span 
-      style="font-size:80pt;"
-      class="ion-loading-a light"></span>
-  </div>
-<swipe-cards>
-      <swipe-card 
-        quote-card
-        class="text-card quote-card" 
-        ng-style="{
-                    'background-image': 'url(img/backgrounds/Amore/' + imageUrl + '.png)'
-                  };"
-        ng-repeat="q in state.visibleQuotes" 
-        on-destroy="cardDestroyed($index)">
-        <span class="slick">{{q.text}}</span>
-        <span class="author slick">{{q.author}}</span>
-      </swipe-card>
-      <swipe-card 
-        class="text-card calm-bg quote-card"
-        on-destroy="destroyTutorial();"> 
-        <div class="text-center">
-          <span class="slick">
-            Scorri verso il basso per leggere le citazioni.  
-          </span>
-          <div>
-            <i style="margin-top:20%;font-size:128pt" class="ion-arrow-down-c"></i>
-          </div>
-        </div>
-      </swipe-card>
-    </swipe-cards>
+    <div>
+        <span style="font-size:80pt;" class="ion-loading-a light"></span>
+    </div>
+</ion-content>
 <ion-footer-bar class="bar-light">
-  <a 
-    ng-cloak
-    class="button button-icon icon important-royal"
-    ng-class="{'ion-loading-a':sharing}"
-  ></a>
-  <h1 
-    class="title important-royal slick text-disabled" 
-    ng-click="share(state.visibleQuotes[0])">
+    <div class="button-bar">
+        <a class="button button-icon" ng-click="next();">
+          <i class="icon ion-skip-forward royal"></i>
+        </a>
+        <a class="button button-icon" ng-click="share(state.visibleQuotes[0]);">
+          <i class="icon royal" ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
+        </a>
+        <a class="button button-icon" ng-click="changeBackground();">
+          <i class="icon ion-image royal"></i>
+        </a>
+    </div>
+    <!--
+    <a ng-cloak class="button button-icon icon important-royal" ng-class="{'ion-loading-a':sharing}"></a>
+    <h1 class="title important-royal slick text-disabled" ng-click="share(state.visibleQuotes[0])">
       {{sharing ? 'Attendi' : 'Condividi'}}
-  </h1>
+  </h1>-->
 </ion-footer-bar>
 <quote-canvas/>

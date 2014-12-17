@@ -18,8 +18,14 @@ angular.module('weQuote', [
       AuthorsState.authors = authors;
     });*/
     
-    //Use in debug
-    localStorage.clear();
+    var head = angular.element(document.querySelector('head'));
+
+    //Adding fake class at runtime
+    var size = Math.floor($window.innerWidth * 95 / 100);
+    var left = Math.floor(($window.innerWidth - size) / 2);
+    var top = Math.floor(($window.innerHeight - size) / 2);
+
+    head.append(angular.element("<style type='text/css'> .centered-card{width:" + size + "px; height:" + size + "px; left:" + left + "px; top:" + top + "px;} </style>"));
 
     $ionicPlatform.ready(function() {
       UUID.value = $cordovaDevice.getUUID();

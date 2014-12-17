@@ -92,8 +92,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.state = QuotesState;
 			$scope.sharing = false;
-			$scope.showTutorial = !localStorage.getItem('tutorial');
-
+			
 			if (_.isEmpty($scope.state)) {
 				$scope.state.visibleQuotes = [];
 				$scope.state.quotes = [];
@@ -122,20 +121,12 @@ angular.module('weQuote.controllers', [])
 				$ionicSideMenuDelegate.toggleLeft();
 			};
 
-			$scope.cardDestroyed = function(index) {
+			$scope.next = function() {
 				$scope.state.visibleQuotes = [$scope.state.quotes.pop()];
 				$log.debug($scope.state.quotes.length + " left");
 				if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
 					downloadQuotes();
 				}
-			};
-
-			$scope.destroyTutorial = function() {
-				$scope.showTutorial = false;
-				localStorage.setItem('tutorial', 'done');
-				downloadQuotes(function(quotes) {
-					$scope.state.visibleQuotes = [quotes.pop()];
-				});
 			};
 
 			$scope.share = function(quote) {
@@ -152,9 +143,7 @@ angular.module('weQuote.controllers', [])
 				$scope.state.quotes = [];
 				$scope.visibleQuotes = [];
 				downloadQuotes(function(quotes) {
-					if (!$scope.showTutorial) {
-						$scope.state.visibleQuotes = [quotes.pop()];
-					}
+					$scope.state.visibleQuotes = [quotes.pop()];
 				});
 			}
 
@@ -168,9 +157,13 @@ angular.module('weQuote.controllers', [])
 				reloadQuotes();
 			}
 
+			$scope.changeBackground = function(){
+				$scope.imageUrl = _.str.pad(Date.now() % IMAGES, 3, '0');
+			}
+
 			$scope.$watch('state.visibleQuotes', function(newValue) {
 				if (newValue.length) {
-					$scope.imageUrl = _.str.pad(Date.now() % IMAGES, 3, '0');
+					$scope.changeBackground();
 				}
 			});
 
