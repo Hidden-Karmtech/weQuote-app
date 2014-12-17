@@ -68,13 +68,7 @@ body{
 	color:white !important;
 }
 
-.swipe-cards {
-  
-}
-
 .swipe-card {
-  position: fixed;
-  left:25px;
   -webkit-transform: scale(1,1);
   line-height: 40vw;
   border-radius: 12px;
