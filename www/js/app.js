@@ -4,7 +4,6 @@ angular.module('weQuote', [
     'weQuote.services',
     'weQuote.directives',
     'ngCordova',
-    'ionic.contrib.ui.cards',
     'pasvaz.bindonce'
   ])
   .run(function($ionicPlatform, $rootScope, TagRepository, TagsState, AuthorRepository, AuthorsState, $log, $cordovaDevice, UUID, $window) {
