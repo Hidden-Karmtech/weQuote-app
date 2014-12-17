@@ -54,6 +54,9 @@ module.exports = function (grunt) {
       },
       installPluginSplashscreen: {
           command: 'cordova plugin add org.apache.cordova.splashscreen'
+      },
+      installPluginCamera: {
+          command: 'cordova plugin add org.apache.cordova.camera'
       }
     }
   });
@@ -68,6 +71,7 @@ module.exports = function (grunt) {
         'shell:installPluginPhoneGap',
         'shell:installPluginAdmob',
         'shell:installPluginSplashscreen',
+        'shell:installPluginCamera',
         'copy']);
 
 };
