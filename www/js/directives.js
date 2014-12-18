@@ -22,8 +22,8 @@ angular.module('weQuote.directives', [])
 					fontSize: fontSize,
 					fontFamily: 'Lobster',
 					fill: '#FFFFFF',
-					x:xOffset,
-					width: size-(xOffset * 2),
+					x: xOffset,
+					width: size - (xOffset * 2),
 					padding: 0,
 					align: 'center'
 				});
@@ -103,7 +103,7 @@ angular.module('weQuote.directives', [])
 				y: 0,
 				width: size,
 				height: size,
-				fillAlpha:0,
+				fillAlpha: 0,
 				stroke: '#98A4D7',
 				strokeWidth: strokeWidth
 			});
@@ -122,6 +122,9 @@ angular.module('weQuote.directives', [])
 		var visibleId = Math.random().toString(36).substring(8);
 		var hiddenId = Math.random().toString(36).substring(8);
 		var canvasId = Math.random().toString(36).substring(8);
+		var visibleStage;
+		var invisibleStage;
+		var count = 0;
 
 		return {
 			restrict: 'E',
@@ -132,31 +135,27 @@ angular.module('weQuote.directives', [])
 			},
 			link: function($scope, element, attrs) {
 
+				visibleStage = new Kinetic.Stage({
+					container: visibleId,
+					width: Screen.getSize(),
+					height: Screen.getSize()
+				});
+
+				invisibleStage = new Kinetic.Stage({
+					container: hiddenId,
+					width: 1000,
+					height: 1000
+				});
+
 				$scope.$watch('quote', function(quote) {
 					if (quote && quote.url) {
-						generateCanvas(visibleKinetic.stage, quote, Screen.getSize(), 36);
+						generateCanvas(visibleStage, quote, Screen.getSize(), 36);
 					}
 				}, true);
 
-				var visibleKinetic = {
-					stage: new Kinetic.Stage({
-						container: visibleId,
-						width: Screen.getSize(),
-						height: Screen.getSize()
-					})
-				};
-
-				var invisibleKinetic = {
-					stage: new Kinetic.Stage({
-						container: hiddenId,
-						width: 1000,
-						height: 1000
-					})
-				};
-
 				$scope.$on('generate-canvas', function(event, quote, callback) {
 					generateCanvas(
-						invisibleKinetic.stage,
+						invisibleStage,
 						quote,
 						1000,
 						104,
@@ -165,7 +164,10 @@ angular.module('weQuote.directives', [])
 
 				var generateCanvas = function(stage, quote, size, startFontSize, callback) {
 
-					stage.clear();
+					count++;
+					$log.debug("Generating Canvas " + count);
+
+					stage.removeChildren();
 
 					var imageObj = new Image();
 
