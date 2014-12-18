@@ -7,7 +7,7 @@
       <i class="ion-close-circled"></i>
       </button>
 </ion-header-bar>
-<ion-content class="royal-bg padding-left padding-right" has-header="true" has-subheader="true" style="padding-top:5px">
+<ion-content class="royal-bg padding-left padding-right loading" has-header="true" has-subheader="true" style="padding-top:5px">
 <ul class="list slick">
     <li class="item important-royal" ng-click="toQuotes(author)" bindonce ng-repeat="author in state.authors | filter:query">
       <span bo-text="author.name + '(' + author.count +')'"/>

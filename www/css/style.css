@@ -1,30 +1,24 @@
 @font-face {
-  font-family: 'Lobster';
-  src: url('Lobster.otf');
+    font-family: 'Lobster';
+    src: url('Lobster.otf');
 }
-
-body{
-	color:white;
+body {
+    color: white;
 }
-
-.slick{
-	font-family: 'Lobster';
+.slick {
+    font-family: 'Lobster';
 }
-
-.important-royal{
-  color: #5264AE !important;
+.important-royal {
+    color: #5264AE !important;
 }
-
-.important-light{
-  color: #FFFFFF !important;
+.important-light {
+    color: #FFFFFF !important;
 }
-
-#loginSection{
-	padding-top: 20%;
+#loginSection {
+    padding-top: 20%;
 }
-
-.center{
-  display: -webkit-box;
+.center {
+    display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -53,94 +47,73 @@ body{
     -ms-flex-align: center;
     align-items: center;
 }
-
 .item-input-wrapper {
-  background: #fff !important;
+    background: #fff !important;
 }
-
-.facebook-bg{
-	background-color: #2C4388 !important;
-	color:white !important;
+.facebook-bg {
+    background-color: #2C4388 !important;
+    color: white !important;
 }
-
-.google-bg{
-	background-color: #D43326 !important;
-	color:white !important;
+.google-bg {
+    background-color: #D43326 !important;
+    color: white !important;
 }
-
 .quote-card {
-  position: fixed;
-  z-index: 1000;
-  line-height: 40vw;
-  border-radius: 12px;
-  border-width: 6px;
-  border-style: solid;
-  border-color: #98A4D7;
-  overflow: hidden;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  background-position: center top;
+    position: fixed;
+    z-index: 1000;
+    line-height: 40vw;
+    border-radius: 12px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #98A4D7;
+    overflow: hidden;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    background-position: center top;
 }
-
-.clear-search-button{
-  border-style: none !important;
+.clear-search-button {
+    border-style: none !important;
 }
-
-.border-sub-header{
-  border-style: none !important;
+.border-sub-header {
+    border-style: none !important;
 }
-
 .text-card {
-  display: table;
-  color: #fff;
-  word-wrap: break-word;
-  line-height: 100%
-  border: 6px solid #A9B5E3;
-  text-align: center;
+    display: table;
+    color: #fff;
+    word-wrap: break-word;
+    line-height: 100% border: 6px solid #A9B5E3;
+    text-align: center;
 }
-
 .text-card span {
-  display: table-cell;
-  vertical-align: middle;
-  line-height: normal;      
-  width: 80%;
-  font-size: 20px;
+    display: table-cell;
+    vertical-align: middle;
+    line-height: normal;
+    width: 80%;
+    font-size: 20px;
 }
-
-.text-card .author{
-  font-style: italic;
-  position: absolute;
-  bottom: 50px;
+.text-card .author {
+    font-style: italic;
+    position: absolute;
+    bottom: 50px;
 }
-
-#shareButton{
-	position: fixed;
- 	bottom: 10px;
+#shareButton {
+    position: fixed;
+    bottom: 10px;
 }
-
-@-webkit-keyframes bounceIn {
-  0% {
-    -webkit-transform: scale(0,0);
-  }
-  70% {
-    -webkit-transform: scale(1.2,1.2);
-  }
-  100% {
-    -webkit-transform: scale(1,1);
-  }
+.loading {
+    background-image: url(../img/spin.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50%;
 }
-.quote-card.ng-enter,
-.quote-card.ng-leave {
-  -webkit-transition:2s linear all;
-  transition:2s linear all;
+.quote-card.ng-enter, .quote-card.ng-leave {
+    -webkit-transition: 2s linear all;
+    transition: 2s linear all;
 }
-
-.quote-card.ng-enter,
-.quote-card.ng-leave.ng-leave-active {
-  opacity:0;
+.quote-card.ng-enter, .quote-card.ng-leave.ng-leave-active {
+    opacity: 0;
 }
-.quote-card.ng-leave,
-.quote-card.ng-enter.ng-enter-active {
-  opacity:1;
+.quote-card.ng-leave, .quote-card.ng-enter.ng-enter-active {
+    opacity: 1;
 }
