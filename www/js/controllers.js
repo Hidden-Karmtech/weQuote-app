@@ -161,6 +161,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.onChangeSearch = function() {
 				$scope.state.query.type = "search";
+				$scope.state.currentQuote = null;
 				reloadQuotes();
 			}
 
