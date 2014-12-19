@@ -10,7 +10,7 @@ angular.module('weQuote.controllers', [])
 
 		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
-		});		
+		});
 
 		$scope.title = $state.title || '#weQuote';
 	}])
@@ -20,7 +20,7 @@ angular.module('weQuote.controllers', [])
 		};
 
 		$scope.$on('back-button-action', function(event, args) {
-			$scope.goTo('quotes');			
+			$scope.goTo('quotes');
 		});
 	}])
 	.controller('Tags', ['$scope', 'TagRepository', '$state', 'TagsState', 'QuotesState', function($scope, TagRepository, $state, TagsState, QuotesState) {
@@ -44,11 +44,11 @@ angular.module('weQuote.controllers', [])
 			QuotesState.quotes = [];
 			QuotesState.currentQuote = null;
 
-			$scope.goTo('quotes');	
+			$scope.goTo('quotes');
 		}
 
 		$scope.$on('back-button-action', function(event, args) {
-			$scope.goTo('quotes');	
+			$scope.goTo('quotes');
 		});
 	}])
 	.controller('Authors', ['$scope', 'AuthorRepository', '$state', 'AuthorsState', 'QuotesState', function($scope, AuthorRepository, $state, AuthorsState, QuotesState) {
@@ -120,18 +120,24 @@ angular.module('weQuote.controllers', [])
 			}
 			$scope.clearText = function() {
 				$scope.state.query.value = "";
+				$scope.state.currentQuote = null;
+				reloadQuotes();
 			}
 			$scope.toggleLeft = function() {
 				$ionicSideMenuDelegate.toggleLeft();
 			};
 
 			$scope.next = function() {
-				var quote = $scope.state.quotes.pop();
-				quote.url = 'img/backgrounds/Amore/' + _.str.pad(Date.now() % IMAGES, 3, '0') + '.png';
-				$scope.state.currentQuote = quote;
-				$log.debug($scope.state.quotes.length + " left");
-				if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
-					downloadQuotes();
+				if ($scope.state.quotes.length > 0) {
+					grabQuote($scope.state.quotes);
+					$log.debug($scope.state.quotes.length + " left");
+					if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
+						downloadQuotes();
+					}
+				} else {
+					downloadQuotes(function(){
+						$scope.next();
+					});
 				}
 			};
 
@@ -144,13 +150,28 @@ angular.module('weQuote.controllers', [])
 				});
 			}
 
+			var grabQuote = function(quotes) {
+				var quote = quotes.pop();
+				quote.url = 'img/backgrounds/Amore/' + _.str.pad(Date.now() % IMAGES, 3, '0') + '.png';
+				$scope.state.currentQuote = quote;
+			};
+
 			var reloadQuotes = function() {
 				$scope.state.quotes = [];
 				$scope.state.currentQuote = null;
 				downloadQuotes(function(quotes) {
-					var quote = quotes.pop();
-					quote.url = 'img/backgrounds/Amore/' + _.str.pad(Date.now() % IMAGES, 3, '0') + '.png';
-					$scope.state.currentQuote = quote;
+					if(quotes.length > 0){
+						grabQuote(quotes);
+					}else{
+						swal({
+							title: "Nessuna Citazione corrispondente ai parametri di ricerca",
+							confirmButtonColor: "#5264AE",
+							closeOnConfirm: true
+						},
+						function() {
+							$scope.clearText();
+						});
+					}
 				});
 			}
 
