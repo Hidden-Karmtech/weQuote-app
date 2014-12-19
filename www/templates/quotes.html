@@ -21,14 +21,14 @@
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
-        <a class="button button-icon" ng-click="next();">
-            <i class="icon ion-skip-forward royal"></i>
-        </a>
         <a class="button button-icon" ng-click="share(state.currentQuote);">
             <i 
               class="icon royal" 
               ng-disabled="sharing" 
               ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
+        </a>
+        <a class="button button-icon" ng-click="next();">
+            <i class="icon ion-skip-forward royal"></i>
         </a>
         <a class="button button-icon" ng-click="startCamera();">
             <i class="icon ion-camera royal"></i>

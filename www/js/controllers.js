@@ -8,6 +8,10 @@ angular.module('weQuote.controllers', [])
 			$state.go(url);
 		}
 
+		$scope.isAndroid = function(){
+			return ionic.Platform.isAndroid();
+		};
+
 		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
 		});
