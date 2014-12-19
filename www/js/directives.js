@@ -12,6 +12,13 @@ angular.module('weQuote.directives', [])
 		var BORDER_WIDTH = 3.5;
 		var HEIGHT_THRESHOLD = 60;
 
+		var visibleId = Math.random().toString(36).substring(8);
+		var hiddenId = Math.random().toString(36).substring(8);
+		var canvasId = Math.random().toString(36).substring(8);
+		var visibleKinetic;
+		var invisibleKinetic;
+		var count = 0;
+
 		this.getQuoteText = function(quote, size, startFontSize) {
 
 			var xOffset = size * (TEXT_X_OFFSET / 100);
@@ -119,12 +126,99 @@ angular.module('weQuote.directives', [])
 			});
 		}
 
-		var visibleId = Math.random().toString(36).substring(8);
-		var hiddenId = Math.random().toString(36).substring(8);
-		var canvasId = Math.random().toString(36).substring(8);
-		var visibleStage;
-		var invisibleStage;
-		var count = 0;
+		var generateCard = function(kineticArea, quote, size, startFontSize, callback) {
+
+			var stage = kineticArea.stage;
+
+			count++;
+			$log.debug("Generating Canvas " + count);
+
+			stage.removeChildren();
+			stage.clearCache();
+			Kinetic.shapes = {};
+
+			var imageObj = new Image();
+
+			imageObj.onload = function(x) {
+				if (imageObj.naturalHeight !== imageObj.naturalWidth) {
+					that.cropImage(imageObj);
+				} else {
+
+					stage.add(that.paintCanvas(imageObj,quote,kineticArea.mainLayer,size,startFontSize));
+
+					if (callback) {
+						stage.toDataURL({
+							callback: callback
+						});
+					}
+				}
+
+			};
+
+			imageObj.src = quote.url;
+
+		};
+
+		this.cropImage = function(imageObj) {
+			var photoSize;
+			var portrait;
+			if (imageObj.naturalWidth < imageObj.naturalHeight) {
+				portrait = true;
+				photoSize = imageObj.naturalWidth;
+			} else {
+				portrait = false;
+				photoSize = imageObj.naturalHeight;
+			}
+
+			//Crop Image
+			var canvas = document.getElementById(canvasId);
+			canvas.width = photoSize;
+			canvas.height = photoSize;
+
+			var context = canvas.getContext('2d');
+
+			if (portrait) {
+				var yOffest = (imageObj.naturalHeight - photoSize) / 2;
+				context.drawImage(
+					imageObj,
+					0,
+					yOffest,
+					photoSize,
+					photoSize,
+					0,
+					0,
+					photoSize,
+					photoSize
+				);
+			} else {
+				var xOffest = (imageObj.naturalWidth - photoSize) / 2;
+				context.drawImage(
+					imageObj,
+					xOffest,
+					0,
+					photoSize,
+					photoSize,
+					0,
+					0,
+					photoSize,
+					photoSize
+				);
+			}
+
+			//Reload url
+			imageObj.src = canvas.toDataURL();
+		};
+
+		this.paintCanvas = function(imageObj,quote,layer,size,startFontSize) {
+
+			layer.add(that.getImageBackgroud(imageObj, size));
+			layer.add(that.getRectBorder(size));
+			layer.add(that.getAuthorText(quote, size));
+			layer.add(that.getQuoteText(quote, size, startFontSize));
+			layer.add(that.getWatermark(size));
+
+			return layer;
+		};
 
 		return {
 			restrict: 'E',
@@ -135,124 +229,45 @@ angular.module('weQuote.directives', [])
 			},
 			link: function($scope, element, attrs) {
 
-				visibleStage = new Kinetic.Stage({
-					container: visibleId,
-					width: Screen.getSize(),
-					height: Screen.getSize()
-				});
+				$log.debug("Linking directive");
 
-				invisibleStage = new Kinetic.Stage({
-					container: hiddenId,
-					width: 1000,
-					height: 1000
-				});
+				visibleKinetic = {
+					stage: new Kinetic.Stage({
+						container: visibleId,
+						width: Screen.getSize(),
+						height: Screen.getSize()
+					}),
+					mainLayer: new Kinetic.Layer()
+				};
+
+				invisibleKinetic = {
+					stage: new Kinetic.Stage({
+						container: hiddenId,
+						width: 1000,
+						height: 1000
+					}),
+					mainLayer: new Kinetic.Layer()
+				};
 
 				$scope.$watch('quote', function(quote) {
 					if (quote && quote.url) {
-						generateCanvas(visibleStage, quote, Screen.getSize(), 36);
+						generateCard(
+							visibleKinetic,
+							quote,
+							Screen.getSize(),
+							36);
 					}
 				}, true);
 
 				$scope.$on('generate-canvas', function(event, quote, callback) {
-					generateCanvas(
-						invisibleStage,
+					generateCard(
+						invisibleKinetic,
 						quote,
 						1000,
 						104,
 						callback);
 				});
 
-				var generateCanvas = function(stage, quote, size, startFontSize, callback) {
-
-					count++;
-					$log.debug("Generating Canvas " + count);
-
-					stage.removeChildren();
-
-					var imageObj = new Image();
-
-					imageObj.onload = function() {
-
-						if (imageObj.naturalHeight !== imageObj.naturalWidth) {
-							cropImage();
-						} else {
-							executeGenerateCanvas();
-						}
-
-					};
-
-					var cropImage = function() {
-						var photoSize;
-						var portrait;
-						if (imageObj.naturalWidth < imageObj.naturalHeight) {
-							portrait = true;
-							photoSize = imageObj.naturalWidth;
-						} else {
-							portrait = false;
-							photoSize = imageObj.naturalHeight;
-						}
-
-						//Crop Image
-						var canvas = document.getElementById(canvasId);
-						canvas.width = photoSize;
-						canvas.height = photoSize;
-
-						var context = canvas.getContext('2d');
-
-						if (portrait) {
-							var yOffest = (imageObj.naturalHeight - photoSize) / 2;
-							context.drawImage(
-								imageObj,
-								0,
-								yOffest,
-								photoSize,
-								photoSize,
-								0,
-								0,
-								photoSize,
-								photoSize
-							);
-						} else {
-							var xOffest = (imageObj.naturalWidth - photoSize) / 2;
-							context.drawImage(
-								imageObj,
-								xOffest,
-								0,
-								photoSize,
-								photoSize,
-								0,
-								0,
-								photoSize,
-								photoSize
-							);
-						}
-
-						//Reload url
-						imageObj.src = canvas.toDataURL();
-					};
-
-					var executeGenerateCanvas = function() {
-
-						var layer = new Kinetic.Layer();
-
-						layer.add(that.getImageBackgroud(imageObj, size));
-						layer.add(that.getRectBorder(size));
-						layer.add(that.getAuthorText(quote, size));
-						layer.add(that.getQuoteText(quote, size, startFontSize));
-						layer.add(that.getWatermark(size));
-
-						stage.add(layer);
-
-						if (callback) {
-							stage.toDataURL({
-								callback: callback
-							});
-						}
-					};
-
-					imageObj.src = quote.url;
-
-				};
 			}
 		};
 	}])
