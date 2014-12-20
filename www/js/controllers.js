@@ -94,18 +94,20 @@ angular.module('weQuote.controllers', [])
 		'$cordovaCamera',
 		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera) {
 
-			var MIN_SIZE = 5;
+			var MIN_SIZE = 15;
 			var IMAGES = 20;
 			var downloading = false;
 
 			$scope.state = QuotesState;
 			$scope.sharing = false;
+			$scope.lastSearch = "";
 
 			if (_.isEmpty($scope.state)) {
 				$scope.state.currentQuote = null;
 				$scope.state.quotes = [];
 				$scope.state.query = {
-					type: 'search'
+					type: 'search',
+					value : ""
 				};
 			}
 
@@ -193,9 +195,13 @@ angular.module('weQuote.controllers', [])
 			}
 
 			$scope.onChangeSearch = function() {
+				$log.debug("onChangeSearch");
 				$scope.state.query.type = "search";
-				$scope.state.currentQuote = null;
-				reloadQuotes();
+				if($scope.state.query.value !== $scope.lastSearch){
+					$scope.lastSearch = $scope.state.query.value;
+					$scope.state.currentQuote = null;
+					reloadQuotes();	
+				}
 			}
 
 			$scope.startCamera = function() {

@@ -28,7 +28,7 @@ angular.module('weQuote.services', [])
 		'UUID',
 		function($http, SERVER_BASE_URL,UUID) {
 			var that = this;
-			var MAX_LEN = 300;
+			var MAX_LEN = 200;
 			return {
 				list: function(queryParam) {
 
@@ -40,6 +40,8 @@ angular.module('weQuote.services', [])
 					if (queryParam && queryParam.value) {
 						params[queryParam.type] = queryParam.value.toLowerCase();
 					}
+
+					params.limit = queryParam.limit || 20;
 
 					return $http({
 						method: 'GET',
