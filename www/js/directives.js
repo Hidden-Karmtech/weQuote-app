@@ -1,4 +1,15 @@
 angular.module('weQuote.directives', [])
+	.directive('blurOnSubmit', ['$log', function($log) {
+		return {
+			restrict: 'A',
+			require:'^form',
+			link: function($scope, element, attrs,form) {
+				element.parent().bind("submit",function(){
+					element[0].blur();
+				});
+			}
+		};
+	}])
 	.directive('quoteCard', ['$log', 'Screen', function($log, Screen) {
 
 		var that = this;
