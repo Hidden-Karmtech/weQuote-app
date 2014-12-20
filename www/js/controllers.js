@@ -213,6 +213,7 @@ angular.module('weQuote.controllers', [])
 					encodingType: Camera.EncodingType.PNG,
 					targetWidth: 1000,
 					targetHeight: 1000,
+					correctOrientation:true,
 					popoverOptions: CameraPopoverOptions,
 					saveToPhotoAlbum: false
 				};
