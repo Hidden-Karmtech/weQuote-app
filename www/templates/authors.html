@@ -1,7 +1,14 @@
 <ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
       <label class="item-input-wrapper"> 
         <i class="icon ion-search placeholder-icon"></i> 
-          <input class="item-input-small" type="search" placeholder="Ricerca..." ng-model="query">
+          <form>
+            <input 
+              blur-on-submit
+              class="item-input-small" 
+              type="search" 
+              placeholder="Ricerca..." 
+              ng-model="query">
+          </form>
       </label>
       <button class="button button-icon button-small royal-bg important-light clear-search-button" ng-click="clearText()">
       <i class="ion-close-circled"></i>
