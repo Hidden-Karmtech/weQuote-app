@@ -25,7 +25,7 @@
             <i 
               class="icon royal" 
               ng-disabled="sharing" 
-              ng-class="{'ion-share':!sharing,'ion-loading-a':sharing}"></i>
+              ng-class="getShareIcon();"></i>
         </a>
         <a class="button button-icon" ng-click="next();">
             <i class="icon ion-skip-forward royal"></i>

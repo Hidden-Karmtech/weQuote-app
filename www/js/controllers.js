@@ -145,6 +145,14 @@ angular.module('weQuote.controllers', [])
 				}
 			};
 
+			$scope.getShareIcon = function(){
+				if(!$scope.sharing){
+					return $scope.isAndroid() ? 'ion-android-share-alt' : 'ion-share'
+				}else{
+					return 'ion-loading-a';
+				}
+			};
+
 			$scope.share = function(quote) {
 				$scope.sharing = true;
 				$scope.$broadcast('generate-canvas', quote, function(imgData) {
