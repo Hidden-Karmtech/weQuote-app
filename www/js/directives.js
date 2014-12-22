@@ -22,6 +22,7 @@ angular.module('weQuote.directives', [])
 		var AUTHOR_FONT_SIZE = 7;
 		var BORDER_WIDTH = 3.5;
 		var HEIGHT_THRESHOLD = 60;
+		var START_FONT_SIZE = 10;
 
 		var visibleId = Math.random().toString(36).substring(8);
 		var hiddenId = Math.random().toString(36).substring(8);
@@ -30,8 +31,9 @@ angular.module('weQuote.directives', [])
 		var invisibleKinetic;
 		var count = 0;
 
-		this.getQuoteText = function(quote, size, startFontSize) {
+		this.getQuoteText = function(quote, size) {
 
+			var startFontSize = size * (START_FONT_SIZE / 100);
 			var xOffset = size * (TEXT_X_OFFSET / 100);
 
 			var generateText = function(text, fontSize, size) {
