@@ -189,11 +189,6 @@ angular.module('weQuote.controllers', [])
 				});
 			}
 
-			//On first run download the quotes
-			if (!$scope.state.quotes.length) {
-				reloadQuotes();
-			}
-
 			$scope.onChangeSearch = function() {
 				$log.debug("onChangeSearch");
 				$scope.state.query.type = "search";
@@ -224,6 +219,13 @@ angular.module('weQuote.controllers', [])
 					// An error occurred. Show a message to the user
 				});
 			};
+
+			
+			$scope.$on('$stateChangeSuccess', function() {
+				if (!$scope.state.quotes.length) {
+					reloadQuotes();
+				}
+			});			
 
 			$scope.$on('back-button-action', function(event, args) {
 				if (true) {
