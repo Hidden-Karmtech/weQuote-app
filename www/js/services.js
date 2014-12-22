@@ -105,9 +105,11 @@ angular.module('weQuote.services', [])
 						return _.str.include(quote.text.toLowerCase(), text.toLowerCase());
 					},
 					tag: function(quote) {
-						return _.find(quote.tags, function(tag) {
-							tag.toLowerCase() === text.toLowerCase();
+						var result = _.find(quote.tags, function(tag) {
+							return _.str.trim(tag.name.toLowerCase()) === text.toLowerCase();
 						});
+
+						return !!result;
 					},
 					author: function(quote) {
 						return quote.author.toLowerCase() === text.toLowerCase();
@@ -180,19 +182,19 @@ angular.module('weQuote.services', [])
 				return OfflineData.get().then(function(quotes) {
 					var authors = {};
 
-					_.each(quotes,function(quote){
+					_.each(quotes, function(quote) {
 						var authorCount = authors[_.str.trim(quote.author.toLowerCase())] || 0;
-						authors[_.str.trim(quote.author.toLowerCase())]=authorCount+1;
+						authors[_.str.trim(quote.author.toLowerCase())] = authorCount + 1;
 					});
 
-					authors = _.map(_.pairs(authors),function(authorRow){
+					authors = _.map(_.pairs(authors), function(authorRow) {
 						return {
-							name:authorRow[0],
-							count:authorRow[1]
+							name: authorRow[0],
+							count: authorRow[1]
 						};
 					});
 
-					authors = _.sortBy(authors,'name');
+					authors = _.sortBy(authors, 'name');
 
 					return authors;
 				});
@@ -202,7 +204,7 @@ angular.module('weQuote.services', [])
 				return $http({
 					method: 'GET',
 					url: SERVER_BASE_URL + 'authors'
-				}).then(function(response){
+				}).then(function(response) {
 					return response.data;
 				});
 			};
@@ -225,21 +227,65 @@ angular.module('weQuote.services', [])
 			};
 		}
 	])
-	.service('TagRepository', ['$http', 'SERVER_BASE_URL', '$log', function($http, SERVER_BASE_URL, $log) {
-		var that = this;
+	.service('TagRepository', [
+		'$http',
+		'SERVER_BASE_URL',
+		'$log',
+		'WeQuote',
+		'OfflineData',
+		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData) {
+			var that = this;
 
-		return {
-			list: function() {
-				$log.debug('downloading tags');
+			var getOfflineListPromise = function(params) {
+
+				return OfflineData.get().then(function(quotes) {
+					var tags = {};
+
+					_.each(quotes, function(quote) {
+						_.each(quote.tags,function(tag){
+							var tagCount = tags[_.str.trim(tag.name.toLowerCase())] || 0;
+							tags[_.str.trim(tag.name.toLowerCase())] = tagCount + 1;
+						});
+						
+					});
+
+					tags = _.map(_.pairs(tags), function(tagRow) {
+						return {
+							name: tagRow[0],
+							count: tagRow[1]
+						};
+					});
+
+					tags = _.sortBy(tags, 'name');
+
+					return tags;
+				});
+			};
+
+			var getOnlineListPromise = function(params) {
 				return $http({
 					method: 'GET',
 					url: SERVER_BASE_URL + 'tags'
 				}).then(function(response) {
-					return _.map(response.data, function(tag) {
-						tag.name = _.str.capitalize(_.str.trim(tag.name));
-						return tag;
-					});
+					return response.data;
 				});
-			}
-		};
-	}]);
+			};
+
+			return {
+				list: function() {
+					$log.debug('downloading tags');
+
+					var promise = (WeQuote.isOnline() ? getOnlineListPromise() : getOfflineListPromise());
+
+					promise.then(function(tags) {
+						return _.map(tags, function(tag) {
+							tag.name = _.str.capitalize(_.str.trim(tag.name));
+							return tag;
+						});
+					});
+
+					return promise;
+				}
+			};
+		}
+	]);

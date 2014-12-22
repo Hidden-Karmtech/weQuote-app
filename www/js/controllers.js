@@ -30,15 +30,17 @@ angular.module('weQuote.controllers', [])
 	.controller('Tags', ['$scope', 'TagRepository', '$state', 'TagsState', 'QuotesState', function($scope, TagRepository, $state, TagsState, QuotesState) {
 		$scope.state = TagsState;
 
-		if (_.isEmpty($scope.state)) {
+		if (_.isEmpty($scope.state) || $scope.state.tags.length === 0) {
 			$scope.state.tags = [];
 			TagRepository.list().then(function(tags) {
 				$scope.state.tags = tags;
 			});
 		}
+
 		$scope.clearText = function() {
 			$scope.query = "";
 		}
+		
 		$scope.toQuotes = function(tag) {
 			QuotesState.query = {
 				type: 'tag',
