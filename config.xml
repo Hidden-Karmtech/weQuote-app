@@ -1,66 +1,45 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="it.hkt.wequote" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>weQuote</name>
-    <description>
+  <name>weQuote</name>
+  <description>
         weQuote. Together.
     </description>
-    <author email="hkt@wequote.it" href="http://www.wequote.it/">
+  <author email="hkt@wequote.it" href="http://www.wequote.it/">
         HKT
     </author>
-    <icon src="res/icon.png" />
-    <content src="index.html" />
-    <access origin="*" />
-    <preference name="Orientation" value="portrait" />
-    <preference name="webviewbounce" value="false" />
-    <preference name="UIWebViewBounce" value="false" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="BackupWebStorage" value="none" />
-    <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="3000" />
-    <feature name="StatusBar">
-        <param name="ios-package" value="CDVStatusBar" onload="true" />
-    </feature>
-    <platform name="android">
-        <splash src="res/screen/android/hdpi-land.png" density="land-hdpi" />
-        <splash src="res/screen/android/ldpi-land.png" density="land-ldpi" />
-        <splash src="res/screen/android/mdpi-land.png" density="land-mdpi" />
-        <splash src="res/screen/android/xhdpi-land.png" density="land-xhdpi" />
-        <splash src="res/screen/android/hdpi-port.png" density="port-hdpi" />
-        <splash src="res/screen/android/ldpi-port.png" density="port-ldpi" />
-        <splash src="res/screen/android/mdpi-port.png" density="port-mdpi" />
-        <splash src="res/screen/android/xhdpi-port.png" density="port-xhdpi" />
-    </platform>
-    <platform name="ios">
-        <!-- images are determined by width and height. The following are supported -->
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="320" height="480" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="640" height="960" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="768" height="1024" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="1536" height="2048" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="1024" height="768" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="2048" height="1536" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="640" height="1136" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="750" height="1334" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="1242" height="2208" />
-        <splash 
-            src="res/screen/ios/icon.png"
-            width="2208" height="1242" />
-    </platform>
+  <icon src="res/icon.png"/>
+  <content src="index.html"/>
+  <access origin="*"/>
+  <preference name="Orientation" value="portrait"/>
+  <preference name="webviewbounce" value="false"/>
+  <preference name="UIWebViewBounce" value="false"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="BackupWebStorage" value="none"/>
+  <preference name="SplashScreen" value="screen"/>
+  <preference name="SplashScreenDelay" value="3000"/>
+  <feature name="StatusBar">
+    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  </feature>
+  <platform name="android">
+    <splash src="res/screen/android/hdpi-land.png" density="land-hdpi"/>
+    <splash src="res/screen/android/ldpi-land.png" density="land-ldpi"/>
+    <splash src="res/screen/android/mdpi-land.png" density="land-mdpi"/>
+    <splash src="res/screen/android/xhdpi-land.png" density="land-xhdpi"/>
+    <splash src="res/screen/android/hdpi-port.png" density="port-hdpi"/>
+    <splash src="res/screen/android/ldpi-port.png" density="port-ldpi"/>
+    <splash src="res/screen/android/mdpi-port.png" density="port-mdpi"/>
+    <splash src="res/screen/android/xhdpi-port.png" density="port-xhdpi"/>
+  </platform>
+  <platform name="ios">
+    <splash src="res/screen/ios/icon.png" width="320" height="480"/>
+    <splash src="res/screen/ios/icon.png" width="640" height="960"/>
+    <splash src="res/screen/ios/icon.png" width="768" height="1024"/>
+    <splash src="res/screen/ios/icon.png" width="1536" height="2048"/>
+    <splash src="res/screen/ios/icon.png" width="1024" height="768"/>
+    <splash src="res/screen/ios/icon.png" width="2048" height="1536"/>
+    <splash src="res/screen/ios/icon.png" width="640" height="1136"/>
+    <splash src="res/screen/ios/icon.png" width="750" height="1334"/>
+    <splash src="res/screen/ios/icon.png" width="1242" height="2208"/>
+    <splash src="res/screen/ios/icon.png" width="2208" height="1242"/>
+  </platform>
 </widget>
