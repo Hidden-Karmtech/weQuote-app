@@ -13,21 +13,10 @@ module.exports = function (grunt) {
         ignorePath:  /\.\.\//
       }      
     },
-    copy: {
-      android: {
-        files: [
-          { src:"www/res/screens/android/hdpi-land/screen.png", dest:"platforms/android/res/drawable-land-hdpi/screen.png" },
-          { src:"www/res/screens/android/hdpi-port/screen.png", dest:"platforms/android/res/drawable-port-hdpi/screen.png" },          
-          { src:"www/res/screens/android/ldpi-land/screen.png", dest:"platforms/android/res/drawable-land-ldpi/screen.png" },
-          { src:"www/res/screens/android/ldpi-port/screen.png", dest:"platforms/android/res/drawable-port-ldpi/screen.png" },
-          { src:"www/res/screens/android/mdpi-port/screen.png", dest:"platforms/android/res/drawable-land-mdpi/screen.png" },
-          { src:"www/res/screens/android/mdpi-land/screen.png", dest:"platforms/android/res/drawable-port-mdpi/screen.png" },
-          { src:"www/res/screens/android/xhdpi-port/screen.png", dest:"platforms/android/res/drawable-port-xhdpi/screen.png" },
-          { src:"www/res/screens/android/xhdpi-land/screen.png", dest:"platforms/android/res/drawable-land-xhdpi/screen.png" }
-        ]
-      }
-    },
     shell: {    
+      installPluginNetwork: {
+          command: 'cordova plugin add org.apache.cordova.network-information'
+      },
       installPluginFile: {
           command: 'cordova plugin add org.apache.cordova.file'
       },
@@ -63,6 +52,7 @@ module.exports = function (grunt) {
   
   grunt.registerTask('setup'
     , ['shell:installPluginFile', 
+        'shell:installPluginNetwork', 
         'shell:installPluginKeyboard',
         'shell:installPluginConsole',
         'shell:installPluginDevice',
@@ -71,7 +61,6 @@ module.exports = function (grunt) {
         'shell:installPluginPhoneGap',
         'shell:installPluginAdmob',
         'shell:installPluginSplashscreen',
-        'shell:installPluginCamera',
-        'copy']);
+        'shell:installPluginCamera']);
 
 };
