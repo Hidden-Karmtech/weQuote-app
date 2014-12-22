@@ -6,7 +6,20 @@ angular.module('weQuote', [
     'ngCordova',
     'pasvaz.bindonce'
   ])
-  .run(function($ionicPlatform, $rootScope, TagRepository, TagsState, AuthorRepository, AuthorsState, $log, $cordovaDevice, UUID, $window,Screen) {
+  .run(function(
+    $ionicPlatform, 
+    $rootScope, 
+    TagRepository, 
+    TagsState, 
+    AuthorRepository, 
+    AuthorsState, 
+    $log, 
+    $cordovaDevice, 
+    WeQuote, 
+    $window,
+    Screen,
+    $state,
+    $cordovaSplashscreen) {
 
     /*
     TagRepository.list().then(function(tags) {
@@ -18,7 +31,6 @@ angular.module('weQuote', [
     });*/
 
     $ionicPlatform.ready(function() {
-      UUID.value = $cordovaDevice.getUUID();
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.plugins && window.plugins.AdMob) {
@@ -58,6 +70,12 @@ angular.module('weQuote', [
         $rootScope.$broadcast('back-button-action');
       }, 100);
 
+      WeQuote.init().then(function(){
+        $state.go("quotes");
+        $cordovaSplashscreen.hide();
+      });
+
+
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {
@@ -87,6 +105,6 @@ angular.module('weQuote', [
         templateUrl: "templates/about.html"
       });
 
-    $urlRouterProvider.otherwise('/quotes');
+    $urlRouterProvider.otherwise('/about');
 
   });

@@ -59,7 +59,7 @@ angular.module('weQuote.controllers', [])
 
 		$scope.state = AuthorsState;
 
-		if (_.isEmpty($scope.state)) {
+		if (_.isEmpty($scope.state) || $scope.state.authors.length === 0) {
 			$scope.state.authors = [];
 			AuthorRepository.list().then(function(authors) {
 				$scope.state.authors = authors;
