@@ -95,7 +95,8 @@ angular.module('weQuote.services', [])
 		'SERVER_BASE_URL',
 		'WeQuote',
 		'OfflineData',
-		function($http, SERVER_BASE_URL, WeQuote, OfflineData) {
+		'$cordovaSocialSharing',
+		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing) {
 			var that = this;
 			var MAX_LEN = 200;
 
@@ -164,6 +165,26 @@ angular.module('weQuote.services', [])
 					params.limit = queryParam.limit || 20;
 
 					return (WeQuote.isOnline() ? getOnlineListPromise(params) : getOfflineListPromise(params));
+				},
+				share: function(quote, image) {
+					var text = image ? "" : quote.text;
+					return $cordovaSocialSharing.share(text, 'weQuote', image, null).then(function(result) {
+						if (result) {
+							var params = {
+								quoteId: quote.id,
+								deviceUUID: that.UUID
+							};
+
+							return $http({
+								method: 'POST',
+								url: SERVER_BASE_URL + 'share',
+								params: params
+							});
+						}
+
+						return result;
+					});
+
 				}
 			};
 		}
@@ -242,11 +263,11 @@ angular.module('weQuote.services', [])
 					var tags = {};
 
 					_.each(quotes, function(quote) {
-						_.each(quote.tags,function(tag){
+						_.each(quote.tags, function(tag) {
 							var tagCount = tags[_.str.trim(tag.name.toLowerCase())] || 0;
 							tags[_.str.trim(tag.name.toLowerCase())] = tagCount + 1;
 						});
-						
+
 					});
 
 					tags = _.map(_.pairs(tags), function(tagRow) {
