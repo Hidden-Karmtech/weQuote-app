@@ -38,11 +38,14 @@ angular.module('weQuote.controllers', [])
 		function($scope, TagRepository, $state, QuotesState, $ionicScrollDelegate, $log,$filter) {
 
 			$scope.$on('$stateChangeSuccess', function() {
+				$scope.loaded = false;
 				TagRepository.list().then(function(tags) {
 					$scope.visibleTags = _.map(tags, function(tag) {
 						tag.toPrint = tag.name + '(' + tag.count + ')';
 						return tag;
 					});
+
+					$scope.loaded = true;
 
 					$ionicScrollDelegate.scrollTop(false);
 				});
@@ -110,12 +113,15 @@ angular.module('weQuote.controllers', [])
 			}
 
 			$scope.$on('$stateChangeSuccess', function() {
+				$scope.loaded = false;
 				AuthorRepository.list().then(function(authors) {
 					$scope.visibleAuthors = _.map(authors, function(author) {
 						author.toPrint = author.name + '(' + author.count + ')';
 						return author;
 					});
 
+					$scope.loaded = true;
+				
 					$ionicScrollDelegate.scrollTop(false);
 				});
 			});

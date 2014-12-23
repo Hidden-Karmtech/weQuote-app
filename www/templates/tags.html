@@ -9,7 +9,12 @@
         <i class="ion-close-circled"></i>
     </button>
 </ion-header-bar>
-<ion-content class="royal-bg padding-left padding-right loading" has-header="true" has-subheader="true" style="padding-top:5px">
+<ion-content 
+  class="royal-bg padding-left padding-right" 
+  has-header="true" 
+  has-subheader="true" 
+  ng-class="{loading:!loaded}"
+  style="padding-top:5px">
     <div class="list slick">
         <div 
           ng-click="toQuotes(tag)" 
