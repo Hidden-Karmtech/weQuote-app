@@ -8,7 +8,7 @@ angular.module('weQuote.controllers', [])
 			$state.go(url);
 		}
 
-		$scope.isAndroid = function(){
+		$scope.isAndroid = function() {
 			return ionic.Platform.isAndroid();
 		};
 
@@ -40,7 +40,7 @@ angular.module('weQuote.controllers', [])
 		$scope.clearText = function() {
 			$scope.query = "";
 		}
-		
+
 		$scope.toQuotes = function(tag) {
 			QuotesState.query = {
 				type: 'tag',
@@ -109,7 +109,7 @@ angular.module('weQuote.controllers', [])
 				$scope.state.quotes = [];
 				$scope.state.query = {
 					type: 'search',
-					value : ""
+					value: ""
 				};
 			}
 
@@ -143,27 +143,30 @@ angular.module('weQuote.controllers', [])
 						downloadQuotes();
 					}
 				} else {
-					downloadQuotes(function(){
+					downloadQuotes(function() {
 						$scope.next();
 					});
 				}
 			};
 
-			$scope.getShareIcon = function(){
-				if(!$scope.sharing){
+			$scope.getShareIcon = function() {
+				if (!$scope.sharing) {
 					return $scope.isAndroid() ? 'ion-android-share-alt' : 'ion-share'
-				}else{
+				} else {
 					return 'ion-loading-a';
 				}
 			};
 
 			$scope.share = function(quote) {
-				$scope.sharing = true;
-				$scope.$broadcast('generate-canvas', quote, function(imgData) {
-					window.plugins.socialsharing.share(null, 'weQuote', imgData, null);
-					$scope.sharing = false;
-					$scope.$apply();
-				});
+				if (!$scope.sharing) {
+					$scope.sharing = true;
+					$scope.$broadcast('generate-canvas', quote, function(imgData) {
+						QuoteRepository.share(quote, imgData).then(function(result) {
+							$scope.sharing = false;
+							$scope.$apply();
+						});
+					});
+				}
 			}
 
 			var grabQuote = function(quotes) {
@@ -176,17 +179,17 @@ angular.module('weQuote.controllers', [])
 				$scope.state.quotes = [];
 				$scope.state.currentQuote = null;
 				downloadQuotes(function(quotes) {
-					if(quotes.length > 0){
+					if (quotes.length > 0) {
 						grabQuote(quotes);
-					}else{
+					} else {
 						swal({
-							title: "Nessuna Citazione corrispondente ai parametri di ricerca",
-							confirmButtonColor: "#5264AE",
-							closeOnConfirm: true
-						},
-						function() {
-							$scope.clearText();
-						});
+								title: "Nessuna Citazione corrispondente ai parametri di ricerca",
+								confirmButtonColor: "#5264AE",
+								closeOnConfirm: true
+							},
+							function() {
+								$scope.clearText();
+							});
 					}
 				});
 			}
@@ -194,10 +197,10 @@ angular.module('weQuote.controllers', [])
 			$scope.onChangeSearch = function() {
 				$log.debug("onChangeSearch");
 				$scope.state.query.type = "search";
-				if($scope.state.query.value !== $scope.lastSearch){
+				if ($scope.state.query.value !== $scope.lastSearch) {
 					$scope.lastSearch = $scope.state.query.value;
 					$scope.state.currentQuote = null;
-					reloadQuotes();	
+					reloadQuotes();
 				}
 			}
 
@@ -210,7 +213,7 @@ angular.module('weQuote.controllers', [])
 					encodingType: Camera.EncodingType.PNG,
 					targetWidth: 1000,
 					targetHeight: 1000,
-					correctOrientation:true,
+					correctOrientation: true,
 					popoverOptions: CameraPopoverOptions,
 					saveToPhotoAlbum: false
 				};
@@ -222,12 +225,12 @@ angular.module('weQuote.controllers', [])
 				});
 			};
 
-			
+
 			$scope.$on('$stateChangeSuccess', function() {
 				if (!$scope.state.quotes.length) {
 					reloadQuotes();
 				}
-			});			
+			});
 
 			$scope.$on('back-button-action', function(event, args) {
 				if (true) {
