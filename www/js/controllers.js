@@ -34,7 +34,8 @@ angular.module('weQuote.controllers', [])
 		'QuotesState',
 		'$ionicScrollDelegate',
 		'$log',
-		function($scope, TagRepository, $state, QuotesState, $ionicScrollDelegate, $log) {
+		'$filter',
+		function($scope, TagRepository, $state, QuotesState, $ionicScrollDelegate, $log,$filter) {
 
 			$scope.$on('$stateChangeSuccess', function() {
 				TagRepository.list().then(function(tags) {
@@ -46,6 +47,13 @@ angular.module('weQuote.controllers', [])
 					$ionicScrollDelegate.scrollTop(false);
 				});
 			});
+
+			$scope.onSubmit = function(){
+				var results = $filter('filter')($scope.visibleTags,$scope.query);
+				if(results.length === 1){
+					$scope.toQuotes(results[0]);
+				}
+			}
 
 			$scope.clearText = function() {
 				$scope.query = "";
@@ -75,7 +83,8 @@ angular.module('weQuote.controllers', [])
 		'QuotesState',
 		'$ionicScrollDelegate',
 		'$log',
-		function($scope, AuthorRepository, $state, QuotesState, $ionicScrollDelegate, $log) {
+		'$filter',
+		function($scope, AuthorRepository, $state, QuotesState, $ionicScrollDelegate, $log,$filter) {
 
 			$scope.toQuotes = function(author) {
 				QuotesState.query = {
@@ -87,6 +96,13 @@ angular.module('weQuote.controllers', [])
 				QuotesState.currentQuote = null;
 
 				$scope.goTo('quotes');
+			}
+
+			$scope.onSubmit = function(){
+				var results = $filter('filter')($scope.visibleAuthors,$scope.query);
+				if(results.length === 1){
+					$scope.toQuotes(results[0]);
+				}
 			}
 
 			$scope.clearText = function() {

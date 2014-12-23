@@ -1,7 +1,7 @@
 <ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
     <label class="item-input-wrapper">
         <i class="icon ion-search placeholder-icon"></i>
-        <form>
+        <form ng-submit="onSubmit();">
             <input blur-on-submit class="item-input-small" type="search" placeholder="Ricerca..." ng-model="query">
         </form>
     </label>
@@ -12,13 +12,13 @@
 <ion-content class="royal-bg padding-left padding-right loading" has-header="true" has-subheader="true" style="padding-top:5px">
     <div class="list slick">
         <div 
-        ng-click="toQuotes(tag)" 
-        class="item important-royal my-item" 
-        collection-repeat="tag in visibleTags | filter:query" 
-        collection-item-width="'100%'" 
-        collection-item-height="50" 
-        ng-style="{height: 50}">
-            {{tag.toPrint}}
-        </div>
+          ng-click="toQuotes(tag)" 
+          class="item important-royal my-item" 
+          collection-repeat="tag in visibleTags | filter:query" 
+          collection-item-width="'100%'" 
+          collection-item-height="50" 
+          ng-style="{height: 50}">
+              {{tag.toPrint}}
+          </div>
     </div>
 </ion-content>
