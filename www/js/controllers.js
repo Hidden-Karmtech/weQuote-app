@@ -45,7 +45,6 @@ angular.module('weQuote.controllers', [])
 
 					$ionicScrollDelegate.scrollTop(false);
 				});
-
 			});
 
 			$scope.clearText = function() {
@@ -69,39 +68,47 @@ angular.module('weQuote.controllers', [])
 			});
 		}
 	])
-	.controller('Authors', ['$scope', 'AuthorRepository', '$state', 'AuthorsState', 'QuotesState', function($scope, AuthorRepository, $state, AuthorsState, QuotesState) {
+	.controller('Authors', [
+		'$scope',
+		'AuthorRepository',
+		'$state',
+		'QuotesState',
+		'$ionicScrollDelegate',
+		'$log',
+		function($scope, AuthorRepository, $state, QuotesState, $ionicScrollDelegate, $log) {
 
-		$scope.state = AuthorsState;
+			$scope.toQuotes = function(author) {
+				QuotesState.query = {
+					type: 'author',
+					value: author.name
+				};
 
-		$scope.toQuotes = function(author) {
-			QuotesState.query = {
-				type: 'author',
-				value: author.name
-			};
+				QuotesState.quotes = [];
+				QuotesState.currentQuote = null;
 
-			QuotesState.quotes = [];
-			QuotesState.currentQuote = null;
-
-			$scope.goTo('quotes');
-		}
-
-		$scope.clearText = function() {
-			$scope.query = "";
-		}
-
-		$scope.$on('$stateChangeSuccess', function() {
-			if (_.isEmpty($scope.state) || $scope.state.authors.length === 0) {
-				$scope.state.authors = [];
-				AuthorRepository.list().then(function(authors) {
-					$scope.state.authors = authors;
-				});
+				$scope.goTo('quotes');
 			}
-		});
 
-		$scope.$on('back-button-action', function(event, args) {
-			$scope.goTo('quotes');
-		});
-	}])
+			$scope.clearText = function() {
+				$scope.query = "";
+			}
+
+			$scope.$on('$stateChangeSuccess', function() {
+				AuthorRepository.list().then(function(authors) {
+					$scope.visibleAuthors = _.map(authors, function(author) {
+						author.toPrint = author.name + '(' + author.count + ')';
+						return author;
+					});
+
+					$ionicScrollDelegate.scrollTop(false);
+				});
+			});
+
+			$scope.$on('back-button-action', function(event, args) {
+				$scope.goTo('quotes');
+			});
+		}
+	])
 	.controller('Quotes', ['$scope',
 		'$log',
 		'QuoteRepository',

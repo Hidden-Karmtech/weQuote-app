@@ -15,9 +15,15 @@
       </button>
 </ion-header-bar>
 <ion-content class="royal-bg padding-left padding-right loading" has-header="true" has-subheader="true" style="padding-top:5px">
-<ul class="list slick">
-    <li class="item important-royal" ng-click="toQuotes(author)" bindonce ng-repeat="author in state.authors | filter:query">
-      <span bo-text="author.name + '(' + author.count +')'"/>
-    </li>
-</ul>
+<div class="list slick">
+      <div 
+        ng-click="toQuotes(author)" 
+        class="item important-royal my-item" 
+        collection-repeat="author in visibleAuthors | filter:query" 
+        collection-item-width="'100%'" 
+        collection-item-height="50" 
+        ng-style="{height: 50}">
+            {{author.toPrint}}
+        </div>
+  </div>
 </ion-content>
