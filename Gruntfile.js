@@ -46,6 +46,15 @@ module.exports = function (grunt) {
       },
       installPluginCamera: {
           command: 'cordova plugin add org.apache.cordova.camera'
+      },
+      buildAndroidRelease:{
+          command: 'cordova build --release android'
+      },
+      signApk:{
+          command: 'jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore hkt.keystore platforms/android/ant-build/CordovaApp-release-unsigned.apk weQuote'
+      },
+      compressApk:{
+          command: 'zipalign -v 4 platforms/android/ant-build/CordovaApp-release-unsigned.apk weQuote.apk'
       }
     }
   });
@@ -62,5 +71,10 @@ module.exports = function (grunt) {
         'shell:installPluginAdmob',
         'shell:installPluginSplashscreen',
         'shell:installPluginCamera']);
+
+  grunt.registerTask('release'
+    , ['shell:buildAndroidRelease', 
+        'shell:signApk',
+        'shell:compressApk']);
 
 };
