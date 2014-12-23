@@ -9,10 +9,6 @@ angular.module('weQuote', [
   .run(function(
     $ionicPlatform,
     $rootScope,
-    TagRepository,
-    TagsState,
-    AuthorRepository,
-    AuthorsState,
     $log,
     $cordovaDevice,
     WeQuote,
@@ -36,15 +32,7 @@ angular.module('weQuote', [
       }
     });
 
-    /*
-    TagRepository.list().then(function(tags) {
-      TagsState.tags = tags;
-    });
-
-    AuthorRepository.list().then(function(authors) {
-      AuthorsState.authors = authors;
-    });*/
-
+    
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)

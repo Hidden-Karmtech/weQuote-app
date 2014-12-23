@@ -27,46 +27,51 @@ angular.module('weQuote.controllers', [])
 			$scope.goTo('quotes');
 		});
 	}])
-	.controller('Tags', ['$scope', 'TagRepository', '$state', 'TagsState', 'QuotesState', function($scope, TagRepository, $state, TagsState, QuotesState) {
-		$scope.state = TagsState;
+	.controller('Tags', [
+		'$scope',
+		'TagRepository',
+		'$state',
+		'QuotesState',
+		'$ionicScrollDelegate',
+		'$log',
+		function($scope, TagRepository, $state, QuotesState, $ionicScrollDelegate, $log) {
 
-		if (_.isEmpty($scope.state) || $scope.state.tags.length === 0) {
-			$scope.state.tags = [];
-			TagRepository.list().then(function(tags) {
-				$scope.state.tags = tags;
+			$scope.$on('$stateChangeSuccess', function() {
+				TagRepository.list().then(function(tags) {
+					$scope.visibleTags = _.map(tags, function(tag) {
+						tag.toPrint = tag.name + '(' + tag.count + ')';
+						return tag;
+					});
+
+					$ionicScrollDelegate.scrollTop(false);
+				});
+
+			});
+
+			$scope.clearText = function() {
+				$scope.query = "";
+			}
+
+			$scope.toQuotes = function(tag) {
+				QuotesState.query = {
+					type: 'tag',
+					value: tag.name
+				};
+
+				QuotesState.quotes = [];
+				QuotesState.currentQuote = null;
+
+				$scope.goTo('quotes');
+			}
+
+			$scope.$on('back-button-action', function(event, args) {
+				$scope.goTo('quotes');
 			});
 		}
-
-		$scope.clearText = function() {
-			$scope.query = "";
-		}
-
-		$scope.toQuotes = function(tag) {
-			QuotesState.query = {
-				type: 'tag',
-				value: tag.name
-			};
-
-			QuotesState.quotes = [];
-			QuotesState.currentQuote = null;
-
-			$scope.goTo('quotes');
-		}
-
-		$scope.$on('back-button-action', function(event, args) {
-			$scope.goTo('quotes');
-		});
-	}])
+	])
 	.controller('Authors', ['$scope', 'AuthorRepository', '$state', 'AuthorsState', 'QuotesState', function($scope, AuthorRepository, $state, AuthorsState, QuotesState) {
 
 		$scope.state = AuthorsState;
-
-		if (_.isEmpty($scope.state) || $scope.state.authors.length === 0) {
-			$scope.state.authors = [];
-			AuthorRepository.list().then(function(authors) {
-				$scope.state.authors = authors;
-			});
-		}
 
 		$scope.toQuotes = function(author) {
 			QuotesState.query = {
@@ -83,6 +88,15 @@ angular.module('weQuote.controllers', [])
 		$scope.clearText = function() {
 			$scope.query = "";
 		}
+
+		$scope.$on('$stateChangeSuccess', function() {
+			if (_.isEmpty($scope.state) || $scope.state.authors.length === 0) {
+				$scope.state.authors = [];
+				AuthorRepository.list().then(function(authors) {
+					$scope.state.authors = authors;
+				});
+			}
+		});
 
 		$scope.$on('back-button-action', function(event, args) {
 			$scope.goTo('quotes');

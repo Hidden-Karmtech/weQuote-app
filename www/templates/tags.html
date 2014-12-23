@@ -14,13 +14,11 @@
         <div 
         ng-click="toQuotes(tag)" 
         class="item important-royal my-item" 
-        collection-repeat="tag in state.tags | filter:query" 
+        collection-repeat="tag in visibleTags | filter:query" 
         collection-item-width="'100%'" 
         collection-item-height="50" 
         ng-style="{height: 50}">
-            {{tag.name + '(' + tag.count +')'}}
+            {{tag.toPrint}}
         </div>
     </div>
-    <ion-infinite-scroll on-infinite="onScroll()" distance="20%">
-    </ion-infinite-scroll>
 </ion-content>

@@ -2,7 +2,6 @@ angular.module('weQuote.services', [])
 	.constant('SERVER_BASE_URL', 'https://api-wequote.rhcloud.com/')
 	.constant('MAX_LEN', 200)
 	.value('QuotesState', {})
-	.value('TagsState', {})
 	.value('AuthorsState', {})
 	.service('OfflineData', ['$http', '$log', function($http, $log) {
 		return {
