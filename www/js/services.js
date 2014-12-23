@@ -1,5 +1,6 @@
 angular.module('weQuote.services', [])
 	.constant('SERVER_BASE_URL', 'https://api-wequote.rhcloud.com/')
+	.constant('MAX_LEN', 200)
 	.value('QuotesState', {})
 	.value('TagsState', {})
 	.value('AuthorsState', {})
@@ -96,9 +97,9 @@ angular.module('weQuote.services', [])
 		'WeQuote',
 		'OfflineData',
 		'$cordovaSocialSharing',
-		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing) {
+		'MAX_LEN',
+		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing,MAX_LEN) {
 			var that = this;
-			var MAX_LEN = 200;
 
 			var filterOfflineQuotes = function(quotes, type, text) {
 				var filterFunctions = {
@@ -195,7 +196,8 @@ angular.module('weQuote.services', [])
 		'$log',
 		'WeQuote',
 		'OfflineData',
-		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData) {
+		'MAX_LEN',
+		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData,MAX_LEN) {
 			var that = this;
 
 			var getOfflineListPromise = function(params) {
@@ -224,7 +226,10 @@ angular.module('weQuote.services', [])
 			var getOnlineListPromise = function(params) {
 				return $http({
 					method: 'GET',
-					url: SERVER_BASE_URL + 'authors'
+					url: SERVER_BASE_URL + 'authors',
+					params:{
+						maxlen:MAX_LEN
+					}
 				}).then(function(response) {
 					return response.data;
 				});
@@ -254,7 +259,8 @@ angular.module('weQuote.services', [])
 		'$log',
 		'WeQuote',
 		'OfflineData',
-		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData) {
+		'MAX_LEN',
+		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData,MAX_LEN) {
 			var that = this;
 
 			var getOfflineListPromise = function(params) {
@@ -286,7 +292,10 @@ angular.module('weQuote.services', [])
 			var getOnlineListPromise = function(params) {
 				return $http({
 					method: 'GET',
-					url: SERVER_BASE_URL + 'tags'
+					url: SERVER_BASE_URL + 'tags',
+					params:{
+						maxlen:MAX_LEN
+					}
 				}).then(function(response) {
 					return response.data;
 				});
