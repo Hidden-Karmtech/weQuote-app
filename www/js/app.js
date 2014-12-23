@@ -7,19 +7,34 @@ angular.module('weQuote', [
     'pasvaz.bindonce'
   ])
   .run(function(
-    $ionicPlatform, 
-    $rootScope, 
-    TagRepository, 
-    TagsState, 
-    AuthorRepository, 
-    AuthorsState, 
-    $log, 
-    $cordovaDevice, 
-    WeQuote, 
+    $ionicPlatform,
+    $rootScope,
+    TagRepository,
+    TagsState,
+    AuthorRepository,
+    AuthorsState,
+    $log,
+    $cordovaDevice,
+    WeQuote,
     $window,
     Screen,
     $state,
     $cordovaSplashscreen) {
+
+    //Add Paginate function to lodash
+    _.mixin({
+      'paginate': function(arr, size) {
+        var pages = [];
+
+        size = size || this.length;
+
+        while (arr.length) {
+          pages.push(arr.splice(0, size));
+        }
+
+        return pages;
+      }
+    });
 
     /*
     TagRepository.list().then(function(tags) {
@@ -70,7 +85,7 @@ angular.module('weQuote', [
         $rootScope.$broadcast('back-button-action');
       }, 100);
 
-      WeQuote.init().then(function(){
+      WeQuote.init().then(function() {
         $state.go("quotes");
         $cordovaSplashscreen.hide();
       });

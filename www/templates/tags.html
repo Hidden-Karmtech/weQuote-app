@@ -1,23 +1,26 @@
 <ion-header-bar class="royal-bg has-header bar-subheader item item-input-inset" style="border-color: transparent; padding-bottom:5px">
-      <label class="item-input-wrapper"> 
-        <i class="icon ion-search placeholder-icon"></i> 
-          <form>
-            <input 
-              blur-on-submit
-              class="item-input-small" 
-              type="search" 
-              placeholder="Ricerca..." 
-              ng-model="query">
-          </form>
-      </label>
-      <button class="button button-icon button-small royal-bg important-light clear-search-button" ng-click="clearText()">
-      <i class="ion-close-circled"></i>
-      </button>
+    <label class="item-input-wrapper">
+        <i class="icon ion-search placeholder-icon"></i>
+        <form>
+            <input blur-on-submit class="item-input-small" type="search" placeholder="Ricerca..." ng-model="query">
+        </form>
+    </label>
+    <button class="button button-icon button-small royal-bg important-light clear-search-button" ng-click="clearText()">
+        <i class="ion-close-circled"></i>
+    </button>
 </ion-header-bar>
 <ion-content class="royal-bg padding-left padding-right loading" has-header="true" has-subheader="true" style="padding-top:5px">
-<ul class="list slick">
-    <li class="item important-royal" ng-click="toQuotes(tag)" bindonce ng-repeat="tag in state.tags | filter:query">
-      <span bo-text="tag.name + '(' + tag.count +')'"/>
-    </li>
-</ul>
+    <div class="list slick">
+        <div 
+        ng-click="toQuotes(tag)" 
+        class="item important-royal my-item" 
+        collection-repeat="tag in state.tags | filter:query" 
+        collection-item-width="'100%'" 
+        collection-item-height="50" 
+        ng-style="{height: 50}">
+            {{tag.name + '(' + tag.count +')'}}
+        </div>
+    </div>
+    <ion-infinite-scroll on-infinite="onScroll()" distance="20%">
+    </ion-infinite-scroll>
 </ion-content>
