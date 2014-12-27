@@ -132,6 +132,15 @@ angular.module('weQuote.controllers', [])
 			});
 		}
 	])
+	.constant('Backgrounds',{
+		amore:2,
+		fede:2,
+		misc:5,
+		musica:2,
+		passione:1,
+		universo:2,
+		vita:1
+	})
 	.controller('Quotes', ['$scope',
 		'$log',
 		'QuoteRepository',
@@ -139,11 +148,11 @@ angular.module('weQuote.controllers', [])
 		'QuotesState',
 		'$cordovaCamera',
 		'$cordovaToast',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast) {
+		'Backgrounds',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,Backgrounds) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
-			var IMAGES = 20;
 			var downloading = false;
 			var lastBackClick = null;
 
@@ -218,7 +227,18 @@ angular.module('weQuote.controllers', [])
 
 			var grabQuote = function(quotes) {
 				var quote = quotes.pop();
-				quote.url = 'img/backgrounds/Amore/' + _.str.pad(Date.now() % IMAGES, 3, '0') + '.png';
+				var tagName = quote.tags[_.random(0,quote.tags.length-1)].name;
+
+				$log.debug("using tag " + tagName);
+
+				var count = Backgrounds[tagName];
+				if(!count){
+					$log.debug("tag " + tagName + " not valid using misc");
+					tagName = 'misc';
+					count = Backgrounds.misc;
+				}
+
+				quote.url = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
 				$scope.state.currentQuote = quote;
 			};
 
