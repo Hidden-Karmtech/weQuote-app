@@ -294,7 +294,7 @@ angular.module('weQuote.controllers', [])
 			});
 
 			$scope.showToast = function() {
-				$cordovaToast.show('Clicca di nuovo per uscire', 'long', 'center')
+				$cordovaToast.show('Clicca di nuovo per uscire', 'long', 'top')
 				.then(function(success) {
 				    lastBackClick = new Date();				   
 				}, function (error) {
