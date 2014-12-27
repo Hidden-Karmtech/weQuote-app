@@ -55,6 +55,9 @@ module.exports = function (grunt) {
       },
       compressApk:{
           command: 'zipalign -v 4 platforms/android/ant-build/CordovaApp-release-unsigned.apk weQuote.apk'
+      },
+      installPluginToast:{
+          command: 'cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git'
       }
     }
   });
@@ -70,7 +73,8 @@ module.exports = function (grunt) {
         'shell:installPluginPhoneGap',
         'shell:installPluginAdmob',
         'shell:installPluginSplashscreen',
-        'shell:installPluginCamera']);
+        'shell:installPluginCamera',
+        'shell:installPluginToast']);
 
   grunt.registerTask('release'
     , ['shell:buildAndroidRelease', 

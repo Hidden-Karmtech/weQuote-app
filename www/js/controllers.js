@@ -1,5 +1,6 @@
 angular.module('weQuote.controllers', [])
 	.controller('Root', ['$scope', '$state', function($scope, $state) {
+		
 		$scope.exit = function() {
 			ionic.Platform.exitApp();
 		}
@@ -137,11 +138,14 @@ angular.module('weQuote.controllers', [])
 		'$ionicSideMenuDelegate',
 		'QuotesState',
 		'$cordovaCamera',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera) {
+		'$cordovaToast',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast) {
 
 			var MIN_SIZE = 15;
+			var SECOND_FOR_EXIT = 5;
 			var IMAGES = 20;
 			var downloading = false;
+			var lastBackClick = null;
 
 			$scope.state = QuotesState;
 			$scope.sharing = false;
@@ -276,19 +280,26 @@ angular.module('weQuote.controllers', [])
 			});
 
 			$scope.$on('back-button-action', function(event, args) {
-				if (true) {
-					swal({
-							title: "Sei sicuro di voler abbandonare #weQuote?",
-							showCancelButton: true,
-							confirmButtonColor: "#5264AE",
-							cancelButtonText: "No",
-							confirmButtonText: "Sì",
-							closeOnConfirm: true
-						},
-						function() {
-							ionic.Platform.exitApp();
-						});
-				}
+				if(lastBackClick!=null){
+					var currentDate = new Date();
+					var difference = (currentDate - lastBackClick) / 1000;
+					if(difference <= SECOND_FOR_EXIT){
+						ionic.Platform.exitApp();
+					}else{
+						$scope.showToast();
+					}
+				}else{
+					$scope.showToast();
+				}				
 			});
+
+			$scope.showToast = function() {
+				$cordovaToast.show('Clicca di nuovo per uscire', 'long', 'center')
+				.then(function(success) {
+				    lastBackClick = new Date();				   
+				}, function (error) {
+				    lastBackClick = null;
+				});
+			}
 		}
 	]);

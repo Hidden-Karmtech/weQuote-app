@@ -36,6 +36,8 @@ angular.module('weQuote', [
     $ionicPlatform.ready(function() {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
+      window.backButtonClick = 0;    
+     
       if (window.plugins && window.plugins.AdMob) {
         var admob_key = ionic.Platform.isAndroid() ? "ca-app-pub-2603547889798705/4397541472" : "ca-app-pub-2603547889798705/9225877072";
         var admob = window.plugins.AdMob;
@@ -70,7 +72,7 @@ angular.module('weQuote', [
       }
 
       $ionicPlatform.registerBackButtonAction(function() {
-        $rootScope.$broadcast('back-button-action');
+          $rootScope.$broadcast('back-button-action');           
       }, 100);
 
       WeQuote.init().then(function() {
