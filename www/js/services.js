@@ -73,12 +73,13 @@ angular.module('weQuote.services', [])
 	])
 	.service('Screen', ['$window','$log', function($window,$log) {
 		var width = Math.floor($window.innerWidth * 95 / 100);
-		var height = $window.innerHeight
+		var visibleHeight = $window.innerHeight
 					 - 44	//Header Bar
 					 - 44 	//Footer Bar
 					 - 44 	//Search Bar
-					 - 50 	//Banner
-					 - 20;	//Padding
+					 - 50;	//Padding
+
+		var height = Math.floor(visibleHeight * 90 / 100);
 
 		$log.debug("calculated width: " + width);
 		$log.debug("calculated height: " + height);
