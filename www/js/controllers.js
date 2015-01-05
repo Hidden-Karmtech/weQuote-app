@@ -28,19 +28,22 @@ angular.module('weQuote.controllers', [])
 			$scope.goTo('quotes');
 		});
 	}])
-	.controller('Tags', [
+	.controller('BaseListController', [
 		'$scope',
-		'TagRepository',
 		'$state',
 		'QuotesState',
 		'$ionicScrollDelegate',
 		'$log',
 		'$filter',
-		function($scope, TagRepository, $state, QuotesState, $ionicScrollDelegate, $log,$filter) {
+		'Repository',
+		'QueryType',
+		function($scope, $state, QuotesState, $ionicScrollDelegate, $log,$filter,Repository,QueryType) {
+
+			var that = this;
 
 			$scope.$on('$stateChangeSuccess', function() {
 				$scope.loaded = false;
-				TagRepository.list().then(function(tags) {
+				Repository.list().then(function(tags) {
 					tags = _.map(tags, function(tag) {
 						tag.toPrint = tag.name + '(' + tag.count + ')';
 						return tag;
@@ -50,7 +53,6 @@ angular.module('weQuote.controllers', [])
 
 					$scope.loaded = true;
 
-					$ionicScrollDelegate.scrollTop(false);
 				});
 			});
 
@@ -67,7 +69,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.toQuotes = function(tag) {
 				QuotesState.query = {
-					type: 'tag',
+					type: QueryType,
 					value: tag.name
 				};
 
@@ -81,17 +83,31 @@ angular.module('weQuote.controllers', [])
 				tags = tags || $scope.visibleTags;
 				$scope.visibleTags = _.sortBy(tags,"name");
 				$scope.sortType = "name";
+				$ionicScrollDelegate.scrollTop(false);
 			};
 
 			$scope.sortCount = function(tags){
 				tags = tags || $scope.visibleTags;
 				$scope.visibleTags = _.sortBy(tags,"count").reverse();
 				$scope.sortType = "count";
+				$ionicScrollDelegate.scrollTop(false);
 			};
 
 			$scope.$on('back-button-action', function(event, args) {
 				$scope.goTo('quotes');
 			});
+
+	}])
+	.controller('Tags', [
+		'$scope',
+		'TagRepository',
+		'$controller',
+		function($scope, TagRepository, $controller) {
+			angular.extend(this, $controller('BaseListController',{
+				'$scope':$scope,
+				QueryType:'tag',
+				Repository:TagRepository
+			}));
 		}
 	])
 	.controller('Authors', [
