@@ -47,6 +47,10 @@
                       menu-toggle="left"
                       class="button button-icon icon ion-navicon important-royal"></button>
                     <h1 class="title important-royal slick">{{title}}</h1>
+                    <button 
+                      ng-show="!isQuote"
+                      ng-click="goTo('quotes');"
+                      class="button button-icon icon ion-home important-royal"></button>
                 </ion-header-bar>
                 <ion-nav-view 
                   animation="none"

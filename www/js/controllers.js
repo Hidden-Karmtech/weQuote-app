@@ -15,6 +15,7 @@ angular.module('weQuote.controllers', [])
 
 		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
+			$scope.isQuote = toState.name === 'quotes';
 		});
 
 		$scope.title = $state.title || '#weQuote';
