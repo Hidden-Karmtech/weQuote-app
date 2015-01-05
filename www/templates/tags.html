@@ -17,14 +17,14 @@
   style="padding-top:5px">
     <div class="list slick">
         <div 
-          ng-click="toQuotes(tag)" 
+          ng-click="toQuotes(object)" 
           class="item important-royal my-item" 
-          collection-repeat="tag in visibleTags | filter:query" 
+          collection-repeat="object in data | filter:query" 
           collection-item-width="'100%'" 
           collection-item-height="50" 
           ng-style="{height: 50}">
-              {{tag.toPrint}}
-          </div>
+              {{object.toPrint}}
+        </div>
     </div>
 </ion-content>
 <ion-footer-bar class="bar-light">

@@ -43,13 +43,13 @@ angular.module('weQuote.controllers', [])
 
 			$scope.$on('$stateChangeSuccess', function() {
 				$scope.loaded = false;
-				Repository.list().then(function(tags) {
-					tags = _.map(tags, function(tag) {
-						tag.toPrint = tag.name + '(' + tag.count + ')';
-						return tag;
+				Repository.list().then(function(results) {
+					results = _.map(results, function(object) {
+						object.toPrint = object.name + '(' + object.count + ')';
+						return object;
 					});
 
-					$scope.sortAlphabetically(tags);
+					$scope.sortAlphabetically(results);
 
 					$scope.loaded = true;
 
@@ -57,7 +57,7 @@ angular.module('weQuote.controllers', [])
 			});
 
 			$scope.onSubmit = function(){
-				var results = $filter('filter')($scope.visibleTags,$scope.query);
+				var results = $filter('filter')($scope.data,$scope.query);
 				if(results.length === 1){
 					$scope.toQuotes(results[0]);
 				}
@@ -79,16 +79,16 @@ angular.module('weQuote.controllers', [])
 				$scope.goTo('quotes');
 			}
 
-			$scope.sortAlphabetically = function(tags){
-				tags = tags || $scope.visibleTags;
-				$scope.visibleTags = _.sortBy(tags,"name");
+			$scope.sortAlphabetically = function(results){
+				results = results || $scope.data;
+				$scope.data = _.sortBy(results,"name");
 				$scope.sortType = "name";
 				$ionicScrollDelegate.scrollTop(false);
 			};
 
-			$scope.sortCount = function(tags){
-				tags = tags || $scope.visibleTags;
-				$scope.visibleTags = _.sortBy(tags,"count").reverse();
+			$scope.sortCount = function(results){
+				results = results || $scope.data;
+				$scope.data = _.sortBy(results,"count").reverse();
 				$scope.sortType = "count";
 				$ionicScrollDelegate.scrollTop(false);
 			};
@@ -113,67 +113,14 @@ angular.module('weQuote.controllers', [])
 	.controller('Authors', [
 		'$scope',
 		'AuthorRepository',
-		'$state',
-		'QuotesState',
-		'$ionicScrollDelegate',
-		'$log',
-		'$filter',
-		function($scope, AuthorRepository, $state, QuotesState, $ionicScrollDelegate, $log,$filter) {
-
-			$scope.toQuotes = function(author) {
-				QuotesState.query = {
-					type: 'author',
-					value: author.name
-				};
-
-				QuotesState.quotes = [];
-				QuotesState.currentQuote = null;
-
-				$scope.goTo('quotes');
-			}
-
-			$scope.onSubmit = function(){
-				var results = $filter('filter')($scope.visibleAuthors,$scope.query);
-				if(results.length === 1){
-					$scope.toQuotes(results[0]);
-				}
-			}
-
-			$scope.clearText = function() {
-				$scope.query = "";
-			}
-
-			$scope.$on('$stateChangeSuccess', function() {
-				$scope.loaded = false;
-				AuthorRepository.list().then(function(authors) {
-					authors = _.map(authors, function(author) {
-						author.toPrint = author.name + '(' + author.count + ')';
-						return author;
-					});
-
-					$scope.sortAlphabetically(authors);
-					
-					$scope.loaded = true;
-				
-					$ionicScrollDelegate.scrollTop(false);
-				});
-			});
-
-			$scope.sortAlphabetically = function(authors){
-				authors = authors || $scope.visibleAuthors;
-				$scope.visibleAuthors = _.sortBy(authors,"name");
-				$scope.sortType = "name";
-			};
-
-			$scope.sortCount = function(authors){
-				authors = authors || $scope.visibleAuthors;
-				$scope.visibleAuthors = _.sortBy(authors,"count").reverse();
-				$scope.sortType = "count";
-			};
-
-			$scope.$on('back-button-action', function(event, args) {
-				$scope.goTo('quotes');
-			});
+		'$controller',
+		
+		function($scope, AuthorRepository, $controller) {
+			angular.extend(this, $controller('BaseListController',{
+				'$scope':$scope,
+				QueryType:'author',
+				Repository:AuthorRepository
+			}));
 		}
 	])
 	.constant('Backgrounds',{

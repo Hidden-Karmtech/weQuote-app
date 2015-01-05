@@ -22,14 +22,14 @@
   style="padding-top:5px">
   <div class="list slick">
       <div 
-        ng-click="toQuotes(author)" 
+        ng-click="toQuotes(object)" 
         class="item important-royal my-item" 
-        collection-repeat="author in visibleAuthors | filter:query" 
+        collection-repeat="object in data | filter:query" 
         collection-item-width="'100%'" 
         collection-item-height="50" 
         ng-style="{height: 50}">
-            {{author.toPrint}}
-        </div>
+            {{object.toPrint}}
+      </div>
   </div>
 </ion-content>
 <ion-footer-bar class="bar-light">
