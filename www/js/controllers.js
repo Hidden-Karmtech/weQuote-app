@@ -167,7 +167,7 @@ angular.module('weQuote.controllers', [])
 		musica:2,
 		passione:1,
 		universo:2,
-		vita:1
+		vita:2
 	})
 	.controller('Quotes', ['$scope',
 		'$log',
