@@ -95,13 +95,13 @@ angular.module('weQuote', [
         url: "/authors",
         controller: 'Authors',
         title: 'Autori',
-        templateUrl: "templates/authors.html"
+        templateUrl: "templates/authors-tags.html"
       })
       .state('tags', {
         url: "/tags",
         controller: 'Tags',
         title: 'Tags',
-        templateUrl: "templates/tags.html"
+        templateUrl: "templates/authors-tags.html"
       })
       .state('about', {
         url: "/about",
