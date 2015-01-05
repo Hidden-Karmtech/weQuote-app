@@ -122,3 +122,16 @@ body {
   left: 0;
   right: 0;
 }
+
+.sort-alpha-asc:before{
+    font-family: 'FontAwesome';
+    content: "\f15d";
+    font-size: 30px !important;
+}
+
+.sort-numeric-desc:before{
+    font-family: 'FontAwesome';
+    content: "\f163";
+    font-size: 30px !important;
+}
+
