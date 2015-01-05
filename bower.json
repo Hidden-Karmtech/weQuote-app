@@ -9,7 +9,8 @@
     "underscore.string": "~2.4.0",
     "kineticjs": "~5.1.0",
     "angular-bindonce": "~0.3.2",
-    "ionicons": "~2.0.0"
+    "ionicons": "~2.0.0",
+    "fontawesome": "~4.2.0"
   },
   "overrides": {
     "ionic-contrib-swipe-cards": {
