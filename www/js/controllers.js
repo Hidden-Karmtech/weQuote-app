@@ -116,16 +116,28 @@ angular.module('weQuote.controllers', [])
 			$scope.$on('$stateChangeSuccess', function() {
 				$scope.loaded = false;
 				AuthorRepository.list().then(function(authors) {
-					$scope.visibleAuthors = _.map(authors, function(author) {
+					authors = _.map(authors, function(author) {
 						author.toPrint = author.name + '(' + author.count + ')';
 						return author;
 					});
 
+					$scope.sortAlphabetically(authors);
+					
 					$scope.loaded = true;
 				
 					$ionicScrollDelegate.scrollTop(false);
 				});
 			});
+
+			$scope.sortAlphabetically = function(authors){
+				authors = authors || $scope.visibleAuthors;
+				$scope.visibleAuthors = _.sortBy(authors,"name");
+			};
+
+			$scope.sortCount = function(authors){
+				authors = authors || $scope.visibleAuthors;
+				$scope.visibleAuthors = _.sortBy(authors,"count").reverse();
+			};
 
 			$scope.$on('back-button-action', function(event, args) {
 				$scope.goTo('quotes');

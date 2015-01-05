@@ -20,7 +20,7 @@
   has-subheader="true" 
   ng-class="{loading:!loaded}"
   style="padding-top:5px">
-<div class="list slick">
+  <div class="list slick">
       <div 
         ng-click="toQuotes(author)" 
         class="item important-royal my-item" 
@@ -32,3 +32,13 @@
         </div>
   </div>
 </ion-content>
+<ion-footer-bar class="bar-light">
+    <div class="button-bar">
+        <a class="button button-icon" ng-click="sortAlphabetically();">
+            <i class="icon fa fa-sort-alpha-asc royal"></i>
+        </a>
+        <a class="button button-icon" ng-click="sortCount();">
+            <i class="icon fa fa-sort-numeric-desc royal"></i>
+        </a>
+    </div>
+</ion-footer-bar>
