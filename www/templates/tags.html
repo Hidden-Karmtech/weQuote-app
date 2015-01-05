@@ -27,3 +27,15 @@
           </div>
     </div>
 </ion-content>
+<ion-footer-bar class="bar-light">
+    <div class="button-bar">
+        <a class="button button-icon" ng-click="sortAlphabetically();">
+          <i ng-show="sortType === 'name'" class="icon ion-checkmark-round royal"></i>
+          <i class="icon fa fa-sort-alpha-asc royal"></i>
+        </a>
+        <a class="button button-icon" ng-click="sortCount();">
+          <i ng-show="sortType === 'count'" class="icon ion-checkmark-round royal"></i>
+          <i class="icon fa fa-sort-numeric-desc royal"></i>
+        </a>
+    </div>
+</ion-footer-bar>

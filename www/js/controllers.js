@@ -41,10 +41,12 @@ angular.module('weQuote.controllers', [])
 			$scope.$on('$stateChangeSuccess', function() {
 				$scope.loaded = false;
 				TagRepository.list().then(function(tags) {
-					$scope.visibleTags = _.map(tags, function(tag) {
+					tags = _.map(tags, function(tag) {
 						tag.toPrint = tag.name + '(' + tag.count + ')';
 						return tag;
 					});
+
+					$scope.sortAlphabetically(tags);
 
 					$scope.loaded = true;
 
@@ -74,6 +76,18 @@ angular.module('weQuote.controllers', [])
 
 				$scope.goTo('quotes');
 			}
+
+			$scope.sortAlphabetically = function(tags){
+				tags = tags || $scope.visibleTags;
+				$scope.visibleTags = _.sortBy(tags,"name");
+				$scope.sortType = "name";
+			};
+
+			$scope.sortCount = function(tags){
+				tags = tags || $scope.visibleTags;
+				$scope.visibleTags = _.sortBy(tags,"count").reverse();
+				$scope.sortType = "count";
+			};
 
 			$scope.$on('back-button-action', function(event, args) {
 				$scope.goTo('quotes');
@@ -132,11 +146,13 @@ angular.module('weQuote.controllers', [])
 			$scope.sortAlphabetically = function(authors){
 				authors = authors || $scope.visibleAuthors;
 				$scope.visibleAuthors = _.sortBy(authors,"name");
+				$scope.sortType = "name";
 			};
 
 			$scope.sortCount = function(authors){
 				authors = authors || $scope.visibleAuthors;
 				$scope.visibleAuthors = _.sortBy(authors,"count").reverse();
+				$scope.sortType = "count";
 			};
 
 			$scope.$on('back-button-action', function(event, args) {
