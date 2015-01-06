@@ -44,6 +44,8 @@ angular.module('weQuote.services', [])
 							$log.debug("Working in " + (result ? 'Online Mode' : 'Offline Mode'));
 							that.initilized = true;
 							that.online = result;
+
+							return result;
 						});
 					} else {
 						$log.debug("Working in Offline Mode");
