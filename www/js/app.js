@@ -6,6 +6,9 @@ angular.module('weQuote', [
     'ngCordova',
     'pasvaz.bindonce'
   ])
+  .config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
+  }])
   .run(function(
     $ionicPlatform,
     $rootScope,
