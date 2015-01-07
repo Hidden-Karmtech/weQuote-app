@@ -135,3 +135,10 @@ body {
     font-size: 30px !important;
 }
 
+.img-responsive{
+  display: block;
+  width: 100% \9;
+  max-width: 100%;
+  height: auto;
+}
+
