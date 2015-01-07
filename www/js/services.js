@@ -192,7 +192,11 @@ angular.module('weQuote.services', [])
 								method: 'POST',
 								url: SERVER_BASE_URL + 'share',
 								params: params
-							});
+							}).then(function(result){
+								return result;
+							},function(){
+								return false;
+							})
 						}
 
 						return result;
