@@ -22,15 +22,23 @@
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
-        <a class="button button-icon" ng-click="share(state.currentQuote);">
+        <a 
+            class="button button-icon" 
+            ng-disabled="(!state.currentQuote) || sharing" 
+            ng-click="share(state.currentQuote);">
             <i class="icon royal" 
-              ng-disabled="sharing" 
               ng-class="getShareIcon();"></i>
         </a>
-        <a class="button button-icon" ng-click="next();">
+        <a 
+            class="button button-icon" 
+            ng-click="next();"
+            ng-disabled="!state.currentQuote">
             <i class="icon ion-skip-forward royal"></i>
         </a>
-        <a class="button button-icon" ng-click="startCamera();">
+        <a 
+            class="button button-icon" 
+            ng-click="startCamera();"
+            ng-disabled="!state.currentQuote">
             <i class="icon ion-camera royal"></i>
         </a>
     </div>
