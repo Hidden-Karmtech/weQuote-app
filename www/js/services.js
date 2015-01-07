@@ -25,7 +25,7 @@ angular.module('weQuote.services', [])
 			var handshake = $http({
 				method: 'GET',
 				url: SERVER_BASE_URL + 'handshake',
-				timeout: 5000
+				timeout: 10000
 			}).then(function(response) {
 					return true;
 				},
