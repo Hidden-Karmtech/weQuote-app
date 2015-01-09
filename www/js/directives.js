@@ -76,7 +76,7 @@ angular.module('weQuote.directives', [])
 			var fontSize = size * (WATERMARK_FONT_SIZE / 100);
 
 			var watermark = new Kinetic.Text({
-				text: 'www.wequote.it',
+				text: 'wequote.it',
 				fontSize: fontSize,
 				x: offset,
 				y: offset,
