@@ -91,8 +91,9 @@ angular.module('weQuote', [
               $cordovaSplashscreen.hide();
             });
         } else {
-          $state.go("quotes");
-          $cordovaSplashscreen.hide();
+          $state.go("quotes").then(function(){
+            $cordovaSplashscreen.hide();  
+          });
         }
 
       });
