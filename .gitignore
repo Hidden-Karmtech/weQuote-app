@@ -7,3 +7,15 @@ www/lib/
 hkt.keystore
 weQuote.apk
 engine
+platforms/android/ant-build
+build.gradle
+custom_rules.xml
+platforms/android/assets
+project.properties
+platforms/android/cordova
+platforms/android/CordovaLib
+platforms/android/libs
+settings.gradle
+platforms/android/platform_www
+platforms/android/res
+platforms/android/src
