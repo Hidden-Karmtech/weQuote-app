@@ -19,3 +19,8 @@ settings.gradle
 platforms/android/platform_www
 platforms/android/res
 platforms/android/src
+platforms/ios/cordova
+platforms/ios/CordovaLib
+platforms/ios/platform_www
+platforms/ios/weQuote
+platforms/ios/www
