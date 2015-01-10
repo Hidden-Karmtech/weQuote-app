@@ -11,6 +11,49 @@ angular.module('weQuote.services', [])
 			}
 		}
 	}])
+	.constant('Backgrounds',{
+		amore:3,
+		fede:2,
+		misc:11,
+		musica:2,
+		passione:1,
+		universo:2,
+		vita:2
+	})
+	.service('BackgroundSelector', ['$log','Backgrounds', function($log,Backgrounds) {
+		var that = this;
+
+		this.lastUrl = null;
+
+		var calculateBackground = function(quote){
+			var tagName = quote.tags[_.random(0,quote.tags.length-1)].name;
+
+			$log.debug("using tag " + tagName);
+
+			var count = Backgrounds[tagName];
+			if(!count){
+				$log.debug("tag " + tagName + " not valid using misc");
+				tagName = 'misc';
+				count = Backgrounds.misc;
+			}
+
+			return 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
+				
+		};
+
+		return {
+			newBackground:function(quote){
+				var url;
+				do{
+					url = calculateBackground(quote);
+				}while(url === that.lastUrl);
+
+				that.lastUrl = url;
+
+				return url;
+			}
+		}
+	}])
 	.service('WeQuote', [
 		'$q',
 		'$http',

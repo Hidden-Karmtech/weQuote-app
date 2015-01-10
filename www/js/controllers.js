@@ -140,8 +140,8 @@ angular.module('weQuote.controllers', [])
 		'QuotesState',
 		'$cordovaCamera',
 		'$cordovaToast',
-		'Backgrounds',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,Backgrounds) {
+		'BackgroundSelector',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,BackgroundSelector) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -219,18 +219,9 @@ angular.module('weQuote.controllers', [])
 
 			var grabQuote = function(quotes) {
 				var quote = quotes.pop();
-				var tagName = quote.tags[_.random(0,quote.tags.length-1)].name;
+				
+				quote.url = BackgroundSelector.newBackground(quote);
 
-				$log.debug("using tag " + tagName);
-
-				var count = Backgrounds[tagName];
-				if(!count){
-					$log.debug("tag " + tagName + " not valid using misc");
-					tagName = 'misc';
-					count = Backgrounds.misc;
-				}
-
-				quote.url = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
 				$scope.state.currentQuote = quote;
 			};
 
