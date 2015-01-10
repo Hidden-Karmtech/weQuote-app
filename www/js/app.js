@@ -87,8 +87,9 @@ angular.module('weQuote', [
               closeOnConfirm: true
             },
             function() {
-              $state.go("quotes");
-              $cordovaSplashscreen.hide();
+              $state.go("quotes").then(function(){
+                $cordovaSplashscreen.hide();  
+              });
             });
         } else {
           $state.go("quotes").then(function(){
@@ -126,8 +127,12 @@ angular.module('weQuote', [
         controller: 'About',
         title: 'About',
         templateUrl: "templates/about.html"
-      });
+      })
+      .state('loading', {
+        url: "/loading",
+        templateUrl: "templates/loading.html"
+      })
 
-    $urlRouterProvider.otherwise('/about');
+    $urlRouterProvider.otherwise('/loading');
 
   });
