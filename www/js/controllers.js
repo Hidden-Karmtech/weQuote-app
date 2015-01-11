@@ -154,6 +154,7 @@ angular.module('weQuote.controllers', [])
 			$scope.state = QuotesState;
 			$scope.sharing = false;
 			$scope.lastSearch = "";
+			$scope.loadingQuote = false;
 
 			if (_.isEmpty($scope.state)) {
 				$scope.state.currentQuote = null;
@@ -197,14 +198,19 @@ angular.module('weQuote.controllers', [])
 					}
 				} else {
 					downloadQuotes(function() {
-						$scope.next();
+						executeGetNextQuote();
 					});
 				}
 			};
 
 			$scope.next = function() {
-				$scope.state.currentQuote = null;
-				$timeout(executeGetNextQuote,300);
+				$scope.loadingQuote = true;
+				
+				executeGetNextQuote();
+				
+				$timeout(function() {
+					$scope.loadingQuote = false;
+				}, 300);
 			};
 
 			$scope.getShareIcon = function() {
@@ -240,9 +246,11 @@ angular.module('weQuote.controllers', [])
 			var reloadQuotes = function() {
 				$scope.state.quotes = [];
 				$scope.state.currentQuote = null;
+				$scope.loadingQuote = true;
 				downloadQuotes(function(quotes) {
 					if (quotes.length > 0) {
 						grabQuote(quotes);
+						$scope.loadingQuote = false;
 					} else {
 						swal({
 								title: "Nessuna Citazione corrispondente ai parametri di ricerca",

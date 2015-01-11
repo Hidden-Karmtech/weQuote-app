@@ -16,15 +16,17 @@
     </button>
 </ion-header-bar>
 <ion-content class="royal-bg text-center center loading">
-    <quote-card 
-      ng-if="state.currentQuote" 
-      quote="state.currentQuote"/>
+    <div ng-show="!loadingQuote">
+        <quote-card 
+            ng-if="state.currentQuote" 
+            quote="state.currentQuote"/>
+    </div>
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
         <a 
             class="button button-icon" 
-            ng-disabled="(!state.currentQuote) || sharing" 
+            ng-disabled="loadingQuote || sharing" 
             ng-click="share(state.currentQuote);">
             <i class="icon royal" 
               ng-class="getShareIcon();"></i>
@@ -32,13 +34,13 @@
         <a 
             class="button button-icon" 
             ng-click="next();"
-            ng-disabled="!state.currentQuote">
+            ng-disabled="loadingQuote">
             <i class="icon ion-skip-forward royal"></i>
         </a>
         <a 
             class="button button-icon" 
             ng-click="startCamera();"
-            ng-disabled="!state.currentQuote">
+            ng-disabled="loadingQuote">
             <i class="icon ion-camera royal"></i>
         </a>
     </div>
