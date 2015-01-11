@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html ng-app="weQuote">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    
+
     <link href="css/ionic.app.css" rel="stylesheet">
 
     <!-- bower:css -->
@@ -15,6 +16,50 @@
     <link rel="stylesheet" href="lib/ionicons/css/ionicons.css" />
     <link rel="stylesheet" href="lib/fontawesome/css/font-awesome.css" />
     <!-- endbower -->
+</head>
+
+<body ng-controller="Root">
+    <ion-side-menus>
+        <ion-side-menu-content class="royal-bg" drag-content="false">
+            <ion-header-bar class="bar-light">
+                <button menu-toggle="left" class="button button-icon icon ion-navicon important-royal"></button>
+                <h1 class="title important-royal slick">{{title}}</h1>
+                <button 
+                  ng-if="!isQuote" 
+                  ng-click="goTo('quotes');" 
+                  class="button button-icon icon ion-home important-royal"></button>
+            </ion-header-bar>
+            <ion-nav-view animation="none" class="royal-bg">
+
+            </ion-nav-view>
+
+        </ion-side-menu-content>
+
+        <ion-side-menu side="left" class="calm-bg">
+            <ion-header-bar class="bar-dark">
+                <h1 class="title important-light slick">Menù</h1>
+            </ion-header-bar>
+            <ion-content class="has-header">
+                <ion-list>
+                    <ion-item nav-clear menu-close class="item-calm title slick " ng-click="goTo('quotes');">
+                        <i class="icon ion-quote padding"></i> Citazioni
+                    </ion-item>
+                    <ion-item nav-clear menu-close class="item-calm title slick " ng-click="goTo('authors');">
+                        <i class="icon ion-person-stalker padding"></i> Autori
+                    </ion-item>
+                    <ion-item nav-clear menu-close class="item-calm title slick" ng-click="goTo('tags');">
+                        <i class="icon ion-pound padding"></i> Tags
+                    </ion-item>
+                    <ion-item nav-clear menu-close class="item-calm title slick" ng-click="goTo('about');">
+                        <i class="icon ion-help-circled padding"></i> About
+                    </ion-item>
+                    <ion-item nav-clear menu-close ng-show="isAndroid();" class="item-calm title slick" ng-click="exit();">
+                        <i class="icon ion-log-out padding"></i> Esci
+                    </ion-item>
+                </ion-list>
+            </ion-content>
+        </ion-side-menu>
+    </ion-side-menus>
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -38,57 +83,6 @@
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
     <script src="js/directives.js"></script>
-  </head>
-  <body ng-controller="Root">
-      <ion-side-menus>
-            <ion-side-menu-content class="royal-bg" drag-content="false">
-                <ion-header-bar class="bar-light">
-                   <button 
-                      menu-toggle="left"
-                      class="button button-icon icon ion-navicon important-royal"></button>
-                    <h1 class="title important-royal slick">{{title}}</h1>
-                    <button 
-                      ng-show="!isQuote"
-                      ng-click="goTo('quotes');"
-                      class="button button-icon icon ion-home important-royal"></button>
-                </ion-header-bar>
-                <ion-nav-view 
-                  animation="none"
-                  class="royal-bg">
+</body>
 
-                </ion-nav-view>
-            
-            </ion-side-menu-content>
-
-            <ion-side-menu side="left" class="calm-bg">
-              <ion-header-bar class="bar-dark">
-                <h1 class="title important-light slick">Menù</h1>           
-              </ion-header-bar>
-              <ion-content class="has-header">
-                <ion-list>
-                    <ion-item nav-clear menu-close class="item-calm title slick " ng-click="goTo('quotes');">
-                  <i class="icon ion-quote padding"></i>
-                    Citazioni
-                  </ion-item>
-                  <ion-item nav-clear menu-close class="item-calm title slick " ng-click="goTo('authors');">
-                  <i class="icon ion-person-stalker padding"></i>
-                    Autori
-                  </ion-item>
-                  <ion-item nav-clear menu-close class="item-calm title slick" ng-click="goTo('tags');">
-                  <i class="icon ion-pound padding"></i>
-                    Tags
-                  </ion-item>
-                  <ion-item nav-clear menu-close class="item-calm title slick" ng-click="goTo('about');">
-                  <i class="icon ion-help-circled padding"></i>
-                    About
-                  </ion-item>
-                  <ion-item nav-clear menu-close ng-show="isAndroid();" class="item-calm title slick" ng-click="exit();">
-                  <i class="icon ion-log-out padding"></i>
-                    Esci
-                  </ion-item>
-                </ion-list>
-              </ion-content>  
-            </ion-side-menu>
-  </ion-side-menus>
-  </body>
 </html>
