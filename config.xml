@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="it.hkt.wequote" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget 
+  xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0"
+  id="it.hkt.wequote" 
+  version="1.0.0" 
+  android-minSdkVersion="17"
+  android-versionCode="10004"
+  ios-CFBundleVersion="1.0.0.4">
   <name>weQuote</name>
   <description>
         weQuote. Together.
