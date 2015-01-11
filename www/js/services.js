@@ -37,7 +37,11 @@ angular.module('weQuote.services', [])
 				count = Backgrounds.misc;
 			}
 
-			return 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
+			var toReturn = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
+
+			$log.debug(toReturn);
+
+			return toReturn;
 				
 		};
 

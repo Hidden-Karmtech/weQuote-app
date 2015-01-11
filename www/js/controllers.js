@@ -141,7 +141,8 @@ angular.module('weQuote.controllers', [])
 		'$cordovaCamera',
 		'$cordovaToast',
 		'BackgroundSelector',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,BackgroundSelector) {
+		'$timeout',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,BackgroundSelector,$timeout) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -174,16 +175,18 @@ angular.module('weQuote.controllers', [])
 					}
 				});
 			}
+
 			$scope.clearText = function() {
 				$scope.state.query.value = "";
 				$scope.state.currentQuote = null;
 				reloadQuotes();
 			}
+
 			$scope.toggleLeft = function() {
 				$ionicSideMenuDelegate.toggleLeft();
 			};
 
-			$scope.next = function() {
+			var executeGetNextQuote = function(){
 				if ($scope.state.quotes.length > 0) {
 					grabQuote($scope.state.quotes);
 					$log.debug($scope.state.quotes.length + " left");
@@ -195,6 +198,11 @@ angular.module('weQuote.controllers', [])
 						$scope.next();
 					});
 				}
+			};
+
+			$scope.next = function() {
+				$scope.state.currentQuote = null;
+				$timeout(executeGetNextQuote,300);
 			};
 
 			$scope.getShareIcon = function() {
@@ -221,6 +229,8 @@ angular.module('weQuote.controllers', [])
 				var quote = quotes.pop();
 				
 				quote.url = BackgroundSelector.newBackground(quote);
+
+				$log.debug("Using quote: " + quote.text);
 
 				$scope.state.currentQuote = quote;
 			};
