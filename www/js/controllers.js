@@ -13,10 +13,12 @@ angular.module('weQuote.controllers', [])
 			return ionic.Platform.isAndroid();
 		};
 
-		$scope.$on('$stateChangeSuccess', function(event, toState) {
+		$scope.$on('$stateChangeStart', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
 			$scope.isQuote = toState.name === 'quotes';
 		});
+
+		$scope.isQuote = false;
 
 		$scope.title = $state.title || '#weQuote';
 	}])
