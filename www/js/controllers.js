@@ -190,6 +190,8 @@ angular.module('weQuote.controllers', [])
 			};
 
 			var executeGetNextQuote = function(){
+				$scope.state.currentQuote = null;
+				
 				if ($scope.state.quotes.length > 0) {
 					grabQuote($scope.state.quotes);
 					$log.debug($scope.state.quotes.length + " left");
@@ -205,7 +207,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.next = function() {
 				$scope.loadingQuote = true;
-				
+
 				executeGetNextQuote();
 				
 				$timeout(function() {
