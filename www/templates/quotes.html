@@ -11,7 +11,10 @@
             ng-blur="onChangeSearch();">
         </form>
     </label>
-    <button class="button button-icon button-small royal-bg important-light clear-search-button" ng-click="clearText()">
+    <button 
+    class="button button-icon button-small royal-bg important-light clear-search-button" 
+    ng-disabled="!state.query.value"
+    ng-click="clearText()">
         <i class="ion-close-circled"></i>
     </button>
 </ion-header-bar>
