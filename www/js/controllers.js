@@ -174,8 +174,19 @@ angular.module('weQuote.controllers', [])
 
 			$scope.clearText = function() {
 				$scope.state.query.value = "";
+				$scope.lastSearch = "";
 				$scope.state.currentQuote = null;
 				reloadQuotes();
+			}
+
+			$scope.onChangeSearch = function() {
+				$log.debug("onChangeSearch");
+				$scope.state.query.type = "search";
+				if ($scope.state.query.value !== $scope.lastSearch) {
+					$scope.lastSearch = $scope.state.query.value;
+					$scope.state.currentQuote = null;
+					reloadQuotes();
+				}
 			}
 
 			$scope.toggleLeft = function() {
@@ -257,16 +268,6 @@ angular.module('weQuote.controllers', [])
 							});
 					}
 				});
-			}
-
-			$scope.onChangeSearch = function() {
-				$log.debug("onChangeSearch");
-				$scope.state.query.type = "search";
-				if ($scope.state.query.value !== $scope.lastSearch) {
-					$scope.lastSearch = $scope.state.query.value;
-					$scope.state.currentQuote = null;
-					reloadQuotes();
-				}
 			}
 
 			$scope.startCamera = function() {
