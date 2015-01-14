@@ -2,15 +2,15 @@ angular.module('weQuote.directives', [])
 	.directive('blurOnSubmit', ['$log', function($log) {
 		return {
 			restrict: 'A',
-			require:'^form',
-			link: function($scope, element, attrs,form) {
-				element.parent().bind("submit",function(){
+			require: '^form',
+			link: function($scope, element, attrs, form) {
+				element.parent().bind("submit", function() {
 					element[0].blur();
 				});
 			}
 		};
 	}])
-	.directive('quoteCard', ['$log', 'Screen', function($log, Screen) {
+	.directive('quoteCard', ['$log','$window', function($log,$window) {
 
 		var that = this;
 
@@ -30,6 +30,21 @@ angular.module('weQuote.directives', [])
 		var visibleKinetic;
 		var invisibleKinetic;
 		var count = 0;
+
+		this.getSize = function(){
+			var width = Math.floor($window.innerWidth * 95 / 100);
+			var visibleHeight = $window.innerHeight - 44 //Header Bar
+				- 44 //Footer Bar
+				- 44 //Search Bar
+				- 50; //Padding
+
+			var height = Math.floor(visibleHeight * 90 / 100);
+
+			$log.debug("calculated width: " + width);
+			$log.debug("calculated height: " + height);
+
+			return width < height ? width : height;
+		}
 
 		this.getQuoteText = function(quote, size) {
 
@@ -157,7 +172,7 @@ angular.module('weQuote.directives', [])
 					that.cropImage(imageObj);
 				} else {
 
-					stage.add(that.paintCanvas(imageObj,quote,kineticArea.mainLayer,size,startFontSize));
+					stage.add(that.paintCanvas(imageObj, quote, kineticArea.mainLayer, size, startFontSize));
 
 					if (callback) {
 						stage.toDataURL({
@@ -222,7 +237,7 @@ angular.module('weQuote.directives', [])
 			imageObj.src = canvas.toDataURL();
 		};
 
-		this.paintCanvas = function(imageObj,quote,layer,size,startFontSize) {
+		this.paintCanvas = function(imageObj, quote, layer, size, startFontSize) {
 
 			layer.add(that.getImageBackgroud(imageObj, size));
 			layer.add(that.getRectBorder(size));
@@ -247,8 +262,8 @@ angular.module('weQuote.directives', [])
 				visibleKinetic = {
 					stage: new Kinetic.Stage({
 						container: visibleId,
-						width: Screen.getSize(),
-						height: Screen.getSize()
+						width: that.getSize(),
+						height: that.getSize()
 					}),
 					mainLayer: new Kinetic.Layer()
 				};
@@ -267,7 +282,7 @@ angular.module('weQuote.directives', [])
 						generateCard(
 							visibleKinetic,
 							quote,
-							Screen.getSize(),
+							that.getSize(),
 							36);
 					}
 				}, true);

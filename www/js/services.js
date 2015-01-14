@@ -120,36 +120,6 @@ angular.module('weQuote.services', [])
 
 		}
 	])
-	.service('Screen', ['$window','$log', function($window,$log) {
-		var width = Math.floor($window.innerWidth * 95 / 100);
-		var visibleHeight = $window.innerHeight
-					 - 44	//Header Bar
-					 - 44 	//Footer Bar
-					 - 44 	//Search Bar
-					 - 50;	//Padding
-
-		var height = Math.floor(visibleHeight * 90 / 100);
-
-		$log.debug("calculated width: " + width);
-		$log.debug("calculated height: " + height);
-
-		var size = width < height ? width : height;
-
-		var left = Math.floor(($window.innerWidth - size) / 2);
-		var top = Math.floor(($window.innerHeight - size) / 2);
-
-		return {
-			getSize: function() {
-				return size;
-			},
-			getLeft: function() {
-				return left;
-			},
-			getTop: function() {
-				return top;
-			}
-		};
-	}])
 	.service('QuoteRepository', [
 		'$http',
 		'SERVER_BASE_URL',
