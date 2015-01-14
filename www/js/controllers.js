@@ -1,6 +1,6 @@
 angular.module('weQuote.controllers', [])
 	.controller('Root', ['$scope', '$state', function($scope, $state) {
-		
+
 		$scope.exit = function() {
 			ionic.Platform.exitApp();
 		}
@@ -40,7 +40,7 @@ angular.module('weQuote.controllers', [])
 		'$filter',
 		'Repository',
 		'QueryType',
-		function($scope, $state, QuotesState, $ionicScrollDelegate, $log,$filter,Repository,QueryType) {
+		function($scope, $state, QuotesState, $ionicScrollDelegate, $log, $filter, Repository, QueryType) {
 
 			var that = this;
 
@@ -59,9 +59,9 @@ angular.module('weQuote.controllers', [])
 				});
 			});
 
-			$scope.onSubmit = function(){
-				var results = $filter('filter')($scope.data,$scope.query);
-				if(results.length === 1){
+			$scope.onSubmit = function() {
+				var results = $filter('filter')($scope.data, $scope.query);
+				if (results.length === 1) {
 					$scope.toQuotes(results[0]);
 				}
 			}
@@ -82,16 +82,16 @@ angular.module('weQuote.controllers', [])
 				$scope.goTo('quotes');
 			}
 
-			$scope.sortAlphabetically = function(results){
+			$scope.sortAlphabetically = function(results) {
 				results = results || $scope.data;
-				$scope.data = _.sortBy(results,"name");
+				$scope.data = _.sortBy(results, "name");
 				$scope.sortType = "name";
 				$ionicScrollDelegate.scrollTop(false);
 			};
 
-			$scope.sortCount = function(results){
+			$scope.sortCount = function(results) {
 				results = results || $scope.data;
-				$scope.data = _.sortBy(results,"count").reverse();
+				$scope.data = _.sortBy(results, "count").reverse();
 				$scope.sortType = "count";
 				$ionicScrollDelegate.scrollTop(false);
 			};
@@ -100,16 +100,17 @@ angular.module('weQuote.controllers', [])
 				$scope.goTo('quotes');
 			});
 
-	}])
+		}
+	])
 	.controller('Tags', [
 		'$scope',
 		'TagRepository',
 		'$controller',
 		function($scope, TagRepository, $controller) {
-			angular.extend(this, $controller('BaseListController',{
-				'$scope':$scope,
-				QueryType:'tag',
-				Repository:TagRepository
+			angular.extend(this, $controller('BaseListController', {
+				'$scope': $scope,
+				QueryType: 'tag',
+				Repository: TagRepository
 			}));
 		}
 	])
@@ -117,12 +118,12 @@ angular.module('weQuote.controllers', [])
 		'$scope',
 		'AuthorRepository',
 		'$controller',
-		
+
 		function($scope, AuthorRepository, $controller) {
-			angular.extend(this, $controller('BaseListController',{
-				'$scope':$scope,
-				QueryType:'author',
-				Repository:AuthorRepository
+			angular.extend(this, $controller('BaseListController', {
+				'$scope': $scope,
+				QueryType: 'author',
+				Repository: AuthorRepository
 			}));
 		}
 	])
@@ -135,7 +136,8 @@ angular.module('weQuote.controllers', [])
 		'$cordovaToast',
 		'BackgroundSelector',
 		'$timeout',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast,BackgroundSelector,$timeout) {
+		'$ionicActionSheet',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -162,10 +164,10 @@ angular.module('weQuote.controllers', [])
 					$log.debug(newQuotes.length + " downloaded");
 
 					downloading = false;
-					_.each(newQuotes,function(q){
+					_.each(newQuotes, function(q) {
 						$scope.state.quotes.push(q);
 					});
-					
+
 					if (onComplete) {
 						onComplete($scope.state.quotes);
 					}
@@ -182,9 +184,9 @@ angular.module('weQuote.controllers', [])
 				$ionicSideMenuDelegate.toggleLeft();
 			};
 
-			var executeGetNextQuote = function(){
+			var executeGetNextQuote = function() {
 				$scope.state.currentQuote = null;
-				
+
 				if ($scope.state.quotes.length > 0) {
 					grabQuote($scope.state.quotes);
 					$log.debug($scope.state.quotes.length + " left");
@@ -202,7 +204,7 @@ angular.module('weQuote.controllers', [])
 				$scope.loadingQuote = true;
 
 				executeGetNextQuote();
-				
+
 				$timeout(function() {
 					$scope.loadingQuote = false;
 				}, 300);
@@ -230,7 +232,7 @@ angular.module('weQuote.controllers', [])
 
 			var grabQuote = function(quotes) {
 				var quote = quotes.shift();
-				
+
 				quote.url = BackgroundSelector.newBackground(quote);
 
 				$log.debug("Using quote: " + quote.text);
@@ -269,11 +271,11 @@ angular.module('weQuote.controllers', [])
 				}
 			}
 
-			$scope.startCamera = function() {
+			var takePhoto = function(cameraMode){
 				var options = {
 					quality: 100,
 					destinationType: Camera.DestinationType.DATA_URL,
-					sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+					sourceType: cameraMode ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY,
 					allowEdit: true,
 					encodingType: Camera.EncodingType.PNG,
 					targetWidth: 1000,
@@ -286,8 +288,44 @@ angular.module('weQuote.controllers', [])
 				$cordovaCamera.getPicture(options).then(function(imageData) {
 					$scope.state.currentQuote.url = "data:image/png;base64," + imageData;
 				}, function(err) {
-					// An error occurred. Show a message to the user
+					$log.error(err);
 				});
+			}
+
+			$scope.showMenu = function() {
+
+				var callbacks = [
+					function(){
+						takePhoto(true);
+					},
+					function(){
+						takePhoto(false);
+					},
+					function(){
+						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.currentQuote);
+					}
+				];
+
+				$ionicActionSheet.show({
+					buttons: [
+						{
+							text: 'Scatta Foto'
+						}, 
+						{
+							text: 'Foto Galleria'
+						},
+						{
+							text: 'Cambia Sfondo'
+						}
+					],
+					cancelText: 'Annulla',
+					buttonClicked: function(index) {
+						callbacks[index]();
+						return true;
+					}
+				});
+
+
 			};
 
 
@@ -298,26 +336,26 @@ angular.module('weQuote.controllers', [])
 			});
 
 			$scope.$on('back-button-action', function(event, args) {
-				if(lastBackClick!=null){
+				if (lastBackClick != null) {
 					var currentDate = new Date();
 					var difference = (currentDate - lastBackClick) / 1000;
-					if(difference <= SECOND_FOR_EXIT){
+					if (difference <= SECOND_FOR_EXIT) {
 						ionic.Platform.exitApp();
-					}else{
+					} else {
 						$scope.showToast();
 					}
-				}else{
+				} else {
 					$scope.showToast();
-				}				
+				}
 			});
 
 			$scope.showToast = function() {
 				$cordovaToast.show('Clicca di nuovo per uscire', 'long', 'top')
-				.then(function(success) {
-				    lastBackClick = new Date();				   
-				}, function (error) {
-				    lastBackClick = null;
-				});
+					.then(function(success) {
+						lastBackClick = new Date();
+					}, function(error) {
+						lastBackClick = null;
+					});
 			}
 		}
 	]);
