@@ -273,6 +273,7 @@ angular.module('weQuote.controllers', [])
 				var options = {
 					quality: 100,
 					destinationType: Camera.DestinationType.DATA_URL,
+					sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
 					allowEdit: true,
 					encodingType: Camera.EncodingType.PNG,
 					targetWidth: 1000,
