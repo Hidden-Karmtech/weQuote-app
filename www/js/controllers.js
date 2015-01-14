@@ -126,15 +126,6 @@ angular.module('weQuote.controllers', [])
 			}));
 		}
 	])
-	.constant('Backgrounds',{
-		amore:3,
-		fede:2,
-		misc:11,
-		musica:2,
-		passione:1,
-		universo:2,
-		vita:2
-	})
 	.controller('Quotes', ['$scope',
 		'$log',
 		'QuoteRepository',
@@ -171,8 +162,10 @@ angular.module('weQuote.controllers', [])
 					$log.debug(newQuotes.length + " downloaded");
 
 					downloading = false;
-					$scope.state.quotes = _.union($scope.state.quotes, _.shuffle(newQuotes));
-
+					_.each(newQuotes,function(q){
+						$scope.state.quotes.push(q);
+					});
+					
 					if (onComplete) {
 						onComplete($scope.state.quotes);
 					}
@@ -236,7 +229,7 @@ angular.module('weQuote.controllers', [])
 			}
 
 			var grabQuote = function(quotes) {
-				var quote = quotes.pop();
+				var quote = quotes.shift();
 				
 				quote.url = BackgroundSelector.newBackground(quote);
 
@@ -280,7 +273,6 @@ angular.module('weQuote.controllers', [])
 				var options = {
 					quality: 100,
 					destinationType: Camera.DestinationType.DATA_URL,
-					sourceType: Camera.PictureSourceType.CAMERA,
 					allowEdit: true,
 					encodingType: Camera.EncodingType.PNG,
 					targetWidth: 1000,
