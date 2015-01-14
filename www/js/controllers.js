@@ -304,6 +304,10 @@ angular.module('weQuote.controllers', [])
 					},
 					function(){
 						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.currentQuote);
+					},
+					function(){
+						var color = $scope.state.currentQuote.fontColor || '#FFFFFF';
+						$scope.state.currentQuote.fontColor = color === '#FFFFFF' ? '#000000' : '#FFFFFF';
 					}
 				];
 
@@ -317,6 +321,9 @@ angular.module('weQuote.controllers', [])
 						},
 						{
 							text: 'Cambia Sfondo'
+						},
+						{
+							text: 'Cambia Colore Testo'
 						}
 					],
 					cancelText: 'Annulla',

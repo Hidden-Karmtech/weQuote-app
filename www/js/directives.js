@@ -10,7 +10,7 @@ angular.module('weQuote.directives', [])
 			}
 		};
 	}])
-	.directive('quoteCard', ['$log','$window', function($log,$window) {
+	.directive('quoteCard', ['$log', '$window', function($log, $window) {
 
 		var that = this;
 
@@ -31,7 +31,7 @@ angular.module('weQuote.directives', [])
 		var invisibleKinetic;
 		var count = 0;
 
-		this.getSize = function(){
+		this.getSize = function() {
 			var width = Math.floor($window.innerWidth * 95 / 100);
 			var visibleHeight = $window.innerHeight - 44 //Header Bar
 				- 44 //Footer Bar
@@ -50,13 +50,14 @@ angular.module('weQuote.directives', [])
 
 			var startFontSize = size * (START_FONT_SIZE / 100);
 			var xOffset = size * (TEXT_X_OFFSET / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var generateText = function(text, fontSize, size) {
 				return new Kinetic.Text({
 					text: text,
 					fontSize: fontSize,
 					fontFamily: 'Lobster',
-					fill: '#FFFFFF',
+					fill: fontColor,
 					x: xOffset,
 					width: size - (xOffset * 2),
 					padding: 0,
@@ -85,10 +86,11 @@ angular.module('weQuote.directives', [])
 			return quoteText;
 		};
 
-		this.getWatermark = function(size) {
+		this.getWatermark = function(quote, size) {
 
 			var offset = size * (WATERMARK_OFFSET / 100);
 			var fontSize = size * (WATERMARK_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var watermark = new Kinetic.Text({
 				text: 'wequote.it',
@@ -96,7 +98,7 @@ angular.module('weQuote.directives', [])
 				x: offset,
 				y: offset,
 				fontFamily: 'Lobster',
-				fill: '#FFFFFF',
+				fill: fontColor,
 				width: size,
 				padding: 0,
 				align: 'left'
@@ -108,12 +110,13 @@ angular.module('weQuote.directives', [])
 		this.getAuthorText = function(quote, size) {
 
 			var fontSize = size * (AUTHOR_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var autorText = new Kinetic.Text({
 				text: quote.author,
 				fontSize: fontSize,
 				fontFamily: 'Lobster',
-				fill: '#FFFFFF',
+				fill: fontColor,
 				width: size,
 				padding: 0,
 				align: 'center'
@@ -179,6 +182,7 @@ angular.module('weQuote.directives', [])
 							callback: callback
 						});
 					}
+
 				}
 
 			};
@@ -243,7 +247,7 @@ angular.module('weQuote.directives', [])
 			layer.add(that.getRectBorder(size));
 			layer.add(that.getAuthorText(quote, size));
 			layer.add(that.getQuoteText(quote, size, startFontSize));
-			layer.add(that.getWatermark(size));
+			layer.add(that.getWatermark(quote, size));
 
 			return layer;
 		};
