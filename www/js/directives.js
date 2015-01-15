@@ -2,15 +2,15 @@ angular.module('weQuote.directives', [])
 	.directive('blurOnSubmit', ['$log', function($log) {
 		return {
 			restrict: 'A',
-			require:'^form',
-			link: function($scope, element, attrs,form) {
-				element.parent().bind("submit",function(){
+			require: '^form',
+			link: function($scope, element, attrs, form) {
+				element.parent().bind("submit", function() {
 					element[0].blur();
 				});
 			}
 		};
 	}])
-	.directive('quoteCard', ['$log', 'Screen', function($log, Screen) {
+	.directive('quoteCard', ['$log', '$window', function($log, $window) {
 
 		var that = this;
 
@@ -31,17 +31,33 @@ angular.module('weQuote.directives', [])
 		var invisibleKinetic;
 		var count = 0;
 
+		this.getSize = function() {
+			var width = Math.floor($window.innerWidth * 95 / 100);
+			var visibleHeight = $window.innerHeight - 44 //Header Bar
+				- 44 //Footer Bar
+				- 44 //Search Bar
+				- 50; //Padding
+
+			var height = Math.floor(visibleHeight * 90 / 100);
+
+			$log.debug("calculated width: " + width);
+			$log.debug("calculated height: " + height);
+
+			return width < height ? width : height;
+		}
+
 		this.getQuoteText = function(quote, size) {
 
 			var startFontSize = size * (START_FONT_SIZE / 100);
 			var xOffset = size * (TEXT_X_OFFSET / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var generateText = function(text, fontSize, size) {
 				return new Kinetic.Text({
 					text: text,
 					fontSize: fontSize,
 					fontFamily: 'Lobster',
-					fill: '#FFFFFF',
+					fill: fontColor,
 					x: xOffset,
 					width: size - (xOffset * 2),
 					padding: 0,
@@ -70,10 +86,11 @@ angular.module('weQuote.directives', [])
 			return quoteText;
 		};
 
-		this.getWatermark = function(size) {
+		this.getWatermark = function(quote, size) {
 
 			var offset = size * (WATERMARK_OFFSET / 100);
 			var fontSize = size * (WATERMARK_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var watermark = new Kinetic.Text({
 				text: 'wequote.it',
@@ -81,7 +98,7 @@ angular.module('weQuote.directives', [])
 				x: offset,
 				y: offset,
 				fontFamily: 'Lobster',
-				fill: '#FFFFFF',
+				fill: fontColor,
 				width: size,
 				padding: 0,
 				align: 'left'
@@ -93,12 +110,13 @@ angular.module('weQuote.directives', [])
 		this.getAuthorText = function(quote, size) {
 
 			var fontSize = size * (AUTHOR_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
 
 			var autorText = new Kinetic.Text({
 				text: quote.author,
 				fontSize: fontSize,
 				fontFamily: 'Lobster',
-				fill: '#FFFFFF',
+				fill: fontColor,
 				width: size,
 				padding: 0,
 				align: 'center'
@@ -157,13 +175,14 @@ angular.module('weQuote.directives', [])
 					that.cropImage(imageObj);
 				} else {
 
-					stage.add(that.paintCanvas(imageObj,quote,kineticArea.mainLayer,size,startFontSize));
+					stage.add(that.paintCanvas(imageObj, quote, kineticArea.mainLayer, size, startFontSize));
 
 					if (callback) {
 						stage.toDataURL({
 							callback: callback
 						});
 					}
+
 				}
 
 			};
@@ -222,13 +241,13 @@ angular.module('weQuote.directives', [])
 			imageObj.src = canvas.toDataURL();
 		};
 
-		this.paintCanvas = function(imageObj,quote,layer,size,startFontSize) {
+		this.paintCanvas = function(imageObj, quote, layer, size, startFontSize) {
 
 			layer.add(that.getImageBackgroud(imageObj, size));
 			layer.add(that.getRectBorder(size));
 			layer.add(that.getAuthorText(quote, size));
 			layer.add(that.getQuoteText(quote, size, startFontSize));
-			layer.add(that.getWatermark(size));
+			layer.add(that.getWatermark(quote, size));
 
 			return layer;
 		};
@@ -247,8 +266,8 @@ angular.module('weQuote.directives', [])
 				visibleKinetic = {
 					stage: new Kinetic.Stage({
 						container: visibleId,
-						width: Screen.getSize(),
-						height: Screen.getSize()
+						width: that.getSize(),
+						height: that.getSize()
 					}),
 					mainLayer: new Kinetic.Layer()
 				};
@@ -267,7 +286,7 @@ angular.module('weQuote.directives', [])
 						generateCard(
 							visibleKinetic,
 							quote,
-							Screen.getSize(),
+							that.getSize(),
 							36);
 					}
 				}, true);

@@ -16,7 +16,6 @@ angular.module('weQuote', [
     $cordovaDevice,
     WeQuote,
     $window,
-    Screen,
     $state,
     $cordovaSplashscreen) {
 

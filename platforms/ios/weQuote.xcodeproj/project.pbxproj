@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		05E628800E764B028B494720 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = ECE4B5C4E1A64548B5F518B9 /* CDVLogger.m */; };
 		08C2DBF92F0F40EFA239D79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0E99A62FB642CE83B93E00 /* Foundation.framework */; };
@@ -703,6 +704,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -731,6 +733,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = weQuote;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -741,6 +744,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "weQuote/weQuote-Prefix.pch";
@@ -767,6 +771,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = weQuote;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
