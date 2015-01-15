@@ -17,6 +17,7 @@ angular.module('weQuote.services', [])
 		misc:14,
 		musica:2,
 		passione:5,
+		sport:3,
 		universo:2,
 		vita:2
 	})
