@@ -12,9 +12,9 @@ angular.module('weQuote.services', [])
 		}
 	}])
 	.constant('Backgrounds',{
-		amore:3,
+		amore:4,
 		fede:2,
-		misc:11,
+		misc:14,
 		musica:2,
 		passione:5,
 		universo:2,
