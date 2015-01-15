@@ -50,7 +50,7 @@ angular.module('weQuote', [
           },
           function() {
             admob.requestAd({
-                'isTesting': true
+                'isTesting': false
               },
               function() {
                 admob.showAd(true);

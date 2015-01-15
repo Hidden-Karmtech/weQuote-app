@@ -14,7 +14,7 @@ angular.module('weQuote.services', [])
 	.constant('Backgrounds',{
 		amore:4,
 		fede:2,
-		misc:14,
+		misc:18,
 		musica:2,
 		passione:5,
 		sport:3,
