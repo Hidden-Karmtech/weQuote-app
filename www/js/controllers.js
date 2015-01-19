@@ -233,9 +233,12 @@ angular.module('weQuote.controllers', [])
 				if (!$scope.sharing) {
 					$scope.sharing = true;
 					$scope.$broadcast('generate-canvas', quote, function(imgData) {
+						
+						$scope.sharing = false;
+						$scope.$apply();
+						
 						QuoteRepository.share(quote, imgData).then(function(result) {
-							$scope.sharing = false;
-							$scope.$apply();
+							$log.debug("Sharing complete");	
 						});
 					});
 				}
