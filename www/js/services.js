@@ -203,7 +203,7 @@ angular.module('weQuote.services', [])
 						if (result) {
 							var params = {
 								quoteId: quote.id,
-								deviceUUID: that.UUID
+								deviceUUID: WeQuote.getUUID()
 							};
 
 							return $http({
