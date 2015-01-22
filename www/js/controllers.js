@@ -13,7 +13,7 @@ angular.module('weQuote.controllers', [])
 			return ionic.Platform.isAndroid();
 		};
 
-		$scope.$on('$stateChangeStart', function(event, toState) {
+		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';
 			$scope.isQuote = toState.name === 'quotes';
 		});
@@ -233,9 +233,12 @@ angular.module('weQuote.controllers', [])
 				if (!$scope.sharing) {
 					$scope.sharing = true;
 					$scope.$broadcast('generate-canvas', quote, function(imgData) {
+						
+						$scope.sharing = false;
+						$scope.$apply();
+						
 						QuoteRepository.share(quote, imgData).then(function(result) {
-							$scope.sharing = false;
-							$scope.$apply();
+							$log.debug("Sharing complete");	
 						});
 					});
 				}

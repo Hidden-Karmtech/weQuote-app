@@ -14,7 +14,7 @@ angular.module('weQuote.services', [])
 	.constant('Backgrounds',{
 		amore:4,
 		fede:2,
-		misc:14,
+		misc:18,
 		musica:2,
 		passione:5,
 		sport:3,
@@ -128,7 +128,8 @@ angular.module('weQuote.services', [])
 		'OfflineData',
 		'$cordovaSocialSharing',
 		'MAX_LEN',
-		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing,MAX_LEN) {
+		'$log',
+		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing,MAX_LEN,$log) {
 			var that = this;
 
 			var filterOfflineQuotes = function(quotes, type, text) {
@@ -202,14 +203,14 @@ angular.module('weQuote.services', [])
 					return $cordovaSocialSharing.share(text, 'weQuote', image, null).then(function(result) {
 						if (result) {
 							var params = {
-								quoteId: quote.id,
-								deviceUUID: that.UUID
+								quoteId: quote['_id'],
+								deviceUUID: WeQuote.getUUID()
 							};
 
 							return $http({
 								method: 'POST',
 								url: SERVER_BASE_URL + 'share',
-								params: params
+								data: params
 							}).then(function(result){
 								return result;
 							},function(){
