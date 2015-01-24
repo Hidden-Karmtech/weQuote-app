@@ -35,12 +35,11 @@ angular.module('weQuote.services', [])
 	}])
 	.constant('Backgrounds', {
 		amore: 4,
-		fede: 2,
-		misc: 18,
-		musica: 2,
+		fede: 3,
+		misc: 21,
+		musica: 3,
 		passione: 5,
-		sport: 3,
-		universo: 2,
+		calcio: 3,
 		vita: 2
 	})
 	.service('BackgroundSelector', ['$log', 'Backgrounds', function($log, Backgrounds) {
