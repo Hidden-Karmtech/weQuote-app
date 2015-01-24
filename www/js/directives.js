@@ -10,7 +10,7 @@ angular.module('weQuote.directives', [])
 			}
 		};
 	}])
-	.directive('quoteCard', ['$log', '$window', function($log, $window) {
+	.directive('quoteCard', ['$log', 'CardSize', function($log, CardSize) {
 
 		var that = this;
 
@@ -31,20 +31,7 @@ angular.module('weQuote.directives', [])
 		var invisibleKinetic;
 		var count = 0;
 
-		this.getSize = function() {
-			var width = Math.floor($window.innerWidth * 95 / 100);
-			var visibleHeight = $window.innerHeight - 44 //Header Bar
-				- 44 //Footer Bar
-				- 44 //Search Bar
-				- 50; //Padding
-
-			var height = Math.floor(visibleHeight * 90 / 100);
-
-			$log.debug("calculated width: " + width);
-			$log.debug("calculated height: " + height);
-
-			return width < height ? width : height;
-		}
+		this.getSize = CardSize.getSize;
 
 		this.getQuoteText = function(quote, size) {
 

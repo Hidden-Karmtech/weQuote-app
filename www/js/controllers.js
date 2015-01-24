@@ -1,5 +1,5 @@
 angular.module('weQuote.controllers', [])
-	.controller('Root', ['$scope', '$state', function($scope, $state) {
+	.controller('Root', ['$scope', '$state','CardSize', function($scope, $state,CardSize) {
 
 		$scope.exit = function() {
 			ionic.Platform.exitApp();
@@ -12,6 +12,8 @@ angular.module('weQuote.controllers', [])
 		$scope.isAndroid = function() {
 			return ionic.Platform.isAndroid();
 		};
+
+		CardSize.init();
 
 		$scope.$on('$stateChangeSuccess', function(event, toState) {
 			$scope.title = toState.title || '#weQuote';

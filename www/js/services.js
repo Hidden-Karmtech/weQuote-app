@@ -2,6 +2,28 @@ angular.module('weQuote.services', [])
 	.constant('SERVER_BASE_URL', 'https://api-wequote.rhcloud.com/')
 	.constant('MAX_LEN', 200)
 	.value('QuotesState', {})
+	.service('CardSize', ['$window', '$log', function($window, $log) {
+		var that = this;
+		return {
+			init: function() {
+				var width = Math.floor($window.innerWidth * 95 / 100);
+				var visibleHeight = $window.innerHeight - 44 //Header Bar
+					- 44 //Footer Bar
+					- 44 //Search Bar
+					- 50; //Padding
+
+				var height = Math.floor(visibleHeight * 90 / 100);
+
+				$log.debug("calculated width: " + width);
+				$log.debug("calculated height: " + height);
+
+				that.size = width < height ? width : height;
+			},
+			getSize: function() {
+				return that.size;
+			}
+		}
+	}])
 	.service('OfflineData', ['$http', '$log', function($http, $log) {
 		return {
 			get: function() {
@@ -11,47 +33,47 @@ angular.module('weQuote.services', [])
 			}
 		}
 	}])
-	.constant('Backgrounds',{
-		amore:4,
-		fede:2,
-		misc:18,
-		musica:2,
-		passione:5,
-		sport:3,
-		universo:2,
-		vita:2
+	.constant('Backgrounds', {
+		amore: 4,
+		fede: 2,
+		misc: 18,
+		musica: 2,
+		passione: 5,
+		sport: 3,
+		universo: 2,
+		vita: 2
 	})
-	.service('BackgroundSelector', ['$log','Backgrounds', function($log,Backgrounds) {
+	.service('BackgroundSelector', ['$log', 'Backgrounds', function($log, Backgrounds) {
 		var that = this;
 
 		this.lastUrl = null;
 
-		var calculateBackground = function(quote){
-			var tagName = quote.tags[_.random(0,quote.tags.length-1)].name;
+		var calculateBackground = function(quote) {
+			var tagName = quote.tags[_.random(0, quote.tags.length - 1)].name;
 
 			$log.debug("using tag " + tagName);
 
 			var count = Backgrounds[tagName];
-			if(!count){
+			if (!count) {
 				$log.debug("tag " + tagName + " not valid using misc");
 				tagName = 'misc';
 				count = Backgrounds.misc;
 			}
 
-			var toReturn = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0,count-1), 3, '0') + '.jpg';
+			var toReturn = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0, count - 1), 3, '0') + '.jpg';
 
 			$log.debug(toReturn);
 
 			return toReturn;
-				
+
 		};
 
 		return {
-			newBackground:function(quote){
+			newBackground: function(quote) {
 				var url;
-				do{
+				do {
 					url = calculateBackground(quote);
-				}while(url === that.lastUrl);
+				} while (url === that.lastUrl);
 
 				that.lastUrl = url;
 
@@ -129,7 +151,7 @@ angular.module('weQuote.services', [])
 		'$cordovaSocialSharing',
 		'MAX_LEN',
 		'$log',
-		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing,MAX_LEN,$log) {
+		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing, MAX_LEN, $log) {
 			var that = this;
 
 			var filterOfflineQuotes = function(quotes, type, text) {
@@ -211,9 +233,9 @@ angular.module('weQuote.services', [])
 								method: 'POST',
 								url: SERVER_BASE_URL + 'share',
 								data: params
-							}).then(function(result){
+							}).then(function(result) {
 								return result;
-							},function(){
+							}, function() {
 								return false;
 							})
 						}
@@ -232,7 +254,7 @@ angular.module('weQuote.services', [])
 		'WeQuote',
 		'OfflineData',
 		'MAX_LEN',
-		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData,MAX_LEN) {
+		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData, MAX_LEN) {
 			var that = this;
 
 			var getOfflineListPromise = function(params) {
@@ -262,8 +284,8 @@ angular.module('weQuote.services', [])
 				return $http({
 					method: 'GET',
 					url: SERVER_BASE_URL + 'authors',
-					params:{
-						maxlen:MAX_LEN
+					params: {
+						maxlen: MAX_LEN
 					}
 				}).then(function(response) {
 					return response.data;
@@ -295,7 +317,7 @@ angular.module('weQuote.services', [])
 		'WeQuote',
 		'OfflineData',
 		'MAX_LEN',
-		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData,MAX_LEN) {
+		function($http, SERVER_BASE_URL, $log, WeQuote, OfflineData, MAX_LEN) {
 			var that = this;
 
 			var getOfflineListPromise = function(params) {
@@ -328,8 +350,8 @@ angular.module('weQuote.services', [])
 				return $http({
 					method: 'GET',
 					url: SERVER_BASE_URL + 'tags',
-					params:{
-						maxlen:MAX_LEN
+					params: {
+						maxlen: MAX_LEN
 					}
 				}).then(function(response) {
 					return response.data;
