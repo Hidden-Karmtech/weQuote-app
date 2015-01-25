@@ -29,3 +29,4 @@ platforms/android/build.xml
 platforms/android/local.properties
 platforms/android/proguard-project.txt
 platforms/android/VERSION
+secrets.js

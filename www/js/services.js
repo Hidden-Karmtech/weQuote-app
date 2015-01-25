@@ -1,6 +1,4 @@
 angular.module('weQuote.services', [])
-	.constant('SERVER_BASE_URL', 'https://api-wequote.rhcloud.com/')
-	.constant('MAX_LEN', 200)
 	.value('QuotesState', {})
 	.service('CardSize', ['$window', '$log', function($window, $log) {
 		var that = this;

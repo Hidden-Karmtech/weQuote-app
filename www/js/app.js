@@ -3,6 +3,7 @@ angular.module('weQuote', [
     'weQuote.controllers',
     'weQuote.services',
     'weQuote.directives',
+    'weQuote.secrets',
     'ngCordova',
     'pasvaz.bindonce'
   ])
@@ -17,7 +18,9 @@ angular.module('weQuote', [
     WeQuote,
     $window,
     $state,
-    $cordovaSplashscreen) {
+    $cordovaSplashscreen,
+    ANDROID_ADMOB,
+    IOS_ADMOB) {
 
     //Add Paginate function to lodash
     _.mixin({
@@ -41,7 +44,7 @@ angular.module('weQuote', [
       window.backButtonClick = 0;
 
       if (window.plugins && window.plugins.AdMob) {
-        var admob_key = ionic.Platform.isAndroid() ? "ca-app-pub-2603547889798705/4397541472" : "ca-app-pub-2603547889798705/9225877072";
+        var admob_key = ionic.Platform.isAndroid() ? ANDROID_ADMOB : IOS_ADMOB;
         var admob = window.plugins.AdMob;
         admob.createBannerView({
             'publisherId': admob_key,
