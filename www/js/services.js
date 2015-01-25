@@ -48,20 +48,34 @@ angular.module('weQuote.services', [])
 		this.lastUrl = null;
 
 		var calculateBackground = function(quote) {
-			var tagName = quote.tags[_.random(0, quote.tags.length - 1)].name;
+			var validFiles = [];
+			var i = 0;
 
-			$log.debug("using tag " + tagName);
+			var validTags = _.filter(quote.tags,function(tag){
+				return Backgrounds[tag.name];
+			}); 
 
-			var count = Backgrounds[tagName];
-			if (!count) {
-				$log.debug("tag " + tagName + " not valid using misc");
-				tagName = 'misc';
-				count = Backgrounds.misc;
+			if(validTags.length){
+				validTags = _.map(validTags,function(tag){
+					return tag.name;
+				});
+			}else{
+				validTags = ['misc'];
 			}
 
-			var toReturn = 'img/backgrounds/' + tagName + '/' + _.str.pad(_.random(0, count - 1), 3, '0') + '.jpg';
+			_.each(validTags,function(tag){
+				var count = Backgrounds[tag];
 
-			$log.debug(toReturn);
+				if(count){
+					for(i=0;i<count;i++){
+						validFiles.push(tag + '/' + _.str.pad(i, 3, '0') + '.jpg');
+					}
+				}
+			});
+
+			var toReturn = 'img/backgrounds/' + validFiles[_.random(0, validFiles.length - 1)];
+
+			$log.debug("Using Background " + toReturn);
 
 			return toReturn;
 
