@@ -54,7 +54,7 @@ angular.module('weQuote.controllers', [])
 						return object;
 					});
 
-					$scope.sortAlphabetically(results);
+					$scope.sort(results,"name");
 
 					$scope.loaded = true;
 
@@ -84,19 +84,28 @@ angular.module('weQuote.controllers', [])
 				$scope.goTo('quotes');
 			}
 
-			$scope.sortAlphabetically = function(results) {
-				results = results || $scope.data;
-				$scope.data = _.sortBy(results, "name");
-				$scope.sortType = "name";
-				$ionicScrollDelegate.scrollTop(false);
-			};
+			$scope.sort = function(results,sortProperty,descending){
 
-			$scope.sortCount = function(results) {
+				$scope.sortType = sortProperty;
+				$scope.sortDescending = descending;
+
 				results = results || $scope.data;
-				$scope.data = _.sortBy(results, "count").reverse();
-				$scope.sortType = "count";
+				
+				$scope.data = _.sortBy(results,$scope.sortType);
+				if($scope.sortDescending){
+					$scope.data = $scope.data.reverse();
+				}
+
 				$ionicScrollDelegate.scrollTop(false);
-			};
+			}
+
+			$scope.getSortIcon = function(toCheck){
+				if($scope.sortType !== toCheck){
+					return 'sort';
+				}else{
+					return $scope.sortDescending ? 'sort-desc' : 'sort-asc';
+				}
+			}
 
 			$scope.$on('back-button-action', function(event, args) {
 				$scope.goTo('quotes');

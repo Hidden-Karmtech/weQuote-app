@@ -129,11 +129,42 @@ body {
     font-size: 30px !important;
 }
 
+.sort-alpha-asc:before{
+    font-family: 'FontAwesome';
+    content: "\f15d";
+    font-size: 30px !important;
+}
+
+.sort-numeric-asc:before{
+    font-family: 'FontAwesome';
+    content: "\f162";
+    font-size: 30px !important;
+}
+
 .sort-numeric-desc:before{
     font-family: 'FontAwesome';
     content: "\f163";
     font-size: 30px !important;
 }
+
+.sort:before{
+    font-family: 'FontAwesome';
+    content: "\f0dc";
+    font-size: 30px !important;
+}
+
+.sort-asc:before{
+    font-family: 'FontAwesome';
+    content: "\f0de";
+    font-size: 30px !important;
+}
+
+.sort-desc:before{
+    font-family: 'FontAwesome';
+    content: "\f0dd";
+    font-size: 30px !important;
+}
+
 
 .img-responsive{
   display: block;
