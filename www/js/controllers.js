@@ -73,7 +73,7 @@ angular.module('weQuote.controllers', [])
 			});
 
 			$scope.onSubmit = function() {
-				var results = $filter('filter')($scope.data, $scope.query);
+				var results = $filter('filter')($scope.state.data, $scope.query);
 				if (results.length === 1) {
 					$scope.toQuotes(results[0]);
 				}
