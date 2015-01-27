@@ -182,6 +182,7 @@ angular.module('weQuote.controllers', [])
 			if (_.isEmpty($scope.state)) {
 				$scope.state.currentQuote = null;
 				$scope.state.quotes = [];
+				$scope.state.history = [];
 				$scope.state.query = {
 					type: 'search',
 					value: ""
@@ -226,6 +227,9 @@ angular.module('weQuote.controllers', [])
 			};
 
 			var executeGetNextQuote = function() {
+
+				$scope.state.history.push($scope.state.currentQuote);
+
 				$scope.state.currentQuote = null;
 
 				if ($scope.state.quotes.length > 0) {
