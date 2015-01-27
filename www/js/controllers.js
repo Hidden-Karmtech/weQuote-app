@@ -1,5 +1,5 @@
 angular.module('weQuote.controllers', [])
-	.controller('Root', ['$scope', '$state','CardSize', function($scope, $state,CardSize) {
+	.controller('Root', ['$scope', '$state', 'CardSize', function($scope, $state, CardSize) {
 
 		$scope.exit = function() {
 			ionic.Platform.exitApp();
@@ -42,23 +42,34 @@ angular.module('weQuote.controllers', [])
 		'$filter',
 		'Repository',
 		'QueryType',
-		function($scope, $state, QuotesState, $ionicScrollDelegate, $log, $filter, Repository, QueryType) {
+		'ControllerState',
+		function($scope, $state, QuotesState, $ionicScrollDelegate, $log, $filter, Repository, QueryType, ControllerState) {
 
 			var that = this;
 
+			$scope.state = ControllerState;
+
 			$scope.$on('$stateChangeSuccess', function() {
-				$scope.loaded = false;
-				Repository.list().then(function(results) {
-					results = _.map(results, function(object) {
-						object.toPrint = object.name + '(' + object.count + ')';
-						return object;
+				if (!$scope.state.data) {
+
+					$scope.loaded = false;
+
+					Repository.list().then(function(results) {
+						results = _.map(results, function(object) {
+							object.toPrint = object.name + '(' + object.count + ')';
+							return object;
+						});
+
+						$scope.sort(results, "name");
+
+						$scope.loaded = true;
+
 					});
 
-					$scope.sort(results,"name");
+				}else{
 
 					$scope.loaded = true;
-
-				});
+				}
 			});
 
 			$scope.onSubmit = function() {
@@ -84,26 +95,31 @@ angular.module('weQuote.controllers', [])
 				$scope.goTo('quotes');
 			}
 
-			$scope.sort = function(results,sortProperty,descending){
-
-				$scope.sortType = sortProperty;
-				$scope.sortDescending = descending;
-
-				results = results || $scope.data;
+			$scope.sort = function(results, sortProperty, descending) {
 				
-				$scope.data = _.sortBy(results,$scope.sortType);
-				if($scope.sortDescending){
-					$scope.data = $scope.data.reverse();
+				//If the property has changed, Use the default property Ordering
+				if(sortProperty !== $scope.state.sortType){
+					descending = sortProperty === 'name' ? false : true;
+					$scope.state.sortType = sortProperty;
+				}
+				
+				$scope.state.sortDescending = descending;
+
+				results = results || $scope.state.data;
+
+				$scope.state.data = _.sortBy(results, $scope.state.sortType);
+				if ($scope.state.sortDescending) {
+					$scope.state.data = $scope.state.data.reverse();
 				}
 
 				$ionicScrollDelegate.scrollTop(false);
 			}
 
-			$scope.getSortIcon = function(toCheck){
-				if($scope.sortType !== toCheck){
+			$scope.getSortIcon = function(toCheck) {
+				if ($scope.state.sortType !== toCheck) {
 					return 'sort';
-				}else{
-					return $scope.sortDescending ? 'sort-desc' : 'sort-asc';
+				} else {
+					return $scope.state.sortDescending ? 'sort-desc' : 'sort-asc';
 				}
 			}
 
@@ -117,11 +133,13 @@ angular.module('weQuote.controllers', [])
 		'$scope',
 		'TagRepository',
 		'$controller',
-		function($scope, TagRepository, $controller) {
+		'TagsState',
+		function($scope, TagRepository, $controller,TagsState) {
 			angular.extend(this, $controller('BaseListController', {
 				'$scope': $scope,
 				QueryType: 'tag',
-				Repository: TagRepository
+				Repository: TagRepository,
+				ControllerState:TagsState
 			}));
 		}
 	])
@@ -129,12 +147,13 @@ angular.module('weQuote.controllers', [])
 		'$scope',
 		'AuthorRepository',
 		'$controller',
-
-		function($scope, AuthorRepository, $controller) {
+		'AuthorsState',
+		function($scope, AuthorRepository, $controller,AuthorsState) {
 			angular.extend(this, $controller('BaseListController', {
 				'$scope': $scope,
 				QueryType: 'author',
-				Repository: AuthorRepository
+				Repository: AuthorRepository,
+				ControllerState:AuthorsState
 			}));
 		}
 	])
@@ -244,12 +263,12 @@ angular.module('weQuote.controllers', [])
 				if (!$scope.sharing) {
 					$scope.sharing = true;
 					$scope.$broadcast('generate-canvas', quote, function(imgData) {
-						
+
 						$scope.sharing = false;
 						$scope.$apply();
-						
+
 						QuoteRepository.share(quote, imgData).then(function(result) {
-							$log.debug("Sharing complete");	
+							$log.debug("Sharing complete");
 						});
 					});
 				}
@@ -286,7 +305,7 @@ angular.module('weQuote.controllers', [])
 				});
 			}
 
-			var takePhoto = function(cameraMode){
+			var takePhoto = function(cameraMode) {
 				var options = {
 					quality: 100,
 					destinationType: Camera.DestinationType.DATA_URL,
@@ -310,36 +329,31 @@ angular.module('weQuote.controllers', [])
 			$scope.showMenu = function() {
 
 				var callbacks = [
-					function(){
+					function() {
 						takePhoto(true);
 					},
-					function(){
+					function() {
 						takePhoto(false);
 					},
-					function(){
+					function() {
 						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.currentQuote);
 					},
-					function(){
+					function() {
 						var color = $scope.state.currentQuote.fontColor || '#FFFFFF';
 						$scope.state.currentQuote.fontColor = color === '#FFFFFF' ? '#000000' : '#FFFFFF';
 					}
 				];
 
 				$ionicActionSheet.show({
-					buttons: [
-						{
-							text: 'Scatta Foto'
-						}, 
-						{
-							text: 'Foto Galleria'
-						},
-						{
-							text: 'Cambia Sfondo'
-						},
-						{
-							text: 'Cambia Colore Testo'
-						}
-					],
+					buttons: [{
+						text: 'Scatta Foto'
+					}, {
+						text: 'Foto Galleria'
+					}, {
+						text: 'Cambia Sfondo'
+					}, {
+						text: 'Cambia Colore Testo'
+					}],
 					cancelText: 'Annulla',
 					buttonClicked: function(index) {
 						callbacks[index]();

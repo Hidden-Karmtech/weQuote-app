@@ -27,7 +27,7 @@
       <div 
         ng-click="toQuotes(object)" 
         class="item important-royal my-item" 
-        collection-repeat="object in data | filter:query" 
+        collection-repeat="object in state.data | filter:query" 
         collection-item-width="'100%'" 
         collection-item-height="50" 
         ng-style="{height: 50}">
@@ -37,7 +37,7 @@
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
-        <a class="button button-icon" ng-click="sort(null,'name',!sortDescending);">
+        <a class="button button-icon" ng-click="sort(null,'name',!state.sortDescending);">
           <i 
             class="icon royal"
             ng-class="getSortIcon('name')"></i>
@@ -45,7 +45,7 @@
         </a>
         <a 
           class="button button-icon" 
-          ng-click="sort(null,'count',!sortDescending);">
+          ng-click="sort(null,'count',!state.sortDescending);">
           <i 
             class="icon royal"
             ng-class="getSortIcon('count')"></i>

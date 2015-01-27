@@ -2,7 +2,7 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="it.hkt.wequote" version="1.0.1" android-versionCode="10012" ios-CFBundleVersion="1.0.0.12">
   <name>weQuote</name>
   <description>
-        weQuote. Together.
+        weQuote. Happy Quoting.
     </description>
   <author email="hkt@wequote.it" href="http://www.wequote.it/">
         HKT
