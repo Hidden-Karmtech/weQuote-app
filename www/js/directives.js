@@ -33,97 +33,39 @@ angular.module('weQuote.directives', [])
 
 		this.getSize = CardSize.getSize;
 
-		this.getQuoteText = function(quote, size) {
+		var EmptyCard = function(canvasId,size){
 
-			var startFontSize = size * (START_FONT_SIZE / 100);
-			var xOffset = size * (TEXT_X_OFFSET / 100);
-			var fontColor = quote.fontColor || '#FFFFFF';
+			var strokeWidth = size * (BORDER_WIDTH / 100);
 
-			var generateText = function(text, fontSize, size) {
-				return new Kinetic.Text({
-					text: text,
-					fontSize: fontSize,
-					fontFamily: 'Lobster',
-					fill: fontColor,
-					x: xOffset,
-					width: size - (xOffset * 2),
-					padding: 0,
-					align: 'center'
-				});
-			};
-
-			var HeightThreshold = size * (HEIGHT_THRESHOLD / 100);
-			var quoteText;
-			var fontSize;
-			var textHeight;
-
-			do {
-				$log.debug("Generating text with font " + fontSize);
-
-				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
-				quoteText = generateText(quote.text, fontSize, size);
-				textHeight = quoteText.getAttr('height');
-
-				$log.debug("text height " + textHeight);
-			} while (textHeight > HeightThreshold)
-
-			//Y center
-			quoteText.setAttr('y', (size - textHeight) / 2);
-
-			return quoteText;
-		};
-
-		this.getWatermark = function(quote, size) {
-
-			var offset = size * (WATERMARK_OFFSET / 100);
-			var fontSize = size * (WATERMARK_FONT_SIZE / 100);
-			var fontColor = quote.fontColor || '#FFFFFF';
-
-			var watermark = new Kinetic.Text({
-				text: 'wequote.it',
-				fontSize: fontSize,
-				x: offset,
-				y: offset,
-				fontFamily: 'Lobster',
-				fill: fontColor,
+			var stage = new Kinetic.Stage({
+				container: canvasId,
 				width: size,
-				padding: 0,
-				align: 'left'
+				height: size
 			});
 
-			return watermark;
-		};
+			var	layer = new Kinetic.Layer();
 
-		this.getAuthorText = function(quote, size) {
-
-			var fontSize = size * (AUTHOR_FONT_SIZE / 100);
-			var fontColor = quote.fontColor || '#FFFFFF';
-
-			var autorText = new Kinetic.Text({
-				text: quote.author,
-				fontSize: fontSize,
+			var textCanvas = new Kinetic.Text({
 				fontFamily: 'Lobster',
-				fill: fontColor,
-				width: size,
 				padding: 0,
 				align: 'center'
 			});
 
-			//Stick to bottom
+			var watermark = new Kinetic.Text({
+				text: 'wequote.it',
+				fontFamily: 'Lobster',
+				padding: 0,
+				align: 'left'
+			});
 
-			var yOffset = size * (AUTHOR_OFFSET / 100);
 
-			var textHeight = autorText.getAttr('height');
-			autorText.setAttr('y', size - textHeight - yOffset);
-
-			return autorText;
-		};
-
-		this.getRectBorder = function(size) {
-
-			var strokeWidth = size * (BORDER_WIDTH / 100);
-
-			return new Kinetic.Image({
+			var	authorText = new Kinetic.Text({
+				fontFamily: 'Lobster',
+				padding: 0,
+				align: 'center'
+			});
+			
+			var rectBorder = new Kinetic.Image({
 				x: 0,
 				y: 0,
 				width: size,
@@ -132,28 +74,107 @@ angular.module('weQuote.directives', [])
 				stroke: '#98A4D7',
 				strokeWidth: strokeWidth
 			});
-		}
 
-		this.getImageBackgroud = function(imgElement, size) {
-			return new Kinetic.Image({
+			var imageBackground = new Kinetic.Image({
 				x: 0,
 				y: 0,
-				image: imgElement,
 				width: size,
 				height: size
 			});
-		}
 
-		var generateCard = function(kineticArea, quote, size, startFontSize, callback) {
+			layer.add(imageBackground);
+			layer.add(rectBorder);
+			layer.add(authorText);
+			layer.add(textCanvas);
+			layer.add(watermark);
+
+			stage.add(layer);
+
+			return {
+				stage:stage,
+				mainLayer:layer,
+				textCanvas:textCanvas,
+				imageBackground:imageBackground,
+				rectBorder:rectBorder,
+				authorText:authorText,
+				watermark:watermark,
+				size:size
+			};
+		};
+
+		this.printQuoteText = function(area, quote) {
+
+			var startFontSize = area.size * (START_FONT_SIZE / 100);
+			var xOffset = area.size * (TEXT_X_OFFSET / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			var printText = function(text, fontSize, size) {
+				
+				area.textCanvas.text(text);
+				area.textCanvas.fontSize(fontSize);
+				area.textCanvas.fill(fontColor);
+				area.textCanvas.x(xOffset);
+				area.textCanvas.width(size - (xOffset * 2));
+
+			};
+
+			var HeightThreshold = area.size * (HEIGHT_THRESHOLD / 100);
+			var fontSize;
+			var textHeight;
+
+			do {
+				$log.debug("Generating text with font " + fontSize);
+
+				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
+				printText(quote.text, fontSize, area.size);
+				textHeight = area.textCanvas.getAttr('height');
+
+				$log.debug("text height " + textHeight);
+			} while (textHeight > HeightThreshold)
+
+			//Y center
+			area.textCanvas.setAttr('y', (area.size - textHeight) / 2);
+		};
+
+		this.printWatermark = function(area, quote) {
+
+			var watermark = area.watermark;
+			var offset = area.size * (WATERMARK_OFFSET / 100);
+			var fontSize = area.size * (WATERMARK_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			watermark.fontSize(fontSize);
+			watermark.x(offset);
+			watermark.y(offset);
+			watermark.fill(fontColor);
+			watermark.width(area.size);
+		};
+
+		this.printAuthorText = function(area, quote) {
+
+			var authorText = area.authorText;
+			var fontSize = area.size * (AUTHOR_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			authorText.text(quote.author);
+			authorText.fontSize(fontSize);
+			authorText.fill(fontColor);
+			authorText.width(area.size);
+
+			//Stick to bottom
+
+			var yOffset = area.size * (AUTHOR_OFFSET / 100);
+
+			var textHeight = authorText.getAttr('height');
+			authorText.y(area.size - textHeight - yOffset);
+		};
+
+		var generateCard = function(kineticArea, quote, startFontSize, callback) {
 
 			var stage = kineticArea.stage;
 
 			count++;
 			$log.debug("Generating Canvas " + count);
-
-			stage.removeChildren();
-			stage.clearCache();
-			Kinetic.shapes = {};
 
 			var imageObj = new Image();
 
@@ -162,7 +183,7 @@ angular.module('weQuote.directives', [])
 					that.cropImage(imageObj);
 				} else {
 
-					stage.add(that.paintCanvas(imageObj, quote, kineticArea.mainLayer, size, startFontSize));
+					that.paintCanvas(kineticArea, imageObj, quote, startFontSize);
 
 					if (callback) {
 						stage.toDataURL({
@@ -228,15 +249,16 @@ angular.module('weQuote.directives', [])
 			imageObj.src = canvas.toDataURL();
 		};
 
-		this.paintCanvas = function(imageObj, quote, layer, size, startFontSize) {
+		//kineticArea, imageObj, quote, startFontSize
+		this.paintCanvas = function(area,imageObj, quote, startFontSize) {
 
-			layer.add(that.getImageBackgroud(imageObj, size));
-			layer.add(that.getRectBorder(size));
-			layer.add(that.getAuthorText(quote, size));
-			layer.add(that.getQuoteText(quote, size, startFontSize));
-			layer.add(that.getWatermark(quote, size));
+			area.imageBackground.image(imageObj);
+			that.printAuthorText(area,quote);
+			that.printQuoteText(area,quote);
+			that.printWatermark(area,quote);
 
-			return layer;
+			area.stage.draw();
+
 		};
 
 		return {
@@ -250,31 +272,16 @@ angular.module('weQuote.directives', [])
 
 				$log.debug("Linking directive");
 
-				visibleKinetic = {
-					stage: new Kinetic.Stage({
-						container: visibleId,
-						width: that.getSize(),
-						height: that.getSize()
-					}),
-					mainLayer: new Kinetic.Layer()
-				};
-
-				invisibleKinetic = {
-					stage: new Kinetic.Stage({
-						container: hiddenId,
-						width: 1000,
-						height: 1000
-					}),
-					mainLayer: new Kinetic.Layer()
-				};
-
+				visibleKinetic = new EmptyCard(visibleId,that.getSize());
+				invisibleKinetic = new EmptyCard(hiddenId,1000);
+				
 				$scope.$watch('quote', function(quote) {
 					if (quote && quote.url) {
 						generateCard(
 							visibleKinetic,
 							quote,
-							that.getSize(),
-							36);
+							36
+						);
 					}
 				}, true);
 
@@ -282,7 +289,6 @@ angular.module('weQuote.directives', [])
 					generateCard(
 						invisibleKinetic,
 						quote,
-						1000,
 						104,
 						callback);
 				});
