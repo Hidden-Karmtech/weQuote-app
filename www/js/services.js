@@ -26,10 +26,11 @@ angular.module('weQuote.services', [])
 	}])
 	.service('CardGenerator', ['$log','CardSize', function($log,CardSize) {
 		
+		var FONT = "Lobster";
 		var TEXT_SCALE_FACTOR = 0.9;
 		var TEXT_X_OFFSET = 3;
 		var WATERMARK_OFFSET = 3;
-		var AUTHOR_OFFSET = 7;
+		var AUTHOR_OFFSET = 14;
 		var WATERMARK_FONT_SIZE = 4.5;
 		var AUTHOR_FONT_SIZE = 7;
 		var BORDER_WIDTH = 3.5;
@@ -44,11 +45,9 @@ angular.module('weQuote.services', [])
 
 			var printText = function(text, fontSize, size) {
 				
-				area.textCanvas.text(text);
-				area.textCanvas.fontSize(fontSize);
-				area.textCanvas.fill(fontColor);
-				area.textCanvas.x(xOffset);
-				area.textCanvas.width(size - (xOffset * 2));
+				area.quoteText.text = text;
+				area.quoteText.font = fontSize + "px " + FONT;
+				area.quoteText.color = fontColor;
 
 			};
 
@@ -57,27 +56,35 @@ angular.module('weQuote.services', [])
 			var textHeight;
 
 			do {
+				
 				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
 				printText(quote.text, fontSize, area.size);
-				textHeight = area.textCanvas.getAttr('height');
+				textHeight = area.quoteText.getBounds().height;
+
 			} while (textHeight > HeightThreshold)
 
-			//Y center
-			area.textCanvas.setAttr('y', (area.size - textHeight) / 2);
+			//Center
+
+			area.quoteText.y = (area.size - textHeight) / 2;
+			area.quoteText.x = area.size / 2;
 		};
 
 		var printWatermark = function(area, quote) {
 
 			var watermark = area.watermark;
-			var offset = area.size * (WATERMARK_OFFSET / 100);
-			var fontSize = area.size * (WATERMARK_FONT_SIZE / 100);
 			var fontColor = quote.fontColor || '#FFFFFF';
+			watermark.color = fontColor;
 
-			watermark.fontSize(fontSize);
-			watermark.x(offset);
-			watermark.y(offset);
-			watermark.fill(fontColor);
-			watermark.width(area.size);
+		};
+
+		var printImage = function(area, imageObj) {
+			var scaleFactor = area.size / imageObj.naturalWidth;
+
+			var matrix = new createjs.Matrix2D();
+			matrix.scale(scaleFactor, scaleFactor);
+
+			area.imageBackground.graphics.beginBitmapFill(imageObj, 'no-repeat', matrix).drawRect(0, 0, area.size, area.size);
+
 		};
 
 		var printAuthorText = function(area, quote) {
@@ -86,98 +93,82 @@ angular.module('weQuote.services', [])
 			var fontSize = area.size * (AUTHOR_FONT_SIZE / 100);
 			var fontColor = quote.fontColor || '#FFFFFF';
 
-			authorText.text(quote.author);
-			authorText.fontSize(fontSize);
-			authorText.fill(fontColor);
-			authorText.width(area.size);
+			authorText.text = quote.author;
+			authorText.font = fontSize + "px " + FONT;
+			authorText.color = fontColor;
 
 			//Stick to bottom
 
 			var yOffset = area.size * (AUTHOR_OFFSET / 100);
 
-			var textHeight = authorText.getAttr('height');
-			authorText.y(area.size - textHeight - yOffset);
+			authorText.y = area.size - yOffset;
+			authorText.x = area.size / 2;
 		};
 
 		return {
 			generateEmptyCard: function(containerId, size) {
 
+				var canvasElement = angular.element(document.getElementById(containerId));
+
 				var size = size || CardSize.getSize();
+
+				canvasElement.attr('width',size);
+				canvasElement.attr('height',size);
 
 				var strokeWidth = size * (BORDER_WIDTH / 100);
 
-				var stage = new Kinetic.Stage({
-					container: containerId,
-					width: size,
-					height: size
-				});
+				var stage = new createjs.Stage(containerId);
 
-				var layer = new Kinetic.Layer();
+				var imageBackground = new createjs.Shape();
+				imageBackground.setBounds(0,0,size,size);
 
-				var textCanvas = new Kinetic.Text({
-					fontFamily: 'Lobster',
-					padding: 0,
-					align: 'center'
-				});
+				var border = new createjs.Shape();
+				border.graphics.beginStroke("#98A4D7");
+				border.graphics.setStrokeStyle(strokeWidth);
+				border.snapToPixel = true;
+				border.graphics.drawRect(0, 0, size, size);
+				
+				var watermarkOffset = size * (WATERMARK_OFFSET / 100);
+				var watermarkFontSize = size * (WATERMARK_FONT_SIZE / 100);
 
-				var watermark = new Kinetic.Text({
-					text: 'wequote.it',
-					fontFamily: 'Lobster',
-					padding: 0,
-					align: 'left'
-				});
+				var quoteText = new createjs.Text();
+				var quoteTextXOffset = size * (TEXT_X_OFFSET / 100);
+				quoteText.lineWidth = size - (quoteTextXOffset * 2);
+				quoteText.textAlign = "center";
 
+				var authorText = new createjs.Text();
+				authorText.textAlign = "center";
 
-				var authorText = new Kinetic.Text({
-					fontFamily: 'Lobster',
-					padding: 0,
-					align: 'center'
-				});
-
-				var rectBorder = new Kinetic.Image({
-					x: 0,
-					y: 0,
-					width: size,
-					height: size,
-					fillAlpha: 0,
-					stroke: '#98A4D7',
-					strokeWidth: strokeWidth
-				});
-
-				var imageBackground = new Kinetic.Image({
-					x: 0,
-					y: 0,
-					width: size,
-					height: size
-				});
-
-				layer.add(imageBackground);
-				layer.add(rectBorder);
-				layer.add(authorText);
-				layer.add(textCanvas);
-				layer.add(watermark);
-
-				stage.add(layer);
+				var watermark = new createjs.Text('wequote.it');
+				watermark.textAlign = 'left';
+				watermark.x = watermarkOffset;
+				watermark.y = watermarkOffset;
+				watermark.font = watermarkFontSize + "px " + FONT;
+				
+				stage.addChild(imageBackground);
+				stage.addChild(border);
+				stage.addChild(watermark);
+				stage.addChild(quoteText);
+				stage.addChild(authorText);
 
 				return {
 					stage: stage,
-					mainLayer: layer,
-					textCanvas: textCanvas,
+					quoteText:quoteText,
 					imageBackground: imageBackground,
-					rectBorder: rectBorder,
-					authorText: authorText,
-					watermark: watermark,
+					watermark:watermark,
+					authorText:authorText,
 					size: size
 				};
 			},
 			updateCard: function(area,imageObj, quote, startFontSize) {
-				area.imageBackground.image(imageObj);
 				
-				printAuthorText(area,quote);
+				printImage(area,imageObj);
 				printQuoteText(area,quote);
 				printWatermark(area,quote);
+				printAuthorText(area,quote);
 
-				area.stage.draw();
+				area.stage.update();
+
 			}
 		}
 	}])

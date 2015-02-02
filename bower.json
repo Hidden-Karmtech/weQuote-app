@@ -7,10 +7,10 @@
     "ngCordova": "~0.1.9-alpha",
     "lodash": "2.4.1",
     "underscore.string": "~2.4.0",
-    "kineticjs": "~5.1.0",
     "angular-bindonce": "~0.3.2",
     "ionicons": "~2.0.0",
-    "fontawesome": "~4.2.0"
+    "fontawesome": "~4.2.0",
+    "easeljs": "~0.8.0"
   },
   "overrides": {
     "ionic-contrib-swipe-cards": {
