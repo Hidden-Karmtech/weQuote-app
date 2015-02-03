@@ -60,6 +60,8 @@ angular.module('weQuote.services', [])
 				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
 				printText(quote.text, fontSize, area.size);
 				textHeight = area.textCanvas.getAttr('height');
+
+				$log.debug("Font Ratio: " + (quote.text.length / fontSize));
 			} while (textHeight > HeightThreshold)
 
 			//Y center
