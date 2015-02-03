@@ -147,22 +147,23 @@ angular.module('weQuote.services', [])
 		return {
 			generateEmptyCard: function(containerId, size) {
 
-				var canvasElement = angular.element(document.getElementById(containerId));
-
-				var size = size || CardSize.getSize();
-
-				canvasElement.attr('width',size);
-				canvasElement.attr('height',size);
-
 				var stage = new createjs.Stage(containerId);
 
 				return {
+					containerId:containerId,
 					stage: stage,
-					size: size
+					fixedSize: size
 				};
 			},
 			updateCard: function(area,imageObj, quote, startFontSize) {
 				
+				var canvasElement = angular.element(document.getElementById(area.containerId));
+
+				area.size = area.fixedSize || CardSize.getSize();
+
+				canvasElement.attr('width',area.size);
+				canvasElement.attr('height',area.size);
+
 				area.stage.removeAllChildren()
 
 				printImage(area,imageObj);
