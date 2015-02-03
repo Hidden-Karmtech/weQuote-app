@@ -17,9 +17,9 @@ angular.module('weQuote.directives', [])
 		var visibleId = Math.random().toString(36).substring(8);
 		var hiddenId = Math.random().toString(36).substring(8);
 		var canvasId = Math.random().toString(36).substring(8);
-		var visibleKinetic;
-		var invisibleKinetic;
 		var count = 0;
+		this.imageObj = new Image();
+
 
 		var generateCard = function(kineticArea, quote, startFontSize, callback) {
 
@@ -28,26 +28,24 @@ angular.module('weQuote.directives', [])
 			count++;
 			$log.debug("Generating Canvas " + count);
 
-			var imageObj = new Image();
+			that.imageObj.src = "";
 
-			imageObj.onload = function(x) {
-				if (imageObj.naturalHeight !== imageObj.naturalWidth) {
-					that.cropImage(imageObj);
+			that.imageObj.onload = function(x) {
+				if (that.imageObj.naturalHeight !== that.imageObj.naturalWidth) {
+					that.cropImage(that.imageObj);
 				} else {
 
-					CardGenerator.updateCard(kineticArea, imageObj, quote, startFontSize);
+					CardGenerator.updateCard(kineticArea, that.imageObj, quote, startFontSize);
 
 					if (callback) {
-						stage.toDataURL({
-							callback: callback
-						});
+						callback(stage.toDataURL());
 					}
 
 				}
 
 			};
 
-			imageObj.src = quote.url;
+			that.imageObj.src = quote.url;
 
 		};
 
@@ -103,7 +101,7 @@ angular.module('weQuote.directives', [])
 
 		return {
 			restrict: 'E',
-			template: '<div><div style="z-index:10000" id=' + visibleId + '></div><div style="display:none" id=' + hiddenId + '></div><canvas style="display:none"id=' + canvasId + '></div>',
+			template: '<div><canvas style="z-index:10000" id=' + visibleId + '></canvas><canvas style="display:none" id=' + hiddenId + '></canvas><canvas style="display:none"id=' + canvasId + '></div>',
 			replace: true,
 			scope: {
 				quote: '='
@@ -112,13 +110,13 @@ angular.module('weQuote.directives', [])
 
 				$log.debug("Linking directive");
 
-				visibleKinetic = CardGenerator.generateEmptyCard(visibleId);
-				invisibleKinetic = CardGenerator.generateEmptyCard(hiddenId,1000);
+				that.invisibleKinetic = CardGenerator.generateEmptyCard(hiddenId,1000);
+				that.visibleKinetic = CardGenerator.generateEmptyCard(visibleId);
 				
 				$scope.$watch('quote', function(quote) {
 					if (quote && quote.url) {
 						generateCard(
-							visibleKinetic,
+							that.visibleKinetic,
 							quote,
 							36
 						);
@@ -127,7 +125,7 @@ angular.module('weQuote.directives', [])
 
 				$scope.$on('generate-canvas', function(event, quote, callback) {
 					generateCard(
-						invisibleKinetic,
+						that.invisibleKinetic,
 						quote,
 						104,
 						callback);
