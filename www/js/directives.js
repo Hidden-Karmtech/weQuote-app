@@ -18,6 +18,8 @@ angular.module('weQuote.directives', [])
 		var hiddenId = Math.random().toString(36).substring(8);
 		var canvasId = Math.random().toString(36).substring(8);
 		var count = 0;
+		this.imageObj = new Image();
+
 
 		var generateCard = function(kineticArea, quote, startFontSize, callback) {
 
@@ -26,14 +28,14 @@ angular.module('weQuote.directives', [])
 			count++;
 			$log.debug("Generating Canvas " + count);
 
-			var imageObj = new Image();
+			that.imageObj.src = "";
 
-			imageObj.onload = function(x) {
-				if (imageObj.naturalHeight !== imageObj.naturalWidth) {
-					that.cropImage(imageObj);
+			that.imageObj.onload = function(x) {
+				if (that.imageObj.naturalHeight !== that.imageObj.naturalWidth) {
+					that.cropImage(that.imageObj);
 				} else {
 
-					CardGenerator.updateCard(kineticArea, imageObj, quote, startFontSize);
+					CardGenerator.updateCard(kineticArea, that.imageObj, quote, startFontSize);
 
 					if (callback) {
 						callback(stage.toDataURL());
@@ -43,7 +45,7 @@ angular.module('weQuote.directives', [])
 
 			};
 
-			imageObj.src = quote.url;
+			that.imageObj.src = quote.url;
 
 		};
 
