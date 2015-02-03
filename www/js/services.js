@@ -24,6 +24,158 @@ angular.module('weQuote.services', [])
 			}
 		}
 	}])
+	.service('CardGenerator', ['$log','CardSize', function($log,CardSize) {
+		
+		var FONT = "Lobster";
+		var TEXT_SCALE_FACTOR = 0.9;
+		var TEXT_X_OFFSET = 3;
+		var WATERMARK_OFFSET = 3;
+		var AUTHOR_OFFSET = 14;
+		var WATERMARK_FONT_SIZE = 4.5;
+		var AUTHOR_FONT_SIZE = 7;
+		var BORDER_WIDTH = 3.5;
+		var HEIGHT_THRESHOLD = 60;
+		var START_FONT_SIZE = 10;
+
+		var printBorder = function(area,quote){
+
+			var strokeWidth = area.size * (BORDER_WIDTH / 100);
+
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			var border = new createjs.Shape();
+
+			border.graphics.beginStroke(fontColor);
+			border.graphics.setStrokeStyle(strokeWidth);
+			border.snapToPixel = true;
+			border.graphics.drawRect(0, 0, area.size, area.size);
+
+			area.stage.addChild(border);
+		}
+
+		var printQuoteText = function(area, quote) {
+
+			var quoteText = new createjs.Text();
+
+			var startFontSize = area.size * (START_FONT_SIZE / 100);
+			var xOffset = area.size * (TEXT_X_OFFSET / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
+			var quoteTextXOffset = area.size * (TEXT_X_OFFSET / 100);
+			var HeightThreshold = area.size * (HEIGHT_THRESHOLD / 100);
+			var fontSize;
+			var textHeight;
+
+			var printText = function(text, fontSize, size) {
+				
+				quoteText.text = text;
+				quoteText.font = fontSize + "px " + FONT;
+				quoteText.color = fontColor;
+
+			};
+
+			quoteText.lineWidth = area.size - (quoteTextXOffset * 2);
+			quoteText.textAlign = "center";
+
+			do {
+				
+				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
+				printText(quote.text, fontSize, area.size);
+				textHeight = quoteText.getBounds().height;
+
+			} while (textHeight > HeightThreshold)
+
+			//Center
+
+			quoteText.y = (area.size - textHeight) / 2;
+			quoteText.x = area.size / 2;
+
+			area.stage.addChild(quoteText);
+		};
+
+		var printWatermark = function(area, quote) {
+
+			var watermarkOffset = area.size * (WATERMARK_OFFSET / 100);
+			var watermarkFontSize = area.size * (WATERMARK_FONT_SIZE / 100);
+			var watermark = new createjs.Text('wequote.it');
+			watermark.textAlign = 'left';
+			watermark.x = watermarkOffset;
+			watermark.y = watermarkOffset;
+			watermark.font = watermarkFontSize + "px " + FONT;
+			watermark.color = quote.fontColor || '#FFFFFF';
+
+			area.stage.addChild(watermark);
+
+		};
+
+		var printImage = function(area, imageObj) {
+
+			var scaleFactor = area.size / imageObj.naturalWidth;
+
+			var imageBackground = new createjs.Shape();
+			imageBackground.setBounds(0,0,area.size,area.size);
+
+			var matrix = new createjs.Matrix2D();
+			matrix.scale(scaleFactor, scaleFactor);
+
+			imageBackground.graphics.beginBitmapFill(imageObj, 'no-repeat', matrix).drawRect(0, 0, area.size, area.size);
+
+			area.stage.addChild(imageBackground);
+
+		};
+
+		var printAuthorText = function(area, quote) {
+
+			var authorText = new createjs.Text();
+			var fontSize = area.size * (AUTHOR_FONT_SIZE / 100);
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			authorText.textAlign = "center";
+			authorText.text = quote.author;
+			authorText.font = fontSize + "px " + FONT;
+			authorText.color = fontColor;
+
+			//Stick to bottom
+
+			var yOffset = area.size * (AUTHOR_OFFSET / 100);
+
+			authorText.y = area.size - yOffset;
+			authorText.x = area.size / 2;
+
+			area.stage.addChild(authorText);
+		};
+
+		return {
+			generateEmptyCard: function(containerId, size) {
+
+				var canvasElement = angular.element(document.getElementById(containerId));
+
+				var size = size || CardSize.getSize();
+
+				canvasElement.attr('width',size);
+				canvasElement.attr('height',size);
+
+				var stage = new createjs.Stage(containerId);
+
+				return {
+					stage: stage,
+					size: size
+				};
+			},
+			updateCard: function(area,imageObj, quote, startFontSize) {
+				
+				area.stage.removeAllChildren()
+
+				printImage(area,imageObj);
+				printBorder(area,quote);
+				printQuoteText(area,quote);
+				printWatermark(area,quote);
+				printAuthorText(area,quote);
+
+				area.stage.update();
+
+			}
+		}
+	}])
 	.service('OfflineData', ['$http', '$log', function($http, $log) {
 		return {
 			get: function() {
@@ -51,23 +203,23 @@ angular.module('weQuote.services', [])
 			var validFiles = [];
 			var i = 0;
 
-			var validTags = _.filter(quote.tags,function(tag){
+			var validTags = _.filter(quote.tags, function(tag) {
 				return Backgrounds[tag.name];
-			}); 
+			});
 
-			if(validTags.length){
-				validTags = _.map(validTags,function(tag){
+			if (validTags.length) {
+				validTags = _.map(validTags, function(tag) {
 					return tag.name;
 				});
-			}else{
+			} else {
 				validTags = ['misc'];
 			}
 
-			_.each(validTags,function(tag){
+			_.each(validTags, function(tag) {
 				var count = Backgrounds[tag];
 
-				if(count){
-					for(i=0;i<count;i++){
+				if (count) {
+					for (i = 0; i < count; i++) {
 						validFiles.push(tag + '/' + _.str.pad(i, 3, '0') + '.jpg');
 					}
 				}

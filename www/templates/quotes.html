@@ -13,7 +13,7 @@
     </label>
     <button 
     class="button button-icon button-small royal-bg important-light clear-search-button" 
-    ng-disabled="!state.query.value"
+    ng-disabled="loadingQuote || !state.query.value"
     ng-click="clearText()">
         <i class="ion-close-circled"></i>
     </button>

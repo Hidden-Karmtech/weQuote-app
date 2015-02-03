@@ -66,7 +66,7 @@ angular.module('weQuote.controllers', [])
 
 					});
 
-				}else{
+				} else {
 
 					$scope.loaded = true;
 				}
@@ -96,13 +96,13 @@ angular.module('weQuote.controllers', [])
 			}
 
 			$scope.sort = function(results, sortProperty, descending) {
-				
+
 				//If the property has changed, Use the default property Ordering
-				if(sortProperty !== $scope.state.sortType){
+				if (sortProperty !== $scope.state.sortType) {
 					descending = sortProperty === 'name' ? false : true;
 					$scope.state.sortType = sortProperty;
 				}
-				
+
 				$scope.state.sortDescending = descending;
 
 				results = results || $scope.state.data;
@@ -134,12 +134,12 @@ angular.module('weQuote.controllers', [])
 		'TagRepository',
 		'$controller',
 		'TagsState',
-		function($scope, TagRepository, $controller,TagsState) {
+		function($scope, TagRepository, $controller, TagsState) {
 			angular.extend(this, $controller('BaseListController', {
 				'$scope': $scope,
 				QueryType: 'tag',
 				Repository: TagRepository,
-				ControllerState:TagsState
+				ControllerState: TagsState
 			}));
 		}
 	])
@@ -148,12 +148,12 @@ angular.module('weQuote.controllers', [])
 		'AuthorRepository',
 		'$controller',
 		'AuthorsState',
-		function($scope, AuthorRepository, $controller,AuthorsState) {
+		function($scope, AuthorRepository, $controller, AuthorsState) {
 			angular.extend(this, $controller('BaseListController', {
 				'$scope': $scope,
 				QueryType: 'author',
 				Repository: AuthorRepository,
-				ControllerState:AuthorsState
+				ControllerState: AuthorsState
 			}));
 		}
 	])
@@ -266,15 +266,17 @@ angular.module('weQuote.controllers', [])
 			$scope.share = function(quote) {
 				if (!$scope.sharing) {
 					$scope.sharing = true;
-					$scope.$broadcast('generate-canvas', quote, function(imgData) {
+					$timeout(function() {
+						$scope.$broadcast('generate-canvas', quote, function(imgData) {
 
-						$scope.sharing = false;
-						$scope.$apply();
+							$scope.sharing = false;
+							$scope.$apply();
 
-						QuoteRepository.share(quote, imgData).then(function(result) {
-							$log.debug("Sharing complete");
+							QuoteRepository.share(quote, imgData).then(function(result) {
+								$log.debug("Sharing complete");
+							});
 						});
-					});
+					}, 300);
 				}
 			}
 
