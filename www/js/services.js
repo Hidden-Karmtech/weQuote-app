@@ -37,62 +37,99 @@ angular.module('weQuote.services', [])
 		var HEIGHT_THRESHOLD = 60;
 		var START_FONT_SIZE = 10;
 
+		var printBorder = function(area,quote){
+
+			var strokeWidth = area.size * (BORDER_WIDTH / 100);
+
+			var fontColor = quote.fontColor || '#FFFFFF';
+
+			var border = new createjs.Shape();
+
+			border.graphics.beginStroke(fontColor);
+			border.graphics.setStrokeStyle(strokeWidth);
+			border.snapToPixel = true;
+			border.graphics.drawRect(0, 0, area.size, area.size);
+
+			area.stage.addChild(border);
+		}
+
 		var printQuoteText = function(area, quote) {
+
+			var quoteText = new createjs.Text();
 
 			var startFontSize = area.size * (START_FONT_SIZE / 100);
 			var xOffset = area.size * (TEXT_X_OFFSET / 100);
 			var fontColor = quote.fontColor || '#FFFFFF';
-
-			var printText = function(text, fontSize, size) {
-				
-				area.quoteText.text = text;
-				area.quoteText.font = fontSize + "px " + FONT;
-				area.quoteText.color = fontColor;
-
-			};
-
+			var quoteTextXOffset = area.size * (TEXT_X_OFFSET / 100);
 			var HeightThreshold = area.size * (HEIGHT_THRESHOLD / 100);
 			var fontSize;
 			var textHeight;
+
+			var printText = function(text, fontSize, size) {
+				
+				quoteText.text = text;
+				quoteText.font = fontSize + "px " + FONT;
+				quoteText.color = fontColor;
+
+			};
+
+			quoteText.lineWidth = area.size - (quoteTextXOffset * 2);
+			quoteText.textAlign = "center";
 
 			do {
 				
 				fontSize = fontSize ? (fontSize * TEXT_SCALE_FACTOR) : (startFontSize || 36);
 				printText(quote.text, fontSize, area.size);
-				textHeight = area.quoteText.getBounds().height;
+				textHeight = quoteText.getBounds().height;
 
 			} while (textHeight > HeightThreshold)
 
 			//Center
 
-			area.quoteText.y = (area.size - textHeight) / 2;
-			area.quoteText.x = area.size / 2;
+			quoteText.y = (area.size - textHeight) / 2;
+			quoteText.x = area.size / 2;
+
+			area.stage.addChild(quoteText);
 		};
 
 		var printWatermark = function(area, quote) {
 
-			var watermark = area.watermark;
-			var fontColor = quote.fontColor || '#FFFFFF';
-			watermark.color = fontColor;
+			var watermarkOffset = area.size * (WATERMARK_OFFSET / 100);
+			var watermarkFontSize = area.size * (WATERMARK_FONT_SIZE / 100);
+			var watermark = new createjs.Text('wequote.it');
+			watermark.textAlign = 'left';
+			watermark.x = watermarkOffset;
+			watermark.y = watermarkOffset;
+			watermark.font = watermarkFontSize + "px " + FONT;
+			watermark.color = quote.fontColor || '#FFFFFF';
+
+			area.stage.addChild(watermark);
 
 		};
 
 		var printImage = function(area, imageObj) {
+
 			var scaleFactor = area.size / imageObj.naturalWidth;
+
+			var imageBackground = new createjs.Shape();
+			imageBackground.setBounds(0,0,area.size,area.size);
 
 			var matrix = new createjs.Matrix2D();
 			matrix.scale(scaleFactor, scaleFactor);
 
-			area.imageBackground.graphics.beginBitmapFill(imageObj, 'no-repeat', matrix).drawRect(0, 0, area.size, area.size);
+			imageBackground.graphics.beginBitmapFill(imageObj, 'no-repeat', matrix).drawRect(0, 0, area.size, area.size);
+
+			area.stage.addChild(imageBackground);
 
 		};
 
 		var printAuthorText = function(area, quote) {
 
-			var authorText = area.authorText;
+			var authorText = new createjs.Text();
 			var fontSize = area.size * (AUTHOR_FONT_SIZE / 100);
 			var fontColor = quote.fontColor || '#FFFFFF';
 
+			authorText.textAlign = "center";
 			authorText.text = quote.author;
 			authorText.font = fontSize + "px " + FONT;
 			authorText.color = fontColor;
@@ -103,6 +140,8 @@ angular.module('weQuote.services', [])
 
 			authorText.y = area.size - yOffset;
 			authorText.x = area.size / 2;
+
+			area.stage.addChild(authorText);
 		};
 
 		return {
@@ -115,54 +154,19 @@ angular.module('weQuote.services', [])
 				canvasElement.attr('width',size);
 				canvasElement.attr('height',size);
 
-				var strokeWidth = size * (BORDER_WIDTH / 100);
-
 				var stage = new createjs.Stage(containerId);
-
-				var imageBackground = new createjs.Shape();
-				imageBackground.setBounds(0,0,size,size);
-
-				var border = new createjs.Shape();
-				border.graphics.beginStroke("#98A4D7");
-				border.graphics.setStrokeStyle(strokeWidth);
-				border.snapToPixel = true;
-				border.graphics.drawRect(0, 0, size, size);
-				
-				var watermarkOffset = size * (WATERMARK_OFFSET / 100);
-				var watermarkFontSize = size * (WATERMARK_FONT_SIZE / 100);
-
-				var quoteText = new createjs.Text();
-				var quoteTextXOffset = size * (TEXT_X_OFFSET / 100);
-				quoteText.lineWidth = size - (quoteTextXOffset * 2);
-				quoteText.textAlign = "center";
-
-				var authorText = new createjs.Text();
-				authorText.textAlign = "center";
-
-				var watermark = new createjs.Text('wequote.it');
-				watermark.textAlign = 'left';
-				watermark.x = watermarkOffset;
-				watermark.y = watermarkOffset;
-				watermark.font = watermarkFontSize + "px " + FONT;
-				
-				stage.addChild(imageBackground);
-				stage.addChild(border);
-				stage.addChild(watermark);
-				stage.addChild(quoteText);
-				stage.addChild(authorText);
 
 				return {
 					stage: stage,
-					quoteText:quoteText,
-					imageBackground: imageBackground,
-					watermark:watermark,
-					authorText:authorText,
 					size: size
 				};
 			},
 			updateCard: function(area,imageObj, quote, startFontSize) {
 				
+				area.stage.removeAllChildren()
+
 				printImage(area,imageObj);
+				printBorder(area,quote);
 				printQuoteText(area,quote);
 				printWatermark(area,quote);
 				printAuthorText(area,quote);
