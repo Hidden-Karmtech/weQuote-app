@@ -18,8 +18,6 @@ angular.module('weQuote.directives', [])
 		var hiddenId = Math.random().toString(36).substring(8);
 		var canvasId = Math.random().toString(36).substring(8);
 		var count = 0;
-		this.imageObj = new Image();
-
 
 		var generateCard = function(kineticArea, quote, startFontSize, base64,callback) {
 
@@ -28,7 +26,7 @@ angular.module('weQuote.directives', [])
 			count++;
 			$log.debug("Generating Canvas with url " + quote.url);
 
-			that.imageObj.src = "";
+			that.imageObj = new Image();
 
 			that.imageObj.onload = function(x) {
 				if (that.imageObj.naturalHeight !== that.imageObj.naturalWidth) {
