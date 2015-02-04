@@ -24,7 +24,7 @@ angular.module('weQuote.services', [])
 			}
 		}
 	}])
-	.service('CardGenerator', ['$log','CardSize', function($log,CardSize) {
+	.service('CardGenerator', ['$log','CardSize','$q', function($log,CardSize,$q) {
 		
 		var FONT = "Lobster";
 		var TEXT_SCALE_FACTOR = 0.9;
@@ -157,6 +157,13 @@ angular.module('weQuote.services', [])
 			},
 			updateCard: function(area,imageObj, quote, startFontSize) {
 				
+				var deferred = $q.defer();
+
+				area.stage.removeAllEventListeners();
+				area.stage.addEventListener ("drawend",function(){
+					deferred.resolve();
+				});
+
 				var canvasElement = angular.element(document.getElementById(area.containerId));
 
 				area.size = area.fixedSize || CardSize.getSize();
@@ -173,6 +180,8 @@ angular.module('weQuote.services', [])
 				printAuthorText(area,quote);
 
 				area.stage.update();
+
+				return deferred.promise;
 
 			}
 		}

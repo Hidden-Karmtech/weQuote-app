@@ -246,13 +246,7 @@ angular.module('weQuote.controllers', [])
 			};
 
 			$scope.next = function() {
-				$scope.loadingQuote = true;
-
 				executeGetNextQuote();
-
-				$timeout(function() {
-					$scope.loadingQuote = false;
-				}, 300);
 			};
 
 			$scope.getShareIcon = function() {
@@ -262,6 +256,16 @@ angular.module('weQuote.controllers', [])
 					return 'ion-loading-a';
 				}
 			};
+
+			$scope.$watch('state.currentQuote', function(quote) {
+				if (quote && quote.url) {
+					$log.debug("Invoking generate-quote");
+					$scope.loadingQuote = true;
+					$scope.$broadcast('generate-quote', quote, function() {
+						$scope.loadingQuote = false;
+					});
+				}
+			}, true);
 
 			$scope.share = function(quote) {
 				if (!$scope.sharing) {

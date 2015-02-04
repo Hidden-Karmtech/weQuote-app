@@ -21,7 +21,7 @@ angular.module('weQuote.directives', [])
 		this.imageObj = new Image();
 
 
-		var generateCard = function(kineticArea, quote, startFontSize, callback) {
+		var generateCard = function(kineticArea, quote, startFontSize, base64,callback) {
 
 			var stage = kineticArea.stage;
 
@@ -35,11 +35,12 @@ angular.module('weQuote.directives', [])
 					that.cropImage(that.imageObj);
 				} else {
 
-					CardGenerator.updateCard(kineticArea, that.imageObj, quote, startFontSize);
-
-					if (callback) {
-						callback(stage.toDataURL());
-					}
+					CardGenerator.updateCard(kineticArea, that.imageObj, quote, startFontSize).then(function(){
+						if (callback) {
+							var toReturn = base64 ? stage.toDataURL() : null;
+							callback(toReturn);
+						}
+					});
 
 				}
 
@@ -113,21 +114,22 @@ angular.module('weQuote.directives', [])
 				that.invisibleKinetic = CardGenerator.generateEmptyCard(hiddenId,1000);
 				that.visibleKinetic = CardGenerator.generateEmptyCard(visibleId);
 				
-				$scope.$watch('quote', function(quote) {
-					if (quote && quote.url) {
-						generateCard(
+				$scope.$on('generate-quote', function(event, quote, callback) {
+					generateCard(
 							that.visibleKinetic,
 							quote,
-							36
+							36,
+							false,
+							callback
 						);
-					}
-				}, true);
+				});
 
 				$scope.$on('generate-canvas', function(event, quote, callback) {
 					generateCard(
 						that.invisibleKinetic,
 						quote,
 						104,
+						true,
 						callback);
 				});
 
