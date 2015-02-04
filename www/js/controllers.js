@@ -90,6 +90,7 @@ angular.module('weQuote.controllers', [])
 				};
 
 				QuotesState.quotes = [];
+				QuotesState.currentIndex = null;
 				QuotesState.currentQuote = null;
 
 				$scope.goTo('quotes');
@@ -180,14 +181,20 @@ angular.module('weQuote.controllers', [])
 			$scope.loadingQuote = false;
 
 			if (_.isEmpty($scope.state)) {
+				$scope.state.currentIndex = null;
 				$scope.state.currentQuote = null;
 				$scope.state.quotes = [];
-				$scope.state.history = [];
 				$scope.state.query = {
 					type: 'search',
 					value: ""
 				};
 			}
+
+			$scope.$on('$stateChangeSuccess', function() {
+				if (!$scope.state.quotes.length) {
+					reloadQuotes();
+				}
+			});
 
 			var downloadQuotes = function(onComplete) {
 				downloading = true;
@@ -208,7 +215,6 @@ angular.module('weQuote.controllers', [])
 			$scope.clearText = function() {
 				$scope.state.query.value = "";
 				$scope.lastSearch = "";
-				$scope.state.currentQuote = null;
 				reloadQuotes();
 			}
 
@@ -217,7 +223,6 @@ angular.module('weQuote.controllers', [])
 				$scope.state.query.type = "search";
 				if ($scope.state.query.value !== $scope.lastSearch) {
 					$scope.lastSearch = $scope.state.query.value;
-					$scope.state.currentQuote = null;
 					reloadQuotes();
 				}
 			}
@@ -226,27 +231,24 @@ angular.module('weQuote.controllers', [])
 				$ionicSideMenuDelegate.toggleLeft();
 			};
 
-			var executeGetNextQuote = function() {
-
-				$scope.state.history.push($scope.state.currentQuote);
-
-				$scope.state.currentQuote = null;
-
-				if ($scope.state.quotes.length > 0) {
-					grabQuote($scope.state.quotes);
-					$log.debug($scope.state.quotes.length + " left");
-					if ($scope.state.quotes.length <= MIN_SIZE && !downloading) {
-						downloadQuotes();
-					}
-				} else {
-					downloadQuotes(function() {
-						executeGetNextQuote();
-					});
+			$scope.previous = function() {
+				if($scope.state.currentIndex){
+					$scope.state.currentIndex--;
+					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 				}
 			};
 
 			$scope.next = function() {
-				executeGetNextQuote();
+
+				$scope.state.currentIndex++;
+				$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
+
+				var quotesLeft = $scope.state.quotes.length - $scope.state.currentIndex;
+				$log.debug(quotesLeft + " quotes left");
+
+				if (quotesLeft <= MIN_SIZE && !downloading) {
+					downloadQuotes();
+				}
 			};
 
 			$scope.getShareIcon = function() {
@@ -257,15 +259,31 @@ angular.module('weQuote.controllers', [])
 				}
 			};
 
-			$scope.$watch('state.currentQuote', function(quote) {
-				if (quote && quote.url) {
-					$log.debug("Invoking generate-quote");
-					$scope.loadingQuote = true;
-					$scope.$broadcast('generate-quote', quote, function() {
-						$scope.loadingQuote = false;
-					});
+			$scope.$watch('state.currentQuote', function(quote,oldQuote) {
+				if(quote !== oldQuote && quote){
+					
+					if(oldQuote){
+						oldQuote.url = null;
+					}
+
+					if($scope.state.quotes.length && quote){
+						
+						//Clone the quote, so the $watch will not be
+						quote = _.clone(quote);
+						
+						if(!quote.url){
+							quote.url = BackgroundSelector.newBackground(quote);
+						}
+
+						$log.debug("Using quote: " + quote.text);
+
+						$scope.loadingQuote = true;
+						$scope.$broadcast('generate-quote', quote, function() {
+							$scope.loadingQuote = false;
+						});
+					}
 				}
-			}, true);
+			},true);
 
 			$scope.share = function(quote) {
 				if (!$scope.sharing) {
@@ -284,23 +302,13 @@ angular.module('weQuote.controllers', [])
 				}
 			}
 
-			var grabQuote = function(quotes) {
-				var quote = quotes.shift();
-
-				quote.url = BackgroundSelector.newBackground(quote);
-
-				$log.debug("Using quote: " + quote.text);
-
-				$scope.state.currentQuote = quote;
-			};
-
 			var reloadQuotes = function() {
 				$scope.state.quotes = [];
-				$scope.state.currentQuote = null;
 				$scope.loadingQuote = true;
 				downloadQuotes(function(quotes) {
 					if (quotes.length > 0) {
-						grabQuote(quotes);
+						$scope.state.currentIndex = 0;
+						$scope.state.currentQuote = quotes[0];
 						$scope.loadingQuote = false;
 					} else {
 						swal({
@@ -346,7 +354,7 @@ angular.module('weQuote.controllers', [])
 						takePhoto(false);
 					},
 					function() {
-						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.currentQuote);
+						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.quotes[$scope.state.currentIndex]);
 					},
 					function() {
 						var color = $scope.state.currentQuote.fontColor || '#FFFFFF';
@@ -374,12 +382,6 @@ angular.module('weQuote.controllers', [])
 
 			};
 
-
-			$scope.$on('$stateChangeSuccess', function() {
-				if (!$scope.state.quotes.length) {
-					reloadQuotes();
-				}
-			});
 
 			$scope.$on('back-button-action', function(event, args) {
 				if (lastBackClick != null) {
