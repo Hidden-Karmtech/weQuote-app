@@ -5,7 +5,7 @@ angular.module('weQuote.services', [])
 	.service('CardSize', ['$window', '$log', function($window, $log) {
 		var that = this;
 		return {
-			init: function() {
+			getSize: function() {
 				var width = Math.floor($window.innerWidth * 95 / 100);
 				var visibleHeight = $window.innerHeight - 44 //Header Bar
 					- 44 //Footer Bar
@@ -17,10 +17,7 @@ angular.module('weQuote.services', [])
 				$log.debug("calculated width: " + width);
 				$log.debug("calculated height: " + height);
 
-				that.size = width < height ? width : height;
-			},
-			getSize: function() {
-				return that.size;
+				return width < height ? width : height;
 			}
 		}
 	}])
