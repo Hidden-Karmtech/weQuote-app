@@ -19,11 +19,10 @@
     </button>
 </ion-header-bar>
 <ion-content class="royal-bg text-center center loading">
-    <div ng-show="!loadingQuote">
-        <quote-card 
-            on-swipe-up="previous()"
-            on-swipe-down="next()"/>
-    </div>
+    <quote-card 
+        ng-show="!loadingQuote"
+        on-swipe-up="previous()"
+        on-swipe-down="next()"/>
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">

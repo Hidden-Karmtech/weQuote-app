@@ -232,22 +232,27 @@ angular.module('weQuote.controllers', [])
 			};
 
 			$scope.previous = function() {
-				if($scope.state.currentIndex){
+				if(!$scope.loadingQuote && $scope.state.currentIndex){
 					$scope.state.currentIndex--;
 					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
+
+					printQuote();
 				}
 			};
 
 			$scope.next = function() {
+				if(!$scope.loadingQuote){
+					$scope.state.currentIndex++;
+					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 
-				$scope.state.currentIndex++;
-				$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
+					printQuote();
 
-				var quotesLeft = $scope.state.quotes.length - $scope.state.currentIndex;
-				$log.debug(quotesLeft + " quotes left");
+					var quotesLeft = $scope.state.quotes.length - $scope.state.currentIndex;
+					$log.debug(quotesLeft + " quotes left");
 
-				if (quotesLeft <= MIN_SIZE && !downloading) {
-					downloadQuotes();
+					if (quotesLeft <= MIN_SIZE && !downloading) {
+						downloadQuotes();
+					}
 				}
 			};
 
@@ -259,17 +264,11 @@ angular.module('weQuote.controllers', [])
 				}
 			};
 
-			$scope.$watch('state.currentQuote', function(quote,oldQuote) {
-				if(quote !== oldQuote && quote){
-					
-					if(oldQuote){
-						oldQuote.url = null;
-					}
+			var printQuote = function(quote){
+				
+				quote = quote || $scope.state.currentQuote;
 
-					if($scope.state.quotes.length && quote){
-						
-						//Clone the quote, so the $watch will not be
-						quote = _.clone(quote);
+				if(quote){
 						
 						if(!quote.url){
 							quote.url = BackgroundSelector.newBackground(quote);
@@ -278,12 +277,14 @@ angular.module('weQuote.controllers', [])
 						$log.debug("Using quote: " + quote.text);
 
 						$scope.loadingQuote = true;
-						$scope.$broadcast('generate-quote', quote, function() {
-							$scope.loadingQuote = false;
-						});
-					}
+						$timeout(function(){
+							$scope.$broadcast('generate-quote', quote, function() {
+								$scope.loadingQuote = false;
+							});	
+						},300);
+						
 				}
-			},true);
+			};
 
 			$scope.share = function(quote) {
 				if (!$scope.sharing) {
@@ -310,6 +311,8 @@ angular.module('weQuote.controllers', [])
 						$scope.state.currentIndex = 0;
 						$scope.state.currentQuote = quotes[0];
 						$scope.loadingQuote = false;
+
+						printQuote();
 					} else {
 						swal({
 								title: "Nessuna Citazione corrispondente ai parametri di ricerca",
@@ -339,6 +342,7 @@ angular.module('weQuote.controllers', [])
 
 				$cordovaCamera.getPicture(options).then(function(imageData) {
 					$scope.state.currentQuote.url = "data:image/png;base64," + imageData;
+					printQuote();
 				}, function(err) {
 					$log.error(err);
 				});
@@ -355,10 +359,12 @@ angular.module('weQuote.controllers', [])
 					},
 					function() {
 						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.quotes[$scope.state.currentIndex]);
+						printQuote();
 					},
 					function() {
 						var color = $scope.state.currentQuote.fontColor || '#FFFFFF';
 						$scope.state.currentQuote.fontColor = color === '#FFFFFF' ? '#000000' : '#FFFFFF';
+						printQuote();
 					}
 				];
 

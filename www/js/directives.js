@@ -26,7 +26,7 @@ angular.module('weQuote.directives', [])
 			var stage = kineticArea.stage;
 
 			count++;
-			$log.debug("Generating Canvas " + count);
+			$log.debug("Generating Canvas with url " + quote.url);
 
 			that.imageObj.src = "";
 
