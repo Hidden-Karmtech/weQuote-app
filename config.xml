@@ -7,7 +7,7 @@
   <author email="hkt@wequote.it" href="http://www.wequote.it/">
         HKT
     </author>
-  <content src="index.html"/>
+  <content src="launcher.html"/>
   <access origin="*"/>
   <preference name="KeepRunning" value="false"/>
   <preference name="Orientation" value="portrait"/>
