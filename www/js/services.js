@@ -195,11 +195,10 @@ angular.module('weQuote.services', [])
 	.constant('Backgrounds', {
 		amore: 4,
 		fede: 3,
-		misc: 21,
+		misc: 23,
 		musica: 3,
 		passione: 5,
-		calcio: 3,
-		vita: 2
+		calcio: 3
 	})
 	.service('BackgroundSelector', ['$log', 'Backgrounds', function($log, Backgrounds) {
 		var that = this;
