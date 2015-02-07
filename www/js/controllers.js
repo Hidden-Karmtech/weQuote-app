@@ -191,6 +191,8 @@ angular.module('weQuote.controllers', [])
 			$scope.$on('$stateChangeSuccess', function() {
 				if (!$scope.state.quotes.length) {
 					reloadQuotes();
+				}else{
+					printQuote();
 				}
 			});
 
