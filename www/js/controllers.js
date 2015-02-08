@@ -166,7 +166,8 @@ angular.module('weQuote.controllers', [])
 		'BackgroundSelector',
 		'$timeout',
 		'$ionicActionSheet',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet) {
+		'Colors',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet,Colors) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -346,7 +347,26 @@ angular.module('weQuote.controllers', [])
 				}, function(err) {
 					$log.error(err);
 				});
-			}
+			};
+
+			var showColorMenu = function(){
+
+				var buttons = _.map(Colors,function(color){
+					return {
+						text:color.label
+					};
+				});
+
+				$ionicActionSheet.show({
+					buttons: buttons,
+					cancelText: 'Annulla',
+					buttonClicked: function(index) {
+						$scope.state.currentQuote.fontColor = Colors[index].value;
+						printQuote();
+						return true;
+					}
+				});
+			};
 
 			$scope.showMenu = function() {
 
@@ -362,9 +382,7 @@ angular.module('weQuote.controllers', [])
 						printQuote();
 					},
 					function() {
-						var color = $scope.state.currentQuote.fontColor || '#FFFFFF';
-						$scope.state.currentQuote.fontColor = color === '#FFFFFF' ? '#000000' : '#FFFFFF';
-						printQuote();
+						showColorMenu();
 					}
 				];
 
@@ -384,10 +402,7 @@ angular.module('weQuote.controllers', [])
 						return true;
 					}
 				});
-
-
 			};
-
 
 			$scope.$on('back-button-action', function(event, args) {
 				if (lastBackClick != null) {

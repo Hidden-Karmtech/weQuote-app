@@ -200,6 +200,28 @@ angular.module('weQuote.services', [])
 		passione: 5,
 		calcio: 3
 	})
+	.constant('Colors', [
+		{
+			label:'Bianco',
+			value:'#FFFFFF'
+		},
+		{
+			label:'Nero',
+			value:'#000000'
+		},
+		{
+			label:'Rosso',
+			value:'#FF0000'
+		},
+		{
+			label:'Blu',
+			value:'#0000FF'
+		},
+		{
+			label:'Verde',
+			value:'#00FF00'
+		}
+	])
 	.service('BackgroundSelector', ['$log', 'Backgrounds', function($log, Backgrounds) {
 		var that = this;
 
