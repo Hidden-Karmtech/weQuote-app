@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		05E628800E764B028B494720 /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = ECE4B5C4E1A64548B5F518B9 /* CDVLogger.m */; };
 		08C2DBF92F0F40EFA239D79F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A0E99A62FB642CE83B93E00 /* Foundation.framework */; };
@@ -713,7 +712,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "weQuote/weQuote-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/weQuote/Plugins/com.google.admobsdk\"",
@@ -751,7 +750,7 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = "";
 				INFOPLIST_FILE = "weQuote/weQuote-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/weQuote/Plugins/com.google.admobsdk\"",
