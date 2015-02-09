@@ -273,7 +273,7 @@ angular.module('weQuote.controllers', [])
 				if(quote){
 						
 						if(!quote.url){
-							quote.url = BackgroundSelector.newBackground(quote);
+							BackgroundSelector.applyNewBackground(quote);
 						}
 
 						$log.debug("Using quote: " + quote.text);
@@ -350,7 +350,9 @@ angular.module('weQuote.controllers', [])
 
 			var showColorMenu = function(){
 
-				var buttons = _.map(Colors,function(color){
+				var colorsArray = _.toArray(Colors);
+
+				var buttons = _.map(colorsArray,function(color){
 					return {
 						text:color.label
 					};
@@ -360,7 +362,7 @@ angular.module('weQuote.controllers', [])
 					buttons: buttons,
 					cancelText: 'Annulla',
 					buttonClicked: function(index) {
-						$scope.state.currentQuote.fontColor = Colors[index].value;
+						$scope.state.currentQuote.fontColor = colorsArray[index].value;
 						printQuote();
 						return true;
 					}
@@ -377,7 +379,7 @@ angular.module('weQuote.controllers', [])
 						takePhoto(false);
 					},
 					function() {
-						$scope.state.currentQuote.url = BackgroundSelector.newBackground($scope.state.quotes[$scope.state.currentIndex]);
+						BackgroundSelector.applyNewBackground($scope.state.quotes[$scope.state.currentIndex]);
 						printQuote();
 					},
 					function() {

@@ -192,85 +192,59 @@ angular.module('weQuote.services', [])
 			}
 		}
 	}])
-	.constant('Backgrounds', {
-		amore: 4,
-		fede: 3,
-		misc: 23,
-		musica: 3,
-		passione: 5,
-		calcio: 3
-	})
-	.constant('Colors', [
-		{
-			label:'Bianco',
-			value:'#FFFFFF'
-		},
-		{
-			label:'Nero',
-			value:'#000000'
-		},
-		{
-			label:'Rosso',
-			value:'#FF0000'
-		},
-		{
-			label:'Blu',
-			value:'#0000FF'
-		},
-		{
-			label:'Verde',
-			value:'#00FF00'
-		}
-	])
 	.service('BackgroundSelector', ['$log', 'Backgrounds', function($log, Backgrounds) {
 		var that = this;
 
-		this.lastUrl = null;
+		var BASE_IMG_PATH = 'img/backgrounds/';
+
+		this.lastUrl = {};
+
+		var miscBackgrounds = _.filter(Backgrounds,function(b){
+			return !b.tags;
+		});
+
+		var taggedBackgrouds = _.filter(Backgrounds,function(b){
+			return b.tags;
+		});
 
 		var calculateBackground = function(quote) {
-			var validFiles = [];
 			var i = 0;
 
-			var validTags = _.filter(quote.tags, function(tag) {
-				return Backgrounds[tag.name];
-			});
-
-			if (validTags.length) {
-				validTags = _.map(validTags, function(tag) {
-					return tag.name;
-				});
-			} else {
-				validTags = ['misc'];
-			}
-
-			_.each(validTags, function(tag) {
-				var count = Backgrounds[tag];
-
-				if (count) {
-					for (i = 0; i < count; i++) {
-						validFiles.push(tag + '/' + _.str.pad(i, 3, '0') + '.jpg');
+			var validFiles = _.filter(taggedBackgrouds,function(background){
+				for(var i = 0; i < quote.tags.length; i++){
+					if(_.contains(background.tags,quote.tags[i].name)){
+						return true;
 					}
 				}
+
+				return false;
 			});
 
-			var toReturn = 'img/backgrounds/' + validFiles[_.random(0, validFiles.length - 1)];
+			if(!validFiles.length){
+				validFiles = miscBackgrounds;
+			}
 
-			$log.debug("Using Background " + toReturn);
+			var toReturn = validFiles[_.random(0, validFiles.length - 1)];
+
+			$log.debug("Using Background " + toReturn.path);
 
 			return toReturn;
 
 		};
 
 		return {
-			newBackground: function(quote) {
-				var url;
+			applyNewBackground: function(quote) {
+				var b;
 				do {
-					url = calculateBackground(quote);
-				} while (url === that.lastUrl);
+					b = calculateBackground(quote);
+				} while (b.path === that.lastUrl.path);
 
-				that.lastUrl = url;
+				that.lastUrl = b;
 
-				return url;
+				quote.url = BASE_IMG_PATH + b.path;
+				quote.fontColor = b.color.value;
+
+				return b;
 			}
 		}
 	}])
