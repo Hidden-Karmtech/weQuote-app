@@ -2,7 +2,6 @@
   "name": "weQuote",
   "private": "true",
   "dependencies": {
-    "sweetalert": "~0.3.1",
     "angular-translate": "~2.4.2",
     "ngCordova": "~0.1.9-alpha",
     "lodash": "2.4.1",

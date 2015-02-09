@@ -20,7 +20,8 @@ angular.module('weQuote', [
     $state,
     $cordovaSplashscreen,
     ANDROID_ADMOB,
-    IOS_ADMOB) {
+    IOS_ADMOB,
+    $ionicPopup) {
 
     //Add Paginate function to lodash
     _.mixin({
@@ -82,26 +83,21 @@ angular.module('weQuote', [
 
       WeQuote.init().then(function(result) {
         if (!result) {
-          swal({
-              title: "Connesione Internet Assente",
-              text: "L'applicazione avrà funzionalità limitate",
-              confirmButtonColor: "#5264AE",
-              closeOnConfirm: true
-            },
-            function() {
-              $state.go("quotes").then(function(){
-                $cordovaSplashscreen.hide();  
-              });
+          $ionicPopup.alert({
+            title: "Connesione Internet Assente",
+            template: "L'applicazione avrà funzionalità limitate",
+            okType: 'button-royal'
+          }).then(function(res) {
+            $state.go("quotes").then(function() {
+              $cordovaSplashscreen.hide();
             });
+          });
         } else {
-          $state.go("quotes").then(function(){
-            $cordovaSplashscreen.hide();  
+          $state.go("quotes").then(function() {
+            $cordovaSplashscreen.hide();
           });
         }
-
       });
-
-
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {

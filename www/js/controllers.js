@@ -167,7 +167,8 @@ angular.module('weQuote.controllers', [])
 		'$timeout',
 		'$ionicActionSheet',
 		'Colors',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet,Colors) {
+		'$ionicPopup',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet,Colors,$ionicPopup) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -315,14 +316,12 @@ angular.module('weQuote.controllers', [])
 
 						printQuote();
 					} else {
-						swal({
-								title: "Nessuna Citazione corrispondente ai parametri di ricerca",
-								confirmButtonColor: "#5264AE",
-								closeOnConfirm: true
-							},
-							function() {
-								$scope.clearText();
-							});
+						$ionicPopup.alert({
+							title: "Nessuna Citazione corrispondente ai parametri di ricerca",
+							okType:'button-royal'
+						}).then(function(res) {
+							$scope.clearText();
+						});
 					}
 				});
 			}
