@@ -126,6 +126,12 @@ angular.module('weQuote', [
         title: 'About',
         templateUrl: "templates/about.html"
       })
+      .state('create', {
+        url: "/create",
+        controller: 'CreateQuote',
+        title: 'Crea',
+        templateUrl: "templates/create.html"
+      })
       .state('loading', {
         url: "/loading",
         templateUrl: "templates/loading.html"

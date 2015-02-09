@@ -428,4 +428,17 @@ angular.module('weQuote.controllers', [])
 					});
 			}
 		}
-	]);
+	])
+	.controller('CreateQuote', ['$scope', '$state', function($scope, $state) {
+		
+		$scope.isValidData = function(){
+			return $scope.author.length && $scope.text.length;
+		};
+
+		$scope.reset = function(){
+			$scope.author = "";
+			$scope.text = "";
+		};
+
+		$scope.reset();
+	}])

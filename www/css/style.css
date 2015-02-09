@@ -173,3 +173,11 @@ body {
   height: auto;
 }
 
+.create-item-input{
+    padding-left: 0px !important;
+    border-style: none !important;
+}
+
+.create-input{
+   font-size: 1.3em !important;
+}

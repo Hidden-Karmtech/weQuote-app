@@ -1,0 +1,44 @@
+<ion-content class="royal-bg">
+	<form name="createForm" role="form">
+		<div class="row row-center">
+	        <div class="col-10"></div>
+	        <div class="col-80">
+	       		<label class="item item-input create-item-input item-stacked-label slick">
+			    	<span class="input-label important-light">Autore</span>
+			    	<span class="pull-right important-light">{{$parent.author.length}}/30</span>
+			    	<input 
+			    		required
+			    		class="slick important-royal create-input" 
+			    		maxlength="30" 
+			    		ng-model="$parent.author"
+			    		type="text">
+			  	</label>
+			  	<label class="item item-input create-item-input item-stacked-label slick">
+			    	<span class="input-label important-light">Testo</span>
+			    	<span class="pull-right important-light">{{$parent.text.length}}/200</span>
+			    	<textarea 
+			    		required
+			    		class="slick important-royal create-input" 
+			    		maxlength="200" 
+			    		ng-model="$parent.text"
+			    		rows="20">
+			    	</textarea>
+			  	</label>
+	        </div>
+	        <div class="col-10"></div>
+	    </div>
+    </form>
+</ion-content>
+<ion-footer-bar class="bar-light">
+    <div class="button-bar">
+    	<a ng-disabled="!isValidData();" class="button button-icon">
+          <i 
+            class="icon royal ion-checkmark-circled"></i>
+          <span class="slick royal">Conferma</span>
+        </a>
+        <a class="button button-icon" ng-click="reset();">
+          <i class="icon royal ion-android-cancel"></i>
+          <span class="slick royal">Annulla</span>
+        </a>
+    </div>
+</ion-footer-bar>
