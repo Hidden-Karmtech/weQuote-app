@@ -163,9 +163,6 @@ angular.module('weQuote.services')
 		}, {
 			path: 'misc/022.jpg',
 			color: Colors.white
-		}, {
-			path: 'misc/023.jpg',
-			color: Colors.white
 		}];
 
 		return Object.freeze(data);
