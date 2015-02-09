@@ -2,7 +2,6 @@
   "name": "weQuote",
   "private": "true",
   "dependencies": {
-    "angular-translate": "~2.4.2",
     "ngCordova": "~0.1.9-alpha",
     "lodash": "2.4.1",
     "underscore.string": "~2.4.0",
@@ -10,11 +9,6 @@
     "ionicons": "~2.0.0",
     "fontawesome": "~4.2.0",
     "easeljs": "~0.8.0"
-  },
-  "overrides": {
-    "ionic-contrib-swipe-cards": {
-      "main": "ionic.swipecards.js"
-    }
   },
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.0.0-beta.13"
