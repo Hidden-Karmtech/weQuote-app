@@ -191,10 +191,13 @@ angular.module('weQuote.controllers', [])
 			}
 
 			$scope.$on('$stateChangeSuccess', function() {
-				if (!$scope.state.quotes.length) {
+				if($scope.state.quotes.length === 0){
 					reloadQuotes();
 				}else{
 					printQuote();
+					if($scope.state.quotes.length <= MIN_SIZE){
+						downloadQuotes();
+					}
 				}
 			});
 
@@ -305,7 +308,7 @@ angular.module('weQuote.controllers', [])
 				}
 			}
 
-			var reloadQuotes = function() {
+			var reloadQuotes = function(skipPrint) {
 				$scope.state.quotes = [];
 				$scope.loadingQuote = true;
 				downloadQuotes(function(quotes) {
@@ -313,8 +316,9 @@ angular.module('weQuote.controllers', [])
 						$scope.state.currentIndex = 0;
 						$scope.state.currentQuote = quotes[0];
 						$scope.loadingQuote = false;
-
-						printQuote();
+						if(!skipPrint){
+							printQuote();	
+						}
 					} else {
 						$ionicPopup.alert({
 							title: "Nessuna Citazione corrispondente ai parametri di ricerca",
@@ -429,7 +433,7 @@ angular.module('weQuote.controllers', [])
 			}
 		}
 	])
-	.controller('CreateQuote', ['$scope', '$state', function($scope, $state) {
+	.controller('CreateQuote', ['$scope', '$state','QuotesState', function($scope, $state,QuotesState) {
 		
 		$scope.isValidData = function(){
 			return $scope.author.length && $scope.text.length;
@@ -439,6 +443,30 @@ angular.module('weQuote.controllers', [])
 			$scope.author = "";
 			$scope.text = "";
 		};
+
+		$scope.confirm = function(){
+			var quote = {
+				text:$scope.text,
+				author:$scope.author,
+				tags:[],
+				custom:true
+			};
+			
+			QuotesState.query = {
+				type: 'search',
+				value: ""
+			};
+
+			QuotesState.quotes = [quote];
+			QuotesState.currentIndex = 0;
+			QuotesState.currentQuote = quote;
+
+			$state.go('quotes');
+		};
+
+		$scope.$on('back-button-action', function(event, args) {
+			$scope.goTo('quotes');
+		});
 
 		$scope.reset();
 	}])

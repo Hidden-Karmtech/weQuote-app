@@ -31,9 +31,8 @@
 </ion-content>
 <ion-footer-bar class="bar-light">
     <div class="button-bar">
-    	<a ng-disabled="!isValidData();" class="button button-icon">
-          <i 
-            class="icon royal ion-checkmark-circled"></i>
+    	<a ng-disabled="!isValidData();" class="button button-icon" ng-click="confirm();">
+          <i class="icon royal ion-checkmark-circled"></i>
           <span class="slick royal">Conferma</span>
         </a>
         <a class="button button-icon" ng-click="reset();">
