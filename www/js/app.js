@@ -98,6 +98,8 @@ angular.module('weQuote', [
           });
         }
       });
+
+      $rootScope.isQuote = false;
     });
   })
   .config(function($stateProvider, $urlRouterProvider) {

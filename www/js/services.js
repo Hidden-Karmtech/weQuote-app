@@ -1,5 +1,9 @@
 angular.module('weQuote.services', [])
 	.value('QuotesState', {})
+	.value('CreateState', {
+		author:"",
+		text:""
+	})
 	.value('TagsState', {})
 	.value('AuthorsState', {})
 	.service('CardSize', ['$window', '$log', function($window, $log) {

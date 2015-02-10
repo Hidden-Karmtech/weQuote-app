@@ -194,12 +194,21 @@ angular.module('weQuote.controllers', [])
 				if($scope.state.quotes.length === 0){
 					reloadQuotes();
 				}else{
+					if($scope.state.currentQuote && $scope.state.currentQuote.custom){
+						$cordovaToast.show('Tieni premuta la tua citazione per modificarla', 'short', 'top');
+					}
 					printQuote();
 					if($scope.state.quotes.length <= MIN_SIZE){
 						downloadQuotes();
 					}
 				}
 			});
+
+			$scope.onCardHold = function(){
+				if($scope.state.currentQuote.custom){
+					$scope.goTo('create');
+				}
+			};
 
 			var downloadQuotes = function(onComplete) {
 				downloading = true;
@@ -433,21 +442,23 @@ angular.module('weQuote.controllers', [])
 			}
 		}
 	])
-	.controller('CreateQuote', ['$scope', '$state','QuotesState', function($scope, $state,QuotesState) {
+	.controller('CreateQuote', ['$scope', '$state','QuotesState','CreateState', function($scope, $state,QuotesState,CreateState) {
 		
+		$scope.state = CreateState;
+
 		$scope.isValidData = function(){
-			return $scope.author.length && $scope.text.length;
+			return $scope.state.author.length && $scope.state.text.length;
 		};
 
 		$scope.reset = function(){
-			$scope.author = "";
-			$scope.text = "";
+			$scope.state.author = "";
+			$scope.state.text = "";
 		};
 
 		$scope.confirm = function(){
 			var quote = {
-				text:$scope.text,
-				author:$scope.author,
+				text:$scope.state.text,
+				author:$scope.state.author,
 				tags:[],
 				custom:true
 			};
@@ -467,6 +478,4 @@ angular.module('weQuote.controllers', [])
 		$scope.$on('back-button-action', function(event, args) {
 			$scope.goTo('quotes');
 		});
-
-		$scope.reset();
 	}])

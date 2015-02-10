@@ -5,22 +5,22 @@
 	        <div class="col-80">
 	       		<label class="item item-input create-item-input item-stacked-label slick">
 			    	<span class="input-label important-light">Autore</span>
-			    	<span class="pull-right important-light">{{$parent.author.length}}/30</span>
+			    	<span class="pull-right important-light">{{state.author.length || 0}}/30</span>
 			    	<input 
 			    		required
 			    		class="slick important-royal create-input" 
 			    		maxlength="30" 
-			    		ng-model="$parent.author"
+			    		ng-model="state.author"
 			    		type="text">
 			  	</label>
 			  	<label class="item item-input create-item-input item-stacked-label slick">
 			    	<span class="input-label important-light">Testo</span>
-			    	<span class="pull-right important-light">{{$parent.text.length}}/200</span>
+			    	<span class="pull-right important-light">{{state.text.length || 0}}/200</span>
 			    	<textarea 
 			    		required
 			    		class="slick important-royal create-input" 
 			    		maxlength="200" 
-			    		ng-model="$parent.text"
+			    		ng-model="state.text"
 			    		rows="20">
 			    	</textarea>
 			  	</label>
