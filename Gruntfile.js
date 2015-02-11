@@ -86,7 +86,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('release', [
     'clean:release',
-    'curl',
     'shell:buildAndroidRelease',
     'shell:signApk',
     'shell:compressApk'
