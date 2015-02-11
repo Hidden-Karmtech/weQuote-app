@@ -168,7 +168,8 @@ angular.module('weQuote.controllers', [])
 		'$ionicActionSheet',
 		'Colors',
 		'$ionicPopup',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet,Colors,$ionicPopup) {
+		'CreateState',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet, Colors, $ionicPopup, CreateState) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -191,21 +192,23 @@ angular.module('weQuote.controllers', [])
 			}
 
 			$scope.$on('$stateChangeSuccess', function() {
-				if($scope.state.quotes.length === 0){
+				if ($scope.state.quotes.length === 0) {
 					reloadQuotes();
-				}else{
-					if($scope.state.currentQuote && $scope.state.currentQuote.custom){
-						$cordovaToast.show('Tieni premuta la tua citazione per modificarla', 'short', 'top');
+				} else {
+					if ($scope.state.currentQuote && $scope.state.currentQuote.custom) {
+						$cordovaToast.show('Utilizza il menù per modificare il testo della tua citazione', 'short', 'top');
 					}
 					printQuote();
-					if($scope.state.quotes.length <= MIN_SIZE){
+					if ($scope.state.quotes.length <= MIN_SIZE) {
 						downloadQuotes();
 					}
 				}
 			});
 
-			$scope.onCardHold = function(){
-				if($scope.state.currentQuote.custom){
+			var editCustomQuote = function() {
+				if ($scope.state.currentQuote.custom) {
+					CreateState.author = $scope.state.currentQuote.author;
+					CreateState.text = $scope.state.currentQuote.text;
 					$scope.goTo('create');
 				}
 			};
@@ -246,7 +249,7 @@ angular.module('weQuote.controllers', [])
 			};
 
 			$scope.previous = function() {
-				if(!$scope.loadingQuote && $scope.state.currentIndex){
+				if (!$scope.loadingQuote && $scope.state.currentIndex) {
 					$scope.state.currentIndex--;
 					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 
@@ -255,7 +258,7 @@ angular.module('weQuote.controllers', [])
 			};
 
 			$scope.next = function() {
-				if(!$scope.loadingQuote){
+				if (!$scope.loadingQuote) {
 					$scope.state.currentIndex++;
 					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 
@@ -278,25 +281,25 @@ angular.module('weQuote.controllers', [])
 				}
 			};
 
-			var printQuote = function(quote){
-				
+			var printQuote = function(quote) {
+
 				quote = quote || $scope.state.currentQuote;
 
-				if(quote){
-						
-						if(!quote.url){
-							BackgroundSelector.applyNewBackground(quote);
-						}
+				if (quote) {
 
-						$log.debug("Using quote: " + quote.text);
+					if (!quote.url) {
+						BackgroundSelector.applyNewBackground(quote);
+					}
 
-						$scope.loadingQuote = true;
-						$timeout(function(){
-							$scope.$broadcast('generate-quote', quote, function() {
-								$scope.loadingQuote = false;
-							});	
-						},300);
-						
+					$log.debug("Using quote: " + quote.text);
+
+					$scope.loadingQuote = true;
+					$timeout(function() {
+						$scope.$broadcast('generate-quote', quote, function() {
+							$scope.loadingQuote = false;
+						});
+					}, 300);
+
 				}
 			};
 
@@ -325,13 +328,13 @@ angular.module('weQuote.controllers', [])
 						$scope.state.currentIndex = 0;
 						$scope.state.currentQuote = quotes[0];
 						$scope.loadingQuote = false;
-						if(!skipPrint){
-							printQuote();	
+						if (!skipPrint) {
+							printQuote();
 						}
 					} else {
 						$ionicPopup.alert({
 							title: "Nessuna Citazione corrispondente ai parametri di ricerca",
-							okType:'button-royal'
+							okType: 'button-royal'
 						}).then(function(res) {
 							$scope.clearText();
 						});
@@ -361,13 +364,13 @@ angular.module('weQuote.controllers', [])
 				});
 			};
 
-			var showColorMenu = function(){
+			var showColorMenu = function() {
 
 				var colorsArray = _.toArray(Colors);
 
-				var buttons = _.map(colorsArray,function(color){
+				var buttons = _.map(colorsArray, function(color) {
 					return {
-						text:color.label
+						text: color.label
 					};
 				});
 
@@ -400,16 +403,25 @@ angular.module('weQuote.controllers', [])
 					}
 				];
 
+				var buttons = [{
+					text: 'Scatta Foto'
+				}, {
+					text: 'Foto Galleria'
+				}, {
+					text: 'Cambia Sfondo'
+				}, {
+					text: 'Cambia Colore Testo'
+				}];
+
+				if($scope.state.currentQuote.custom){
+					callbacks.push(editCustomQuote);
+					buttons.push({
+						text: 'Modifica testo'
+					});
+				}
+
 				$ionicActionSheet.show({
-					buttons: [{
-						text: 'Scatta Foto'
-					}, {
-						text: 'Foto Galleria'
-					}, {
-						text: 'Cambia Sfondo'
-					}, {
-						text: 'Cambia Colore Testo'
-					}],
+					buttons: buttons,
 					cancelText: 'Annulla',
 					buttonClicked: function(index) {
 						callbacks[index]();
@@ -442,40 +454,48 @@ angular.module('weQuote.controllers', [])
 			}
 		}
 	])
-	.controller('CreateQuote', ['$scope', '$state','QuotesState','CreateState', function($scope, $state,QuotesState,CreateState) {
-		
-		$scope.state = CreateState;
+	.controller('CreateQuote', [
+		'$scope',
+		'$state',
+		'QuotesState',
+		'CreateState',
+		function($scope, $state, QuotesState, CreateState) {
 
-		$scope.isValidData = function(){
-			return $scope.state.author.length && $scope.state.text.length;
-		};
+			$scope.state = CreateState;
 
-		$scope.reset = function(){
-			$scope.state.author = "";
-			$scope.state.text = "";
-		};
-
-		$scope.confirm = function(){
-			var quote = {
-				text:$scope.state.text,
-				author:$scope.state.author,
-				tags:[],
-				custom:true
-			};
-			
-			QuotesState.query = {
-				type: 'search',
-				value: ""
+			$scope.isValidData = function() {
+				return $scope.state.author.length && $scope.state.text.length;
 			};
 
-			QuotesState.quotes = [quote];
-			QuotesState.currentIndex = 0;
-			QuotesState.currentQuote = quote;
+			$scope.reset = function() {
+				$scope.state.author = "";
+				$scope.state.text = "";
+			};
 
-			$state.go('quotes');
-		};
+			$scope.confirm = function() {
+				if ($scope.isValidData()) {
+					var quote = {
+						text: $scope.state.text,
+						author: $scope.state.author,
+						tags: [],
+						custom: true
+					};
 
-		$scope.$on('back-button-action', function(event, args) {
-			$scope.goTo('quotes');
-		});
-	}])
+					QuotesState.query = {
+						type: 'search',
+						value: ""
+					};
+
+					QuotesState.quotes = [quote];
+					QuotesState.currentIndex = 0;
+					QuotesState.currentQuote = quote;
+
+					$state.go('quotes');
+				}
+			};
+
+			$scope.$on('back-button-action', function(event, args) {
+				$scope.goTo('quotes');
+			});
+		}
+	])

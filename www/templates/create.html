@@ -1,5 +1,5 @@
 <ion-content class="royal-bg">
-	<form name="createForm" role="form">
+	<form name="createForm" role="form" ng-submit="confirm();">
 		<div class="row row-center">
 	        <div class="col-10"></div>
 	        <div class="col-80">
@@ -7,21 +7,22 @@
 			    	<span class="input-label important-light">Autore</span>
 			    	<span class="pull-right important-light">{{state.author.length || 0}}/30</span>
 			    	<input 
-			    		required
+			    		blur-on-submit
 			    		class="slick important-royal create-input" 
 			    		maxlength="30" 
 			    		ng-model="state.author"
 			    		type="text">
+			    	</input>
 			  	</label>
 			  	<label class="item item-input create-item-input item-stacked-label slick">
 			    	<span class="input-label important-light">Testo</span>
 			    	<span class="pull-right important-light">{{state.text.length || 0}}/200</span>
-			    	<textarea 
-			    		required
-			    		class="slick important-royal create-input" 
+			    	<textarea
+			    		blur-on-submit
+			    		class="slick important-royal create-textarea" 
 			    		maxlength="200" 
 			    		ng-model="state.text"
-			    		rows="20">
+			    		type="text">
 			    	</textarea>
 			  	</label>
 	        </div>
@@ -37,7 +38,7 @@
         </a>
         <a class="button button-icon" ng-click="reset();">
           <i class="icon royal ion-android-cancel"></i>
-          <span class="slick royal">Annulla</span>
+          <span class="slick royal">Pulisci</span>
         </a>
     </div>
 </ion-footer-bar>

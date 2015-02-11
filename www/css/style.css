@@ -174,10 +174,17 @@ body {
 }
 
 .create-item-input{
-    padding-left: 0px !important;
-    border-style: none !important;
+    padding-left: 0px;
+    border-style: none;
 }
 
 .create-input{
-   font-size: 1.3em !important;
+   font-size: 1.8em !important;
+   height:2.2em !important;
+}
+
+.create-textarea{
+    font-size: 1.8em;
+    height:9em;
+    line-height: 1.8em;
 }
