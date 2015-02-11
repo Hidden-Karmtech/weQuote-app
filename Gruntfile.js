@@ -11,6 +11,9 @@ module.exports = function(grunt) {
     clean: {
       release: ["weQuote.apk"]
     },
+    curl: {
+      'www/data.json': 'https://api-wequote.rhcloud.com/list?deviceUUID=testclient&limit=2500',
+    },
     wiredep: {
       app: {
         src: ['www/index.html'],
@@ -83,6 +86,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('release', [
     'clean:release',
+    'curl',
     'shell:buildAndroidRelease',
     'shell:signApk',
     'shell:compressApk'
