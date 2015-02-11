@@ -30,3 +30,4 @@ platforms/android/local.properties
 platforms/android/proguard-project.txt
 platforms/android/VERSION
 secrets.js
+www.zip
