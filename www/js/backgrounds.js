@@ -10,15 +10,15 @@ angular.module('weQuote.services')
 		},
 		red: {
 			label: 'Rosso',
-			value: '#FF0000'
+			value: '#990000'
 		},
 		blue: {
 			label: 'Blu',
-			value: '#0000FF'
+			value: '#000099'
 		},
 		green: {
 			label: 'Verde',
-			value: '#00FF00'
+			value: '#008100'
 		}
 	})
 	.factory('Backgrounds', ['Colors', function(Colors) {
