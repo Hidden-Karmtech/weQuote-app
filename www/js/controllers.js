@@ -259,16 +259,25 @@ angular.module('weQuote.controllers', [])
 
 			$scope.next = function() {
 				if (!$scope.loadingQuote) {
-					$scope.state.currentIndex++;
-					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
-
-					printQuote();
-
 					var quotesLeft = $scope.state.quotes.length - $scope.state.currentIndex;
-					$log.debug(quotesLeft + " quotes left");
+					
+					if(quotesLeft > 1){
+						$scope.state.currentIndex++;
+						$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 
-					if (quotesLeft <= MIN_SIZE && !downloading) {
-						downloadQuotes();
+						printQuote();
+
+						$log.debug(quotesLeft + " quotes left");
+
+						if (quotesLeft <= MIN_SIZE && !downloading) {
+							downloadQuotes();
+						}	
+					}else{
+						$scope.loadingQuote = true;
+						downloadQuotes(function(){
+							$scope.loadingQuote = false;
+							$scope.next();
+						});
 					}
 				}
 			};
