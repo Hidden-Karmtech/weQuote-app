@@ -53,7 +53,7 @@ angular.module('weQuote.services')
 		}, {
 			path: '007.jpg',
 			color: Colors.white,
-			tags: ['religione']
+			tags: ['passione']
 		}, {
 			path: '008.jpg',
 			color: Colors.white,
@@ -108,7 +108,7 @@ angular.module('weQuote.services')
 			tags: ['passione']
 		}, {
 			path: '021.jpg',
-			color: Colors.red
+			color: Colors.black
 		}, {
 			path: '022.jpg',
 			color: Colors.black
