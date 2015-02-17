@@ -317,10 +317,8 @@ angular.module('weQuote.controllers', [])
 					$scope.sharing = true;
 					$timeout(function() {
 						$scope.$broadcast('generate-canvas', quote, function(imgData) {
-
 							$scope.sharing = false;
-							$scope.$apply();
-
+							
 							QuoteRepository.share(quote, imgData).then(function(result) {
 								$log.debug("Sharing complete");
 							});
