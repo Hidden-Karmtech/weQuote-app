@@ -21,7 +21,8 @@ angular.module('weQuote', [
     $cordovaSplashscreen,
     ANDROID_ADMOB,
     IOS_ADMOB,
-    $ionicPopup) {
+    $ionicPopup,
+    ServerLogger) {
 
     //Add Paginate function to lodash
     _.mixin({
@@ -93,6 +94,7 @@ angular.module('weQuote', [
             });
           });
         } else {
+          ServerLogger.log('startup');
           $state.go("quotes").then(function() {
             $cordovaSplashscreen.hide();
           });

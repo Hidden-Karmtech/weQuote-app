@@ -169,7 +169,8 @@ angular.module('weQuote.controllers', [])
 		'Colors',
 		'$ionicPopup',
 		'CreateState',
-		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet, Colors, $ionicPopup, CreateState) {
+		'ServerLogger',
+		function($scope, $log, QuoteRepository, $ionicSideMenuDelegate, QuotesState, $cordovaCamera, $cordovaToast, BackgroundSelector, $timeout, $ionicActionSheet, Colors, $ionicPopup, CreateState,ServerLogger) {
 
 			var MIN_SIZE = 15;
 			var SECOND_FOR_EXIT = 5;
@@ -250,6 +251,7 @@ angular.module('weQuote.controllers', [])
 
 			$scope.previous = function() {
 				if (!$scope.loadingQuote && $scope.state.currentIndex) {
+					ServerLogger.log("previous");
 					$scope.state.currentIndex--;
 					$scope.state.currentQuote = $scope.state.quotes[$scope.state.currentIndex];
 
@@ -257,8 +259,9 @@ angular.module('weQuote.controllers', [])
 				}
 			};
 
-			$scope.next = function() {
+			$scope.next = function(swipe) {
 				if (!$scope.loadingQuote) {
+					ServerLogger.log(swipe ? 'swipeNext' : 'buttonNext');
 					var quotesLeft = $scope.state.quotes.length - $scope.state.currentIndex;
 					
 					if(quotesLeft > 1){
@@ -350,6 +353,9 @@ angular.module('weQuote.controllers', [])
 			}
 
 			var takePhoto = function(cameraMode) {
+
+				ServerLogger.log('photo');
+
 				var options = {
 					quality: 100,
 					destinationType: Camera.DestinationType.DATA_URL,
