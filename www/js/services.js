@@ -314,6 +314,39 @@ angular.module('weQuote.services', [])
 
 		}
 	])
+	.service('ServerLogger', [
+		'SERVER_BASE_URL',
+		'$http',
+		'WeQuote',
+		function(SERVER_BASE_URL,$http,WeQuote) {
+			var that = this;
+
+			return {
+				log: function(event, data) {
+					if (WeQuote.isOnline()) {
+
+						data = data || {};
+
+						data.event = event;
+						data.deviceUUID = WeQuote.getUUID();
+
+						return $http({
+							method: 'POST',
+							url: SERVER_BASE_URL + 'logEvent',
+							data: data
+						}).then(function(response) {
+								return true;
+							},
+							function(response) {
+								return false;
+							}
+						);
+					}
+				}
+
+			}
+		}
+	])
 	.service('QuoteRepository', [
 		'$http',
 		'SERVER_BASE_URL',
@@ -322,7 +355,8 @@ angular.module('weQuote.services', [])
 		'$cordovaSocialSharing',
 		'MAX_LEN',
 		'$log',
-		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing, MAX_LEN, $log) {
+		'ServerLogger',
+		function($http, SERVER_BASE_URL, WeQuote, OfflineData, $cordovaSocialSharing, MAX_LEN, $log,ServerLogger) {
 			var that = this;
 
 			var filterOfflineQuotes = function(quotes, type, text) {
@@ -400,15 +434,17 @@ angular.module('weQuote.services', [])
 								deviceUUID: WeQuote.getUUID()
 							};
 
-							return $http({
-								method: 'POST',
-								url: SERVER_BASE_URL + 'share',
-								data: params
-							}).then(function(result) {
-								return result;
-							}, function() {
-								return false;
-							})
+
+							var toShare = {};
+							if(quote._id){
+								toShare.id = quote._id;
+							}else{
+								toShare.id = 0;
+								toShare.custom = true;
+							}
+
+							ServerLogger.log('share', toShare);
+
 						}
 
 						return result;
