@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="it.hkt.wequote" version="1.0.2" android-versionCode="10203" ios-CFBundleVersion="1.0.2.3">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="it.hkt.wequote" version="1.0.2" android-versionCode="10204" ios-CFBundleVersion="1.0.2.4">
   <name>weQuote</name>
   <description>
         weQuote. Happy Quoting.
