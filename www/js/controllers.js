@@ -429,7 +429,16 @@ angular.module('weQuote.controllers', [])
 				if($scope.state.currentQuote.custom){
 					callbacks.push(editCustomQuote);
 					buttons.push({
-						text: 'Modifica testo'
+						text: 'Modifica Citazione'
+					});
+				}else{
+					callbacks.push(function(){
+						CreateState.author = "";
+						CreateState.text = "";
+						$scope.goTo('create');
+					});
+					buttons.push({
+						text: 'Nuova Citazione'
 					});
 				}
 
